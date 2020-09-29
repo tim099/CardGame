@@ -1,17 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RCG {
+
     public class RCG_Card : MonoBehaviour {
-        // Start is called before the first frame update
-        void Start() {
+        public Image m_Image;
+        public Text m_NameText;
+        public Text m_DescriptionText;
+        protected RCG_CardData m_Data;
 
-        }
-
-        // Update is called once per frame
-        void Update() {
-
+        virtual public void SetData(RCG_CardData _Data) {
+            m_Data = _Data;
+            m_Image.sprite = m_Data.m_Icon;
         }
     }
 }
