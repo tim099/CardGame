@@ -14,6 +14,11 @@ namespace RCG {
         virtual public void SetData(RCG_CardData _Data) {
             m_Data = _Data;
             m_Image.sprite = m_Data.m_Icon;
+            m_NameText.text = m_Data.GetName();
+            m_DescriptionText.text = m_Data.GetDescription();
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(gameObject);
+#endif
         }
     }
 }

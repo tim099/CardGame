@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RCG {
     public class RCG_CardGame : MonoBehaviour {
-
+        public RCG_Player m_Player;
+        private void Awake() {
+            
+        }
     }
 }
