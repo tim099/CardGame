@@ -1,0 +1,4 @@
+[submodule "CardGame/Assets/UCL"]
+	path = CardGame/Assets/UCL
+	url = https://github.com/tim099/UCL
+	branch = Dev

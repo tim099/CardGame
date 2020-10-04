@@ -1,0 +1,11 @@
+.svn/
+.vs/
+Library/
+obj/
+Temp/
+Build/
+.gradle/
+*.csproj
+*.sln
+Logs/
+
