@@ -8,7 +8,6 @@ namespace RCG {
         public RCG_Deck m_Deck;
         public List<RCG_Card> m_Cards;
         public List<RCG_CardData> m_CardDatas;
-
         private void Awake() {
             Test();
         }
@@ -28,6 +27,9 @@ namespace RCG {
                 var card = m_Cards[i];
                 card.SetData(m_CardDatas[UCL.Core.MathLib.UCL_Random.Instance.Next(m_CardDatas.Count)]);
             }
+        }
+        private void Update() {
+
         }
     }
 }
