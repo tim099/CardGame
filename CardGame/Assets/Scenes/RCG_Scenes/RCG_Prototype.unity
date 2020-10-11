@@ -2635,10 +2635,6 @@ RectTransform:
   m_Children:
   - {fileID: 2009541221}
   - {fileID: 1026535019}
-  - {fileID: 1648369945}
-  - {fileID: 1465234084}
-  - {fileID: 398354204}
-  - {fileID: 1532376695}
   m_Father: {fileID: 1994476214}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
