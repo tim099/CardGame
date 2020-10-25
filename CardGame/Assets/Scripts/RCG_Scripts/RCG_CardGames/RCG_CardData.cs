@@ -22,5 +22,9 @@ namespace RCG {
         virtual public string GetDescription() {
             return m_Description;
         }
+
+        virtual public int GetCost() {
+            return m_Cost;
+        }
     }
 }
