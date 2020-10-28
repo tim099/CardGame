@@ -2,25 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 namespace RCG {
-    public enum CardType {
-        Attack = 0,
-        Defense,
-        Buff,
-        DeBuff,
-        Unknow,
-    }
-    public class RCG_CardData : MonoBehaviour {
+
+    public class RCG_CardData {
+        public RCG_CardData(RCG_CardSettings setting) {
+            m_Setting = setting;
+            m_Cost = m_Setting.m_Cost;
+            m_CardType = m_Setting.m_CardType;
+        }
+        protected RCG_CardSettings m_Setting;
         public int m_Cost = 1;
         public CardType m_CardType = CardType.Attack;
-        public Sprite m_Icon;
-        public string m_CardName;
-        public string m_Description;
-
-        virtual public string GetName() {
-            return m_CardName;
-        }
-        virtual public string GetDescription() {
-            return m_Description;
-        }
+        public Sprite Icon { get { return m_Setting.m_Icon; } }
+        virtual public string CardName { get { return m_Setting.m_CardName; } }
+        virtual public string Description { get { return m_Setting.m_Description; } }
     }
 }
