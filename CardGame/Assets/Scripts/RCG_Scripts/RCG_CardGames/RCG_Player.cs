@@ -42,21 +42,36 @@ namespace RCG {
             m_Deck.Shuffle();
             for(int i = 0; i < m_Cards.Count; i++) {
                 var card = m_Cards[i];
-                card.Init(this, m_Deck.Draw());
+                card.Init(this);
             }
             TurnInit();
         }
         public void TurnInit() {
+            foreach(var card in m_Cards) {
+                if(!card.m_Used && card.Data != null) {
+                    m_Deck.Used(card.Data);
+                }
+            }
+
+            for(int i = 0; i < m_Cards.Count; i++) {
+                var card = m_Cards[i];
+                card.TurnInit(m_Deck.Draw());
+            }
             m_Cost = MaxCost;
         }
         public void CardRelease() {
             if(m_DraggingCard != null && m_Target != null) {
-                
-                UCL.TweenLib.UCL_TweenManager.Instance.KillAllOnTransform(m_DraggingCard.m_Button.transform);
-                //Debug.LogError("Hit!!:" + m_DraggingCard.name + ",m_Target:" + m_Target.name);
-                var seq = m_DraggingCard.m_Button.transform.UCL_Move(0.4f, m_Target.transform.position).SetEase(EaseType.OutElastic).Start();
-                
-                m_DraggingCard.TriggerCardEffect(m_Target.m_ID);
+                if(m_DraggingCard.TriggerCardEffect(m_Target.m_ID)) {
+                    var card = m_DraggingCard;
+                    m_Deck.Used(m_DraggingCard.Data);
+                    UCL.TweenLib.UCL_TweenManager.Instance.KillAllOnTransform(m_DraggingCard.m_Button.transform);
+                    //Debug.LogError("Hit!!:" + m_DraggingCard.name + ",m_Target:" + m_Target.name);
+                    var seq = m_DraggingCard.m_Button.transform.UCL_Move(0.4f, m_Target.transform.position).SetEase(EaseType.OutElastic);
+                    seq.OnComplete(() => {
+                        card.CardUsed();
+                    });
+                    seq.Start();
+                }
             }
         }
         private void Update() {
