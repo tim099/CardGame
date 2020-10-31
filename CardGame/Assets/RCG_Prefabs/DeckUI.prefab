@@ -769,6 +769,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CardRowsDisplayUITmp: {fileID: 1358757696848512911}
   m_HidePos: {fileID: 1358757697499899527}
+  m_ScrollRect: {fileID: 1358757698236898347}
 --- !u!1 &1358757698236898345
 GameObject:
   m_ObjectHideFlags: 0
@@ -782,7 +783,6 @@ GameObject:
   - component: {fileID: 1358757698236898326}
   - component: {fileID: 1358757698236898325}
   - component: {fileID: 1358757698236898324}
-  - component: {fileID: 1358757698236898327}
   m_Layer: 5
   m_Name: Scroll
   m_TagString: Untagged
@@ -890,21 +890,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
---- !u!114 &1358757698236898327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1358757698236898345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4c6b68b3fcd0e14a833547b9fe40238, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TriggerState: 8
-  m_TriggerAction: 1
-  m_Rect: {fileID: 1358757698236898347}
 --- !u!1 &1358757698318754905
 GameObject:
   m_ObjectHideFlags: 0
