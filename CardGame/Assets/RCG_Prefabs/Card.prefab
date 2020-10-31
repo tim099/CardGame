@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Transition: 0
-  m_Draggable: 0
+  m_Draggable: 1
   m_PressedTime: 0
   m_Image: {fileID: 0}
   m_Text: {fileID: 0}
@@ -173,10 +173,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: def1b4d2e58dcff42a54ed03652a19a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  p_Player: {fileID: 0}
   m_Button: {fileID: 870112678151016132}
-  m_Used: 0
+  m_TB_Tweener: {fileID: 870112678151016135}
   m_CardDisplayer: {fileID: 870112677363859462}
+  m_Used: 0
 --- !u!1001 &1540415674875747499
 PrefabInstance:
   m_ObjectHideFlags: 0
