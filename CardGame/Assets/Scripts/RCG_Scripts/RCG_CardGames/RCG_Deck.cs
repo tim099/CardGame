@@ -5,6 +5,21 @@ namespace RCG {
     public class RCG_Deck {
         public List<RCG_CardData> m_Cards = new List<RCG_CardData>();
         public List<RCG_CardData> m_UsedCards = new List<RCG_CardData>();
+        
+        public void LogDatas() {
+            Debug.LogWarning("m_Cards:" + m_Cards.Count);
+            Debug.LogWarning("m_UsedCards:" + m_UsedCards.Count);
+        }
+        public List<RCG_CardData> ShowCards() {
+            var list = m_Cards.Clone();
+            UCL.Core.MathLib.UCL_Random.Instance.Shuffle(ref list);
+            return list;
+        }
+        public List<RCG_CardData> ShowUsedCards() {
+            var list = m_UsedCards.Clone();
+            UCL.Core.MathLib.UCL_Random.Instance.Shuffle(ref list);
+            return list;
+        }
         public void Add(RCG_CardData card) {
             m_Cards.Add(card);
         }

@@ -14,12 +14,18 @@ namespace RCG {
         public List<RCG_CardBeginSet> m_BeginSets = null;
         public List<UCL_RectTransformCollider> m_Targets = new List<UCL_RectTransformCollider>();
         public int m_Cost = 0;
+
+        public RCG_DeckUI m_CardUI;
+        public RCG_DeckUI m_UsedCardUI;
         protected RCG_Card m_DraggingCard = null;
         protected UCL_RectTransformCollider m_Target = null;
         private void Awake() {
             Init();
         }
-
+        [UCL.Core.ATTR.UCL_FunctionButton]
+        public void LogDeck() {
+            m_Deck.LogDatas();
+        }
         [UCL.Core.ATTR.UCL_FunctionButton]
         public void Init() {
             if(m_Cards == null) {
@@ -44,11 +50,14 @@ namespace RCG {
                 var card = m_Cards[i];
                 card.Init(this);
             }
+            m_CardUI.Init(this);
+            m_UsedCardUI.Init(this);
             TurnInit();
         }
         public void TurnInit() {
             foreach(var card in m_Cards) {
                 if(!card.m_Used && card.Data != null) {
+                    Debug.LogWarning("Use:" + card.name);
                     m_Deck.Used(card.Data);
                 }
             }
@@ -62,6 +71,7 @@ namespace RCG {
         public void CardRelease() {
             if(m_DraggingCard != null && m_Target != null) {
                 if(m_DraggingCard.TriggerCardEffect(m_Target.m_ID)) {
+                    Debug.LogWarning("D Use:" + m_DraggingCard.name);
                     var card = m_DraggingCard;
                     m_Deck.Used(m_DraggingCard.Data);
                     UCL.TweenLib.UCL_TweenManager.Instance.KillAllOnTransform(m_DraggingCard.m_Button.transform);
@@ -88,6 +98,8 @@ namespace RCG {
                 }
             }
             m_CostText.SetText("" + m_Cost);
+            m_CardUI.SetCardNum(m_Deck.m_Cards.Count);
+            m_UsedCardUI.SetCardNum(m_Deck.m_UsedCards.Count);
         }
     }
 }
