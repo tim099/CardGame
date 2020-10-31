@@ -58,10 +58,10 @@ namespace RCG {
 
         virtual public void SetData(RCG_CardData _Data) {
             m_Data = _Data;
-            m_Image.sprite = m_Data.m_Icon;
-            m_NameText.text = m_Data.GetName();
+            m_Image.sprite = m_Data.Icon;
+            m_NameText.text = m_Data.CardName;
             m_CostText.text = m_Data.GetCost().ToString();
-            m_DescriptionText.text = m_Data.GetDescription();
+            m_DescriptionText.text = m_Data.Description;
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(gameObject);
 #endif
