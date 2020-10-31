@@ -17,10 +17,15 @@ namespace RCG
         protected RCG_CardData m_Data;
         virtual public void Init(RCG_CardData _Data) {
             m_Data = _Data;
-            m_Image.SetSprite(m_Data.Icon);
-            m_NameText.SetText(m_Data.CardName);
-            m_DescriptionText.SetText(m_Data.Description);
-            m_CostText.SetText(m_Data.m_Cost);
+            if(m_Data != null) {
+                gameObject.SetActive(true);
+                m_Image.SetSprite(m_Data.Icon);
+                m_NameText.SetText(m_Data.CardName);
+                m_DescriptionText.SetText(m_Data.Description);
+                m_CostText.SetText(m_Data.m_Cost);
+            } else {
+                gameObject.SetActive(false);
+            }
         }
     }
 }

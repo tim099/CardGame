@@ -9,6 +9,11 @@ namespace RCG {
             m_Cost = m_Setting.m_Cost;
             m_CardType = m_Setting.m_CardType;
         }
+        virtual public void TriggerEffect(RCG_Player player) {
+            if(m_Setting.m_DrawCard > 0) {
+                player.DrawCard(m_Setting.m_DrawCard);
+            }
+        }
         protected RCG_CardSettings m_Setting;
         public int m_Cost = 1;
         public CardType m_CardType = CardType.Attack;
