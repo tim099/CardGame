@@ -7,8 +7,16 @@ using TMPro;
 namespace RCG{
     public class RCG_Status : MonoBehaviour
     {
+        public RCG_Unit m_target;
         protected int m_amount = 0;
-        protected int m_round = 0;
+        public int _m_round  = 1;
+        protected int m_round {
+            get{return _m_round;}
+            set{
+                _m_round = value;
+                m_counter_text.text = value.ToString();
+            }
+        }
 
         public TextMeshProUGUI m_counter_text;
         // Start is called before the first frame update
@@ -25,23 +33,24 @@ namespace RCG{
 
         private void awake(){
             if(!m_counter_text){
-                
+                m_counter_text = GetComponentInChildren<TextMeshProUGUI>();
+                m_counter_text.text = m_round.ToString();
             }
         }
 
-        public void StatusStart(){
+        virtual public void StatusStart(){
 
         }
 
-        public void StatusStack(){
+        virtual public void StatusStack(){
             
         }
 
-        public void StatusTurnEnd(){
+        virtual public void StatusTurnEnd(){
             
         }
 
-        public void StatusTurnStart(){
+        virtual public void StatusTurnStart(){
             
         }
     }

@@ -15,7 +15,10 @@ namespace RCG {
         void Update(){}
 
         private void Awake() {
-            Test();
+            RCG_Unit[] units = GetComponentsInChildren<RCG_Unit>();
+            foreach(RCG_Unit u in units){
+                m_units.Add(u);
+            }
         }
 
         public void Test() {
@@ -24,6 +27,12 @@ namespace RCG {
 
         public void CreateUnits() {
 
+        }
+
+        public void TurnEnd() {
+            foreach(RCG_Unit u in m_units){
+                u.EndTurn();
+            }
         }
     }
 }

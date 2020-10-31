@@ -21,6 +21,7 @@ namespace RCG {
                 m_unit_HUD.UpdateHUD();
             }
         }
+        public List<RCG_Status> m_status_list;
         private RCG_UnitHUD m_unit_HUD;
 
         private void Awake() {
@@ -38,6 +39,16 @@ namespace RCG {
         public int DamageHP(int amount){
             m_Hp -= amount;
             return 0;
+        }
+
+        public void Die(){
+            
+        }
+
+        public void EndTurn(){
+            for(int i = 0; i < m_status_list.Count; i++) {
+                m_status_list[i].StatusTurnEnd();
+            }
         }
 
         [UCL.Core.ATTR.UCL_FunctionButton]
