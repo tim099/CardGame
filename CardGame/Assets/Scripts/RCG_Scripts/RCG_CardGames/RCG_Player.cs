@@ -17,6 +17,7 @@ namespace RCG {
         public int m_DrawCardCount = 0;
         public RCG_DeckUI m_CardUI;
         public RCG_DeckUI m_UsedCardUI;
+        public Transform m_DrawCardPos;
         protected RCG_Card m_DraggingCard = null;
         protected UCL_RectTransformCollider m_Target = null;
         protected bool m_Blocking = false;
@@ -131,7 +132,9 @@ namespace RCG {
                     for(int i = 0; i < m_Cards.Count; i++) {
                         var card = m_Cards[i];
                         if(card.IsEmpty) {
+                            m_Blocking = true;
                             card.SetCardData(m_Deck.Draw());
+                            card.DrawCardAnime(m_DrawCardPos.position, () => { m_Blocking = false; });
                             m_DrawCardCount--;
                             break;
                         }

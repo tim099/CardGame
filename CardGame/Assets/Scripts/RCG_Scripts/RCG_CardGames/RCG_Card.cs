@@ -70,6 +70,12 @@ namespace RCG {
             }
             m_Used = false;
         }
+        virtual public void DrawCardAnime(Vector3 start_pos, System.Action end_act) {
+            m_Button.transform.position = start_pos;
+            m_Button.gameObject.SetActive(true);
+
+            m_TB_Tweener.StartTween(end_act);
+        }
         virtual public void CardUsed() {
             SetCardData(null);
         }

@@ -2920,8 +2920,10 @@ MonoBehaviour:
   - {fileID: 1571871979}
   - {fileID: 465921400}
   m_Cost: 0
+  m_DrawCardCount: 0
   m_CardUI: {fileID: 875771593}
   m_UsedCardUI: {fileID: 2037868082}
+  m_DrawCardPos: {fileID: 1984190515}
 --- !u!1 &1196592957
 GameObject:
   m_ObjectHideFlags: 0
@@ -3928,6 +3930,12 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 870112678433552044, guid: d09f410d112979946b0c1ebb3b82a185,
     type: 3}
   m_PrefabInstance: {fileID: 1982004876}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1984190515 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1358757697499899527, guid: 18fa582053a6f48438f9384dff90a2c2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1358757697126366900}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1994476210
 GameObject:
