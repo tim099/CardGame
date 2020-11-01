@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Cost: 1
   m_CardName: Draw
-  m_Description: 
-  m_CardType: 1
+  m_Description: Draw 3 Cards
+  m_Target: 1
+  m_CardType: 2
   m_Icon: {fileID: 21300000, guid: 5af10e090bfb7b345ac7f139af9a3b72, type: 3}
   m_Atk: 0
   m_AtkRange: 0

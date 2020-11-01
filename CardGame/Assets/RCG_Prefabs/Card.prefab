@@ -77,6 +77,34 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_OnPointerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 870112677363859462}
+        m_MethodName: ShowDescription
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnPointerExit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 870112677363859462}
+        m_MethodName: HideDescription
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnPressed:
     m_PersistentCalls:
       m_Calls: []
@@ -293,6 +321,46 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CardDisplay
+      objectReference: {fileID: 0}
+    - target: {fileID: 1834061518494477224, guid: 949a92143beaa994db19f8304564c734,
+        type: 3}
+      propertyPath: m_Text
+      value: 1234
+      objectReference: {fileID: 0}
+    - target: {fileID: 1834061518494477224, guid: 949a92143beaa994db19f8304564c734,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1834061518494477224, guid: 949a92143beaa994db19f8304564c734,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1834061518494477224, guid: 949a92143beaa994db19f8304564c734,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1834061518494477225, guid: 949a92143beaa994db19f8304564c734,
+        type: 3}
+      propertyPath: m_EffectColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1834061518494477225, guid: 949a92143beaa994db19f8304564c734,
+        type: 3}
+      propertyPath: m_EffectColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1834061518494477225, guid: 949a92143beaa994db19f8304564c734,
+        type: 3}
+      propertyPath: m_EffectColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7386940067427310006, guid: 949a92143beaa994db19f8304564c734,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 949a92143beaa994db19f8304564c734, type: 3}

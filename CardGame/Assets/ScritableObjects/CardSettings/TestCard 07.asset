@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Cost: 3
   m_CardName: GGG
-  m_Description: 
+  m_Description: Atk 8 Range 2
+  m_Target: 4
   m_CardType: 0
   m_Icon: {fileID: 21300000, guid: d0e7f893260354c43b3b4f0f173c3b1a, type: 3}
   m_Atk: 8
   m_AtkRange: 2
+  m_AtkTimes: 1
   m_Defense: 0
+  m_DrawCard: 0

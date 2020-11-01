@@ -10,10 +10,6 @@ using TMPro;
 namespace RCG {
 
     public class RCG_Card : MonoBehaviour {
-        public Image m_Image;
-        public TextMeshProUGUI m_CostText;
-        public Text m_NameText;
-        public Text m_DescriptionText;
         public UCL.Core.UI.UCL_Button m_Button;
         public UCL.TweenLib.UCL_TB_Tweener m_TB_Tweener;
         public RCG_CardDisplayer m_CardDisplayer;
@@ -38,6 +34,7 @@ namespace RCG {
                 Debug.LogError("m_Data == null");
                 return false;
             }
+            if(!m_Data.TargetCheck(target)) return false;
             if(p_Player.m_Cost < m_Data.m_Cost) return false;
             m_Used = true;
             p_Player.m_Cost -= m_Data.m_Cost;
@@ -53,18 +50,6 @@ namespace RCG {
         virtual public void Init(RCG_Player _Player) {
             p_Player = _Player;
             m_Button.m_OnPointerUp.AddListener(p_Player.CardRelease);
-        }
-
-
-        virtual public void SetData(RCG_CardData _Data) {
-            m_Data = _Data;
-            m_Image.sprite = m_Data.Icon;
-            m_NameText.text = m_Data.CardName;
-            m_CostText.text = m_Data.GetCost().ToString();
-            m_DescriptionText.text = m_Data.Description;
-#if UNITY_EDITOR
-            UnityEditor.EditorUtility.SetDirty(gameObject);
-#endif
         }
         virtual public void TurnInit(RCG_CardData _Data) {
             SetCardData(_Data);

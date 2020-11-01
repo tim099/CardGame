@@ -9,6 +9,30 @@ namespace RCG {
             m_Cost = m_Setting.m_Cost;
             m_CardType = m_Setting.m_CardType;
         }
+        virtual public bool TargetCheck(int target) {
+            switch(m_Setting.m_Target) {
+                case Target.Null: {
+                        return false;
+                    }
+                case Target.Player: {
+                        return target == 0;
+                    }
+                case Target.Friend: {
+                        return target == 1;
+                    }
+                case Target.Allied: {
+                        return target <= 1;
+                    }
+                case Target.Enemy: {
+                        if(target <= 1) return false;
+                        return target <= m_Setting.m_AtkRange + 2;
+                    }
+                case Target.All: {
+                        return true;
+                    }
+            }
+            return true;
+        }
         virtual public void TriggerEffect(RCG_Player player) {
             if(m_Setting.m_DrawCard > 0) {
                 player.DrawCard(m_Setting.m_DrawCard);

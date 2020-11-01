@@ -11,6 +11,15 @@ namespace RCG
         DeBuff,
         Unknow,
     }
+    public enum Target 
+    {
+        Null = 0,
+        Player,
+        Friend,
+        Allied,//both Player and Friend
+        Enemy,
+        All,
+    }
     [CreateAssetMenu(fileName = "New CardSettings", menuName = "RCG/CardSettings")]
     public class RCG_CardSettings : ScriptableObject
     {
@@ -23,11 +32,12 @@ namespace RCG
         public string m_CardName;
         public string m_Description;
 
-
+        public Target m_Target = Target.Enemy;
         public CardType m_CardType = CardType.Attack;
         public Sprite m_Icon = null;
         public int m_Atk = 0;
         public int m_AtkRange = 1;//MeleeAttack
+        public int m_AtkTimes = 1;
 
         public int m_Defense = 0;
         public int m_DrawCard = 0;

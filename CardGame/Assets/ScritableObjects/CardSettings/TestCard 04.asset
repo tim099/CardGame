@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Cost: 1
   m_CardName: 
-  m_Description: 
+  m_Description: Atk2 times 4 Range 1
+  m_Target: 4
   m_CardType: 2
   m_Icon: {fileID: 21300000, guid: 294ddca362372724c93de6a21ca129f6, type: 3}
-  m_Atk: 3
-  m_AtkRange: 0
+  m_Atk: 2
+  m_AtkRange: 1
+  m_AtkTimes: 4
   m_Defense: 0
+  m_DrawCard: 0
