@@ -14,6 +14,10 @@ namespace RCG {
                 player.DrawCard(m_Setting.m_DrawCard);
             }
         }
+
+        virtual public int GetCost() {
+            return m_Cost;
+        }
         protected RCG_CardSettings m_Setting;
         public int m_Cost = 1;
         public CardType m_CardType = CardType.Attack;
