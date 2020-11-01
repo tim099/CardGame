@@ -16,7 +16,7 @@ MonoBehaviour:
   m_CardName: 
   m_Description: Atk2 times 4 Range 1
   m_Target: 4
-  m_CardType: 2
+  m_CardType: 0
   m_Icon: {fileID: 21300000, guid: 294ddca362372724c93de6a21ca129f6, type: 3}
   m_Atk: 2
   m_AtkRange: 1

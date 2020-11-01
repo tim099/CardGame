@@ -10,6 +10,7 @@ using TMPro;
 namespace RCG {
 
     public class RCG_Card : MonoBehaviour {
+        public GameObject m_CardPanel;
         public UCL.Core.UI.UCL_Button m_Button;
         public UCL.TweenLib.UCL_TB_Tweener m_TB_Tweener;
         public RCG_CardDisplayer m_CardDisplayer;
@@ -59,17 +60,17 @@ namespace RCG {
             m_CardDisplayer.Init(m_Data);
             m_TB_Tweener.Kill();
             if(m_Data != null) {
-                m_Button.transform.position = transform.position;
-                m_Button.gameObject.SetActive(true);
+                m_CardPanel.transform.position = transform.position;
+                m_CardPanel.SetActive(true);
             } else {
-                m_Button.transform.position = transform.position;
-                m_Button.gameObject.SetActive(false);
+                m_CardPanel.transform.position = transform.position;
+                m_CardPanel.SetActive(false);
             }
             m_Used = false;
         }
         virtual public void DrawCardAnime(Vector3 start_pos, System.Action end_act) {
-            m_Button.transform.position = start_pos;
-            m_Button.gameObject.SetActive(true);
+            m_CardPanel.transform.position = start_pos;
+            m_CardPanel.SetActive(true);
 
             m_TB_Tweener.StartTween(end_act);
         }

@@ -33,13 +33,14 @@ namespace RCG {
             }
         }
 
-        private void Awake() {
-            Init();
-        }
         [UCL.Core.ATTR.UCL_FunctionButton]
         public void LogDeck() {
             m_Deck.LogDatas();
         }
+        void Awake() {
+            Init();
+        }
+
         [UCL.Core.ATTR.UCL_FunctionButton]
         public void Init() {
             if(m_Cards == null) {
@@ -56,7 +57,7 @@ namespace RCG {
             }
             m_Deck = new RCG_Deck();
             var set = m_BeginSets[UCL.Core.MathLib.UCL_Random.Instance.Next(m_BeginSets.Count)];
-            for(int i = 0,len = set.m_Settings.Count; i < len; i++) {
+            for(int i = 0, len = set.m_Settings.Count; i < len; i++) {
                 m_Deck.Add(set.m_Settings[i].CreateCard());
             }
             m_Deck.Shuffle();
@@ -73,12 +74,16 @@ namespace RCG {
             int space = CardSpace;
             if(m_DrawCardCount > space) m_DrawCardCount = space;
         }
+        public void EndTurn() {
+
+        }
         public void TurnInit() {
             if(m_Blocking) return;
             m_DrawCardCount = 0;
             foreach(var card in m_Cards) {
                 if(!card.m_Used && card.Data != null) {
-                    Debug.LogWarning("Use:" + card.name);
+                    //Debug.LogWarning("Use:" + card.name);
+                    //card.Data.LogSetting();
                     m_Deck.Used(card.Data);
                 }
             }
@@ -88,6 +93,7 @@ namespace RCG {
                 RCG_CardData data = null;
                 if(i > 0 && i < m_Cards.Count - 1) data = m_Deck.Draw();
                 card.TurnInit(data);
+                if(data != null) card.DrawCardAnime(m_DrawCardPos.position, null);
             }
             m_Cost = MaxCost;
         }

@@ -15,7 +15,7 @@ MonoBehaviour:
   m_Cost: 0
   m_CardName: DDD
   m_Description: Def 2
-  m_Target: 4
+  m_Target: 3
   m_CardType: 1
   m_Icon: {fileID: 21300000, guid: 5c2fb14b16f115546adc2b2b10cc51c1, type: 3}
   m_Atk: 0

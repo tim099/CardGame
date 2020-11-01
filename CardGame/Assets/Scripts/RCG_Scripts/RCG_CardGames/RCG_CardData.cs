@@ -9,6 +9,9 @@ namespace RCG {
             m_Cost = m_Setting.m_Cost;
             m_CardType = m_Setting.m_CardType;
         }
+        public void LogSetting() {
+            Debug.LogWarning("m_Setting:" + m_Setting.UCL_ToString());
+        }
         virtual public bool TargetCheck(int target) {
             switch(m_Setting.m_Target) {
                 case Target.Null: {
@@ -25,7 +28,7 @@ namespace RCG {
                     }
                 case Target.Enemy: {
                         if(target <= 1) return false;
-                        return target <= m_Setting.m_AtkRange + 2;
+                        return target < m_Setting.m_AtkRange + 2;
                     }
                 case Target.All: {
                         return true;

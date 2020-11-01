@@ -36,7 +36,7 @@ namespace RCG
         public CardType m_CardType = CardType.Attack;
         public Sprite m_Icon = null;
         public int m_Atk = 0;
-        public int m_AtkRange = 1;//MeleeAttack
+        public int m_AtkRange = 1;//if MeleeAttack m_AtkRange == 1
         public int m_AtkTimes = 1;
 
         public int m_Defense = 0;

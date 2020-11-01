@@ -176,7 +176,7 @@ GameObject:
   - component: {fileID: 1834061517717232786}
   - component: {fileID: 1834061517717232787}
   - component: {fileID: 1834061517717232813}
-  - component: {fileID: 7386940067427310006}
+  - component: {fileID: 6682943148800859605}
   m_Layer: 5
   m_Name: CardDisplay
   m_TagString: Untagged
@@ -261,7 +261,7 @@ MonoBehaviour:
   m_Description: {fileID: 1834061518494477231}
   m_DescriptionText: {fileID: 1834061518494477224}
   m_CostText: {fileID: 1834061519075677221}
---- !u!114 &7386940067427310006
+--- !u!114 &6682943148800859605
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -270,25 +270,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1834061517717232785}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac4f9da290f142142b07603baf5efc10, type: 3}
+  m_Script: {fileID: 11500000, guid: 3644f4992a8239646826ce129720ac88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Transition: 1
-  m_Draggable: 0
-  m_PressedTime: 0
-  m_Image: {fileID: 0}
-  m_Text: {fileID: 0}
-  m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnPointerDown:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnPointerUp:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnPointerEnter:
     m_PersistentCalls:
       m_Calls:
@@ -317,9 +301,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_OnPressed:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1834061517906098239
 GameObject:
   m_ObjectHideFlags: 0
