@@ -30,5 +30,6 @@ namespace RCG
         public int m_AtkRange = 1;//MeleeAttack
 
         public int m_Defense = 0;
+        public int m_DrawCard = 0;
     }
 }
