@@ -21,7 +21,7 @@ namespace RCG {
         protected RCG_Card m_DraggingCard = null;
         protected UCL_RectTransformCollider m_Target = null;
         protected bool m_Blocking = false;
-
+        protected bool m_Inited = false;
         public int CardSpace {
             get {
                 int count = 0;
@@ -37,12 +37,14 @@ namespace RCG {
         public void LogDeck() {
             m_Deck.LogDatas();
         }
-        void Awake() {
-            Init();
-        }
+        //void Awake() {
+        //    Init();
+        //}
 
         [UCL.Core.ATTR.UCL_FunctionButton]
         public void Init() {
+            if(m_Inited) return;
+            m_Inited = true;
             if(m_Cards == null) {
                 m_Cards = new List<RCG_Card>();
             }
@@ -117,6 +119,7 @@ namespace RCG {
             }
         }
         private void Update() {
+            if(!m_Inited) return;
             m_DraggingCard = null;
             m_Target = null;
             foreach(var card in m_Cards) {

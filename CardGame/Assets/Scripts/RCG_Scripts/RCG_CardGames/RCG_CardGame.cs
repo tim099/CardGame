@@ -8,9 +8,12 @@ namespace RCG {
         public RCG_Player m_Player;
         private void Awake() {
             ins = this;
-            //m_Player.Init();
+            m_Player.Init();
         }
-        public void EndTurn() {
+        public void EnemyEndTurn() {
+
+        }
+        public void PlayerEndTurn() {
             m_Player.EndTurn();
         }
     }

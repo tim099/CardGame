@@ -4,6 +4,14 @@ using UnityEngine;
 namespace RCG {
 
     public class RCG_CardData {
+        public Sprite Icon { get { return m_Setting.m_Icon; } }
+        virtual public string CardName { get { return m_Setting.m_CardName; } }
+        virtual public string Description { get { return m_Setting.m_Description; } }
+        virtual public int Atk { get { return m_Setting.m_Atk; } }
+        virtual public int AtkTimes { get { return m_Setting.m_AtkTimes; } }
+        virtual public int AtkRange { get { return m_Setting.m_AtkRange; } }
+        virtual public int Defense { get { return m_Setting.m_Defense; } }
+        virtual public TargetType Target { get { return m_Setting.m_Target; } }
         public RCG_CardData(RCG_CardSettings setting) {
             m_Setting = setting;
             m_Cost = m_Setting.m_Cost;
@@ -14,23 +22,23 @@ namespace RCG {
         }
         virtual public bool TargetCheck(int target) {
             switch(m_Setting.m_Target) {
-                case Target.Null: {
+                case TargetType.Null: {
                         return false;
                     }
-                case Target.Player: {
+                case TargetType.Player: {
                         return target == 0;
                     }
-                case Target.Friend: {
+                case TargetType.Friend: {
                         return target == 1;
                     }
-                case Target.Allied: {
+                case TargetType.Allied: {
                         return target <= 1;
                     }
-                case Target.Enemy: {
+                case TargetType.Enemy: {
                         if(target <= 1) return false;
                         return target < m_Setting.m_AtkRange + 2;
                     }
-                case Target.All: {
+                case TargetType.All: {
                         return true;
                     }
             }
@@ -48,8 +56,6 @@ namespace RCG {
         protected RCG_CardSettings m_Setting;
         public int m_Cost = 1;
         public CardType m_CardType = CardType.Attack;
-        public Sprite Icon { get { return m_Setting.m_Icon; } }
-        virtual public string CardName { get { return m_Setting.m_CardName; } }
-        virtual public string Description { get { return m_Setting.m_Description; } }
+
     }
 }
