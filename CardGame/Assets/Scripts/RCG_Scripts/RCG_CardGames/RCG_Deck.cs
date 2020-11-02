@@ -17,13 +17,16 @@ namespace RCG {
         }
         public List<RCG_CardData> ShowUsedCards() {
             var list = m_UsedCards.Clone();
-            UCL.Core.MathLib.UCL_Random.Instance.Shuffle(ref list);
             return list;
         }
         public void Add(RCG_CardData card) {
             m_Cards.Add(card);
         }
         public void Used(RCG_CardData card) {
+            if(card == null) {
+                Debug.LogError("Used card fail card == null");
+                return;
+            }
             m_UsedCards.Add(card);
         }
         public void Shuffle() {

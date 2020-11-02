@@ -12,6 +12,7 @@ namespace RCG
     {
         public Image m_Image;
         public Text m_NameText;
+        public GameObject m_Description;
         public Text m_DescriptionText;
         public Text m_CostText;
         protected RCG_CardData m_Data;
@@ -23,9 +24,16 @@ namespace RCG
                 m_NameText.SetText(m_Data.CardName);
                 m_DescriptionText.SetText(m_Data.Description);
                 m_CostText.SetText(m_Data.m_Cost);
+                HideDescription();
             } else {
                 gameObject.SetActive(false);
             }
+        }
+        virtual public void ShowDescription() {
+            m_Description.SetActive(true);
+        }
+        virtual public void HideDescription() {
+            m_Description.SetActive(false);
         }
     }
 }

@@ -176,6 +176,7 @@ GameObject:
   - component: {fileID: 1834061517717232786}
   - component: {fileID: 1834061517717232787}
   - component: {fileID: 1834061517717232813}
+  - component: {fileID: 6682943148800859605}
   m_Layer: 5
   m_Name: CardDisplay
   m_TagString: Untagged
@@ -257,8 +258,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Image: {fileID: 1834061518711089337}
   m_NameText: {fileID: 1834061517906098232}
+  m_Description: {fileID: 1834061518494477231}
   m_DescriptionText: {fileID: 1834061518494477224}
   m_CostText: {fileID: 1834061519075677221}
+--- !u!114 &6682943148800859605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834061517717232785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3644f4992a8239646826ce129720ac88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OnPointerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1834061517717232813}
+        m_MethodName: ShowDescription
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_OnPointerExit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1834061517717232813}
+        m_MethodName: HideDescription
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1834061517906098239
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,7 +431,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -28.000017}
-  m_SizeDelta: {x: 180, y: 230.00002}
+  m_SizeDelta: {x: 180, y: 220}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1834061518494477227
 CanvasRenderer:
