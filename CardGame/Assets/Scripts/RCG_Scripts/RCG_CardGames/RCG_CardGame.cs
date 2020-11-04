@@ -16,5 +16,12 @@ namespace RCG {
         public void PlayerEndTurn() {
             m_Player.EndTurn();
         }
+        private void Update() {
+            //Debug.LogWarning("Update()");
+            if(Input.GetKeyDown(KeyCode.Escape)) {
+                //Debug.LogWarning("Input.GetKeyDown(KeyCode.Escape)");
+                Application.Quit();
+            }
+        }
     }
 }
