@@ -51,6 +51,7 @@ namespace RCG {
         virtual public void Init(RCG_Player _Player) {
             p_Player = _Player;
             m_Button.m_OnPointerUp.AddListener(p_Player.CardRelease);
+            m_CardDisplayer.m_OnSelected.AddListener(() => { transform.SetAsLastSibling(); });
         }
         virtual public void TurnInit(RCG_CardData _Data) {
             SetCardData(_Data);
@@ -71,11 +72,17 @@ namespace RCG {
         virtual public void DrawCardAnime(Vector3 start_pos, System.Action end_act) {
             m_CardPanel.transform.position = start_pos;
             m_CardPanel.SetActive(true);
-
-            m_TB_Tweener.StartTween(end_act);
+            m_CardDisplayer.BlockSelection();
+            m_TB_Tweener.StartTween(()=> {
+                m_CardDisplayer.UnBlockSelection();
+                if(end_act != null) end_act.Invoke();
+            });
         }
         virtual public void CardUsed() {
             SetCardData(null);
+        }
+        virtual protected void Update() {
+
         }
     }
 }

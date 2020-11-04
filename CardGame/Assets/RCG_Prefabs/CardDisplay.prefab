@@ -32,7 +32,7 @@ RectTransform:
   m_Children:
   - {fileID: 1834061518711089342}
   m_Father: {fileID: 1834061517717232784}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -120,7 +120,7 @@ RectTransform:
   m_Children:
   - {fileID: 1834061519075677227}
   m_Father: {fileID: 1834061517717232784}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -195,6 +195,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1341368502825519234}
+  - {fileID: 947540366013581175}
   - {fileID: 1834061517102111603}
   - {fileID: 1834061517906098238}
   - {fileID: 1834061518494477230}
@@ -256,6 +258,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb405af992c2e9c45b98459ba51a8633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ScaleUpTB: {fileID: 8901769786041409943}
+  m_ScaleBackTB: {fileID: 2434434774781888483}
   m_Image: {fileID: 1834061518711089337}
   m_NameText: {fileID: 1834061517906098232}
   m_Description: {fileID: 1834061518494477231}
@@ -301,6 +305,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_Enter: 0
 --- !u!1 &1834061517906098239
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,7 +337,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1834061517717232784}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -426,7 +431,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1834061517717232784}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -658,3 +663,165 @@ MonoBehaviour:
   m_EffectDistance: {x: 2, y: -2}
   m_UseGraphicAlpha: 1
   m_Size: 3
+--- !u!1 &2483673694183496883
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1341368502825519234}
+  - component: {fileID: 8901769786041409943}
+  m_Layer: 5
+  m_Name: CardScaleUp
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1341368502825519234
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2483673694183496883}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1834061517717232784}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8901769786041409943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2483673694183496883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07496e38c5092ca4eba68d0b931910e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StartOption: 0
+  m_EndOnDestroy: 1
+  m_EndOnDisable: 0
+  m_Looping: 0
+  m_StartEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_EndEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_CompleteWhenKill: 0
+  m_Ease: 25
+  m_Duration: 0.3
+  m_DrawGizmos: 1
+  m_TimeManager: {fileID: 0}
+  m_TweenerComponents:
+  - m_Type: 7
+    m_Transform:
+    - {fileID: 1834061517717232784}
+    - {fileID: 0}
+    m_Quaternion: []
+    m_UCL_Path: []
+    m_LookAtFront: []
+    m_UCL_TC_Event: []
+    m_Vector3:
+    - {x: 1.2, y: 1.2, z: 1}
+    - {x: 0, y: 0, z: 0}
+    m_Vector2: []
+    m_Boolean: 0100
+    m_Byte: 
+    m_Int32: 
+    m_Single: []
+    m_Foldout: 1
+--- !u!1 &4564993089021895502
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 947540366013581175}
+  - component: {fileID: 2434434774781888483}
+  m_Layer: 5
+  m_Name: CardScaleBack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &947540366013581175
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4564993089021895502}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1834061517717232784}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2434434774781888483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4564993089021895502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07496e38c5092ca4eba68d0b931910e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StartOption: 0
+  m_EndOnDestroy: 1
+  m_EndOnDisable: 0
+  m_Looping: 0
+  m_StartEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_EndEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_CompleteWhenKill: 0
+  m_Ease: 25
+  m_Duration: 0.2
+  m_DrawGizmos: 1
+  m_TimeManager: {fileID: 0}
+  m_TweenerComponents:
+  - m_Type: 7
+    m_Transform:
+    - {fileID: 1834061517717232784}
+    - {fileID: 0}
+    m_Quaternion: []
+    m_UCL_Path: []
+    m_LookAtFront: []
+    m_UCL_TC_Event: []
+    m_Vector3:
+    - {x: 1, y: 1, z: 1}
+    - {x: 0, y: 0, z: 0}
+    m_Vector2: []
+    m_Boolean: 0100
+    m_Byte: 
+    m_Int32: 
+    m_Single: []
+    m_Foldout: 1
