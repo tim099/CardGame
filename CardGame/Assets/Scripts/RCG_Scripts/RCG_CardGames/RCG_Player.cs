@@ -109,7 +109,7 @@ namespace RCG {
                     UCL.TweenLib.UCL_TweenManager.Instance.KillAllOnTransform(m_DraggingCard.m_Button.transform);
                     //Debug.LogError("Hit!!:" + m_DraggingCard.name + ",m_Target:" + m_Target.name);
                     m_Blocking = true;
-                    var seq = m_DraggingCard.m_Button.transform.UCL_Move(0.4f, m_Target.transform.position).SetEase(EaseType.OutElastic);
+                    var seq = m_DraggingCard.m_Button.transform.UCL_Move(0.15f, m_Target.transform.position).SetEase(EaseType.OutQuad);
                     seq.OnComplete(() => {
                         m_Blocking = false;
                         card.CardUsed();

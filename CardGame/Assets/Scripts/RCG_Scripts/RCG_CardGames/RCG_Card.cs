@@ -11,7 +11,8 @@ namespace RCG {
 
     public class RCG_Card : MonoBehaviour {
         public GameObject m_CardPanel;
-        public UCL.Core.UI.UCL_Button m_Button;
+        public UCL_Button m_Button;
+        public UCL_Draggable m_Draggable;
         public UCL.TweenLib.UCL_TB_Tweener m_TB_Tweener;
         public RCG_CardDisplayer m_CardDisplayer;
         public bool m_Used = false;
@@ -19,7 +20,7 @@ namespace RCG {
         protected RCG_Player p_Player;
         virtual public RCG_CardData Data { get { return m_Data; } }
         virtual public bool IsDragging {
-            get { return m_Button.m_Dragging; }
+            get { return m_Draggable.IsDragging; }
         }
         /// <summary>
         /// target >=3 is enemy
