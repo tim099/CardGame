@@ -8,7 +8,9 @@ namespace RCG {
         public RCG_Player m_Player;
         private void Awake() {
             ins = this;
+            UCL.Core.LocalizeLib.UCL_LocalizeManager.Instance.ResourceLoadLanguage(@"Language/Chinese/Lang");
             m_Player.Init();
+            Debug.LogWarning("Application.systemLanguage:" + Application.systemLanguage.ToString());
         }
         public void EnemyEndTurn() {
 
@@ -20,7 +22,7 @@ namespace RCG {
             //Debug.LogWarning("Update()");
             if(Input.GetKeyDown(KeyCode.Escape)) {
                 //Debug.LogWarning("Input.GetKeyDown(KeyCode.Escape)");
-                Application.Quit();
+                RCG_GameManager.Instance.ExitGame();
             }
         }
     }

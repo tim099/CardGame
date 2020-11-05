@@ -30,7 +30,9 @@ namespace RCG
                 m_Image.SetSprite(m_Data.Icon);
                 m_NameText.SetText(m_Data.CardName);
                 m_DescriptionText.SetText(m_Data.Description);
-                m_CostText.SetText(m_Data.m_Cost);
+                int cost = m_Data.Cost;
+                if(cost < 0) cost = 0;
+                m_CostText.SetText(cost);
                 HideDescription();
             } else {
                 gameObject.SetActive(false);

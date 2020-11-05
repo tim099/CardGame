@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7e07d5a6456dd94b8ec095b5d89df33, type: 3}
   m_Name: TestCard 02
   m_EditorClassIdentifier: 
+  m_FortifyCard: {fileID: 0}
+  m_Insane: {fileID: 0}
   m_Cost: 1
   m_CardName: 
-  m_Description: Atk 7 range 3
+  m_Description: 
   m_Target: 4
   m_CardType: 0
   m_Icon: {fileID: 21300000, guid: 3f2730da2148dcc4ba3fe1d1611dadb8, type: 3}
@@ -23,3 +25,4 @@ MonoBehaviour:
   m_AtkTimes: 1
   m_Defense: 0
   m_DrawCard: 0
+  m_Entries: 
