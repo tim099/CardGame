@@ -15,6 +15,9 @@ namespace RCG{
             set{
                 _m_round = value;
                 m_counter_text.text = value.ToString();
+                if(value < 1){
+                    StatusEnd();
+                }
             }
         }
 
@@ -52,6 +55,12 @@ namespace RCG{
 
         virtual public void StatusTurnStart(){
             
+        }
+
+        virtual public void StatusEnd(){
+            // Destroy(transform.gameObject);
+            // foreach( Transform t in transform) { Destroy(t.gameObject); }
+            Destroy(gameObject);
         }
     }
 }
