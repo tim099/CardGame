@@ -5,6 +5,18 @@ using UnityEngine.UI;
 using TMPro;
 
 namespace RCG{
+
+    public enum StatusType{
+        None,
+        Bleed,
+        Poisoned,
+        Dazed,
+        Weak,
+        Stun,
+        Fragile,
+        Strength
+    }
+    
     public class RCG_Status : MonoBehaviour
     {
         public RCG_Unit m_target;

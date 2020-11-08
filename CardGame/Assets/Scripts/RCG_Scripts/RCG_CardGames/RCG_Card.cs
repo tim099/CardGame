@@ -41,6 +41,7 @@ namespace RCG {
             m_Used = true;
             p_Player.m_Cost -= m_Data.m_Cost;
             m_Data.TriggerEffect(p_Player);
+            RCG_CardGame.ins.m_battlefield.TriggerCardEffect(target, m_Data);
             return true;
         }
         virtual public bool IsEmpty {

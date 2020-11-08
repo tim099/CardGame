@@ -48,5 +48,7 @@ namespace RCG
         public int m_Defense = 0;
         public int m_DrawCard = 0;
         public List<Entry> m_Entries = new List<Entry>();
+        public StatusType m_status_type = StatusType.None;
+        public int m_status_count = 0;
     }
 }

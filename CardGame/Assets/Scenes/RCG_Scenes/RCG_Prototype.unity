@@ -1110,12 +1110,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 801277870}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 28c9d93516f1ef94396ee5245099b533, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Player: {fileID: 1172460288}
+  m_battlefield: {fileID: 254911906}
 --- !u!1001 &804047493
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1621,7 +1622,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Transition: 1
-  m_Draggable: 0
   m_PressedTime: 0
   m_Image: {fileID: 1070785879}
   m_Text: {fileID: 788677495}
@@ -2971,6 +2971,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Player: {fileID: 1172460288}
+  m_battlefield: {fileID: 254911906}
+--- !u!114 &2115415679 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6070551706161409556, guid: b1503341312fdba43b46f3c0a8db535c,
+    type: 3}
+  m_PrefabInstance: {fileID: 6070551707596735004}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f41acf2e4ffaa345bb1aa16748ef941, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &870112676451107814
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3519,6 +3532,71 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Knight
+      objectReference: {fileID: 0}
+    - target: {fileID: 6070551706161409562, guid: b1503341312fdba43b46f3c0a8db535c,
+        type: 3}
+      propertyPath: m_OnMouseEnterEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6070551706161409562, guid: b1503341312fdba43b46f3c0a8db535c,
+        type: 3}
+      propertyPath: m_OnMouseExitEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6070551706161409562, guid: b1503341312fdba43b46f3c0a8db535c,
+        type: 3}
+      propertyPath: m_OnMouseEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6070551706161409562, guid: b1503341312fdba43b46f3c0a8db535c,
+        type: 3}
+      propertyPath: m_OnMouseEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6070551706161409562, guid: b1503341312fdba43b46f3c0a8db535c,
+        type: 3}
+      propertyPath: m_OnMouseEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6070551706161409562, guid: b1503341312fdba43b46f3c0a8db535c,
+        type: 3}
+      propertyPath: m_OnMouseEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 2115415679}
+    - target: {fileID: 6070551706161409562, guid: b1503341312fdba43b46f3c0a8db535c,
+        type: 3}
+      propertyPath: m_OnMouseEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: set_enabled
+      objectReference: {fileID: 0}
+    - target: {fileID: 6070551706161409562, guid: b1503341312fdba43b46f3c0a8db535c,
+        type: 3}
+      propertyPath: m_OnMouseEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6070551706161409562, guid: b1503341312fdba43b46f3c0a8db535c,
+        type: 3}
+      propertyPath: m_OnMouseExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6070551706161409562, guid: b1503341312fdba43b46f3c0a8db535c,
+        type: 3}
+      propertyPath: m_OnMouseExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6070551706161409562, guid: b1503341312fdba43b46f3c0a8db535c,
+        type: 3}
+      propertyPath: m_OnMouseExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 2115415679}
+    - target: {fileID: 6070551706161409562, guid: b1503341312fdba43b46f3c0a8db535c,
+        type: 3}
+      propertyPath: m_OnMouseExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: set_enabled
+      objectReference: {fileID: 0}
+    - target: {fileID: 6070551706161409562, guid: b1503341312fdba43b46f3c0a8db535c,
+        type: 3}
+      propertyPath: m_OnMouseExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6070551706508158706, guid: b1503341312fdba43b46f3c0a8db535c,
         type: 3}

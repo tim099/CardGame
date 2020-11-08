@@ -47,7 +47,12 @@ namespace RCG {
 
         public void EndTurn(){
             for(int i = 0; i < m_status_list.Count; i++) {
-                m_status_list[i].StatusTurnEnd();
+                if(m_status_list[i] != null){
+                    m_status_list[i].StatusTurnEnd();
+                }
+                else{
+                    m_status_list.RemoveAt(i);
+                }
             }
         }
 

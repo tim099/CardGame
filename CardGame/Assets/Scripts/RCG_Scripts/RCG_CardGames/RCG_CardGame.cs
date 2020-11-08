@@ -6,10 +6,12 @@ namespace RCG {
     public class RCG_CardGame : MonoBehaviour {
         static public RCG_CardGame ins = null; 
         public RCG_Player m_Player;
+        public RCG_BattleField m_battlefield;
         private void Awake() {
             ins = this;
             UCL.Core.LocalizeLib.UCL_LocalizeManager.Instance.ResourceLoadLanguage(@"Language/Chinese/Lang");
             m_Player.Init();
+            m_battlefield.Init();
             Debug.LogWarning("Application.systemLanguage:" + Application.systemLanguage.ToString());
         }
         public void EnemyEndTurn() {
