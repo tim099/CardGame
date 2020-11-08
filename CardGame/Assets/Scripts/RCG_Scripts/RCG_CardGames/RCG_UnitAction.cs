@@ -11,7 +11,8 @@ namespace RCG {
         Defend,
         Attack,
         Buff,
-        Debuff
+        Debuff,
+        Die
     }
 
     [UCL.Core.ATTR.EnableUCLEditor]

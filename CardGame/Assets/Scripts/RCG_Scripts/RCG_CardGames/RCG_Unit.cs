@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UCL.Core.UI;
 
 namespace RCG {
     [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_Unit : MonoBehaviour {
         public int _m_Hp = 0;
         public int _m_MaxHp = 0;
+        public bool  m_is_dead = false;
         private Queue<RCG_UnitAction> m_action_queue;
         private RCG_UnitAction m_action = null;
 
@@ -41,11 +43,15 @@ namespace RCG {
 
         public int DamageHP(int amount){
             m_Hp -= amount;
+            if(m_Hp <= 0){
+                Die();
+            }
             return 0;
         }
 
         public void Die(){
-            
+            m_is_dead = true;
+            m_action_queue.Enqueue(new RCG_UnitAction(UnitActionType.Die, 0, null, 1.1));
         }
 
         public void EndTurn(){
@@ -87,8 +93,14 @@ namespace RCG {
             }
             else{
                 m_action.m_duration -= Time.deltaTime;
-                Debug.Log(m_action.m_duration);
+                if(m_action.m_type == UnitActionType.Die){
+                    gameObject.GetComponent<UCL_Image>().color = new Color(1, 1, 1, (float)m_action.m_duration/1.1F);
+                    // gameObject.GetComponent<UCL_Image>().color = new Color(1, 1, 1, 1);
+                }
                 if(m_action.m_duration < 0){
+                    if(m_action.m_type == UnitActionType.Die){
+                        Destroy(gameObject);
+                    }
                     m_action = null;
                 }
             }
