@@ -8,14 +8,12 @@ namespace RCG {
     {
         public static void TriggerCardEffectOnUnits(List<RCG_Unit> units, RCG_CardData card_data){
             if(card_data.Atk > 0){
-                if(card_data.AtkTimes > 1){
+                if(card_data.AtkTimes > 0){
                     for(int i=0; i<units.Count; i++){
-                        units[i].DamageHP(card_data.Atk * card_data.AtkTimes);
-                    }
-                }
-                else{
-                    for(int i=0; i<units.Count; i++){
-                        units[i].DamageHP(card_data.Atk);
+                        // units[i].DamageHP(card_data.Atk * card_data.AtkTimes);
+                        for(int j=0; j<card_data.AtkTimes; j++){
+                            units[i].AddAction(new RCG_UnitAction(UnitActionType.Damage, card_data.Atk, card_data));
+                        }
                     }
                 }
             }

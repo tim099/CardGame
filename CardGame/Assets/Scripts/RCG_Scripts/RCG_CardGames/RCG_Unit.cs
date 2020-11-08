@@ -7,6 +7,9 @@ namespace RCG {
     public class RCG_Unit : MonoBehaviour {
         public int _m_Hp = 0;
         public int _m_MaxHp = 0;
+        private Queue<RCG_UnitAction> m_action_queue;
+        private RCG_UnitAction m_action = null;
+
         public int m_Hp{
             get{return _m_Hp;}
             set{
@@ -59,6 +62,36 @@ namespace RCG {
         [UCL.Core.ATTR.UCL_FunctionButton]
         public void Test(){
             DamageHP(1);
+        }
+
+        public void AddAction(RCG_UnitAction action){
+            m_action_queue.Enqueue(action);
+        }
+
+        public void TakeAction(){
+            m_action.TakeAction(this);
+        }
+
+        public void Start()
+        {
+            m_action_queue = new Queue<RCG_UnitAction>();
+        }
+
+        public void Update(){
+            if(m_action_queue.Count <= 0){
+                return;
+            }
+            else if(m_action == null){
+                m_action = m_action_queue.Dequeue();
+                TakeAction();
+            }
+            else{
+                m_action.m_duration -= Time.deltaTime;
+                Debug.Log(m_action.m_duration);
+                if(m_action.m_duration < 0){
+                    m_action = null;
+                }
+            }
         }
 
     }
