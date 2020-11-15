@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UCL.Core.UI;
 
 namespace RCG {
@@ -30,6 +31,7 @@ namespace RCG {
         private RCG_UnitHUD m_unit_HUD;
 
         private void Awake() {
+            m_action = null;
             if(!m_unit_HUD){
                 m_unit_HUD = gameObject.GetComponent<RCG_UnitHUD>();
                 //QWQ
@@ -76,6 +78,10 @@ namespace RCG {
 
         public void TakeAction(){
             m_action.TakeAction(this);
+            if(m_action.m_type == UnitActionType.Die){
+                gameObject.GetComponent<UCL_RectTransformCollider>().enabled = false;
+                gameObject.GetComponent<Outline>().enabled = false;
+            }
         }
 
         public void Start()
@@ -84,22 +90,28 @@ namespace RCG {
         }
 
         public void Update(){
-            if(m_action_queue.Count <= 0){
+            if(m_action_queue.Count <= 0 && m_action == null){
                 return;
             }
             else if(m_action == null){
                 m_action = m_action_queue.Dequeue();
+                Debug.Log(m_action.m_type);
                 TakeAction();
             }
             else{
                 m_action.m_duration -= Time.deltaTime;
                 if(m_action.m_type == UnitActionType.Die){
                     gameObject.GetComponent<UCL_Image>().color = new Color(1, 1, 1, (float)m_action.m_duration/1.1F);
+                    foreach (Image img in gameObject.GetComponentsInChildren<Image>())
+                    {
+                        img.color = new Color(1, 1, 1, (float)m_action.m_duration/1.1F);
+                    }
                     // gameObject.GetComponent<UCL_Image>().color = new Color(1, 1, 1, 1);
                 }
                 if(m_action.m_duration < 0){
                     if(m_action.m_type == UnitActionType.Die){
                         Destroy(gameObject);
+                        Debug.Log("Destroy");
                     }
                     m_action = null;
                 }
