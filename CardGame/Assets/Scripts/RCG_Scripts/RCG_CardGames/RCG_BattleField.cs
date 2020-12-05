@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UCL.Core.UI;
 
 namespace RCG {
     [UCL.Core.ATTR.EnableUCLEditor]
@@ -15,9 +16,22 @@ namespace RCG {
         void Update(){}
 
         private void Awake() {
-            RCG_Unit[] units = GetComponentsInChildren<RCG_Unit>();
-            foreach(RCG_Unit u in units){
-                m_units.Add(u);
+            //Init();
+        }
+
+        public void Init() {
+            // RCG_Unit[] units = GetComponentsInChildren<RCG_Unit>();
+            UCL_RectTransformCollider[] colliders = GetComponentsInChildren<UCL_RectTransformCollider>();
+            // Debug.Log(units.Length);
+            for(int i=0; i<colliders.Length; i++){
+                UCL_RectTransformCollider c = colliders[i];
+                RCG_Unit u = c.gameObject.GetComponent<RCG_Unit>();
+                if(u){
+                    m_units.Add(u);
+                }
+                else{
+                    m_units.Add(null);
+                }
             }
         }
 
@@ -31,8 +45,16 @@ namespace RCG {
 
         public void TurnEnd() {
             foreach(RCG_Unit u in m_units){
+                if(u == null){
+                    continue;
+                }
                 u.EndTurn();
             }
+        }
+
+        public void TriggerCardEffect(int target, RCG_CardData card_data){
+            Debug.Log("TriggerCardEffect");
+            RCG_CardEffectHandler.TriggerCardEffectOnUnits(m_units ,target, card_data);
         }
     }
 }

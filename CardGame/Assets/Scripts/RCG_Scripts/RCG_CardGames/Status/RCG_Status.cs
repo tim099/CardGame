@@ -5,6 +5,18 @@ using UnityEngine.UI;
 using TMPro;
 
 namespace RCG{
+
+    public enum StatusType{
+        None,
+        Bleed,
+        Poisoned,
+        Dazed,
+        Weak,
+        Stun,
+        Fragile,
+        Strength
+    }
+    
     public class RCG_Status : MonoBehaviour
     {
         public RCG_Unit m_target;
@@ -15,6 +27,9 @@ namespace RCG{
             set{
                 _m_round = value;
                 m_counter_text.text = value.ToString();
+                if(value < 1){
+                    StatusEnd();
+                }
             }
         }
 
@@ -52,6 +67,12 @@ namespace RCG{
 
         virtual public void StatusTurnStart(){
             
+        }
+
+        virtual public void StatusEnd(){
+            // Destroy(transform.gameObject);
+            // foreach( Transform t in transform) { Destroy(t.gameObject); }
+            Destroy(gameObject);
         }
     }
 }
