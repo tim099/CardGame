@@ -9,14 +9,14 @@ namespace RCG
         
         public Text m_CardNumText;
         public RCG_ShowCardUI m_ShowCardUI;
-        /// <summary>
-        /// if m_ShowCards == false then show UsedCard
-        /// </summary>
-        public bool m_ShowCards = true;
+
+        System.Func<List<RCG_CardData>> m_GetCardsFunc = null;
         List<RCG_CardData> m_Cards;
         RCG_Player p_Player;
-        public void Init(RCG_Player _Player) {
+        public void Init(RCG_Player _Player, System.Func<List<RCG_CardData>> _GetCardsFunc) {
             p_Player = _Player;
+            m_GetCardsFunc = _GetCardsFunc;
+
             m_ShowCardUI.Init();
             m_ShowCardUI.gameObject.SetActive(false);
         }
@@ -33,11 +33,7 @@ namespace RCG
         }
         public void Show() {
             List<RCG_CardData> cards = null;
-            if(m_ShowCards) {
-                cards = p_Player.m_Deck.ShowCards();
-            } else {
-                cards = p_Player.m_Deck.ShowUsedCards();
-            }
+            cards = m_GetCardsFunc.Invoke();
              
             m_Cards = cards;
             m_ShowCardUI.Show(m_Cards);
