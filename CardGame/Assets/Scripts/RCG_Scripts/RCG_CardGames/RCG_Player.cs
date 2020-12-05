@@ -15,8 +15,6 @@ namespace RCG {
         public List<UCL_RectTransformCollider> m_Targets = new List<UCL_RectTransformCollider>();
         public int m_Cost = 0;
         public int m_DrawCardCount = 0;
-        public RCG_DeckUI m_CardUI;
-        public RCG_DeckUI m_UsedCardUI;
         public Transform m_DrawCardPos;
         protected RCG_Card m_DraggingCard = null;
         protected UCL_RectTransformCollider m_Target = null;
@@ -37,9 +35,6 @@ namespace RCG {
         public void LogDeck() {
             m_Deck.LogDatas();
         }
-        //void Awake() {
-        //    Init();
-        //}
 
         [UCL.Core.ATTR.UCL_FunctionButton]
         public void Init() {
@@ -57,8 +52,8 @@ namespace RCG {
             for(int i = 0; i < m_Targets.Count; i++) {
                 m_Targets[i].m_ID = i;
             }
-            m_Deck = new RCG_Deck();
             var set = m_BeginSets[UCL.Core.MathLib.UCL_Random.Instance.Next(m_BeginSets.Count)];
+            m_Deck.Init(this);
             for(int i = 0, len = set.m_Settings.Count; i < len; i++) {
                 m_Deck.Add(set.m_Settings[i].CreateCard());
             }
@@ -67,8 +62,6 @@ namespace RCG {
                 var card = m_Cards[i];
                 card.Init(this);
             }
-            m_CardUI.Init(this);
-            m_UsedCardUI.Init(this);
             TurnInit();
         }
         public void DrawCard(int count) {
@@ -133,8 +126,8 @@ namespace RCG {
                 }
             }
             m_CostText.SetText("" + m_Cost);
-            m_CardUI.SetCardNum(m_Deck.m_Cards.Count);
-            m_UsedCardUI.SetCardNum(m_Deck.m_UsedCards.Count);
+
+            m_Deck.PlayerUpdate();
             if(!m_Blocking) {
                 if(m_DrawCardCount > 0) {
                     
