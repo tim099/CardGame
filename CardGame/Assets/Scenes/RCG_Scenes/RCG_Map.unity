@@ -2718,7 +2718,7 @@ GameObject:
   - component: {fileID: 1649186005}
   - component: {fileID: 1649186004}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: UCL_DebugInspectorDemo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2737,9 +2737,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Test: 0
+  m_DemoClass:
+    m_Int: 30
+    m_Float: 20
+    m_DemoClass2:
+      m_Str: Demo2 Str
   m_Val: 10
   m_F: 0.731
+  str: Test String
   m_IntList: 
+  m_FloatArr: []
+  m_Vec3: {x: 10.5, y: 22.73, z: 0.7321}
+  m_Transform: {fileID: 0}
 --- !u!4 &1649186005
 Transform:
   m_ObjectHideFlags: 0
