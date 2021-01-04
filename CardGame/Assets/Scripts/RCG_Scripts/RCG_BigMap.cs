@@ -18,6 +18,7 @@ namespace RCG
         }
         virtual public void SelectCity(string city_name) {
             Debug.LogWarning("SelectCity:" + city_name);
+            RCG_EmbarkUI.ins.Show(city_name);
         }
     }
 }

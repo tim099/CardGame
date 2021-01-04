@@ -18,7 +18,7 @@ MonoBehaviour:
   m_OpenOutputFolder: 0
   m_DefaultSetting: {fileID: 0}
   m_ProductName: RCG
-  m_ApplicationIdentifier: com.RCG.RoguelikeCarfGame
+  m_ApplicationIdentifier: com.RCG.RoguelikeCardGame
   m_BuildTargetGroup: 1
   m_BuildTarget: 19
   m_BuildOption: 0
@@ -27,7 +27,11 @@ MonoBehaviour:
   m_BuildAppBundle: 0
   m_OutputPath: Build/PC/
   m_OutputName: RCGWin64.exe
-  m_ScenesInBuild: []
+  m_ScenesInBuild:
+  - {fileID: 102900000, guid: 633ed79f04a7dd44a97d994e54bfa354, type: 3}
+  - {fileID: 102900000, guid: cd833600b9986734d89dfec7a2b91fda, type: 3}
+  - {fileID: 102900000, guid: 039af5cc215bdcd44aca89be99d2e837, type: 3}
+  - {fileID: 102900000, guid: ac1af6a14070de4499775800e7e50e84, type: 3}
   m_KeyStoreSetting:
     m_KeystoreName: 
     m_KeystorePass: 
