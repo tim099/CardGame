@@ -1,0 +1,2 @@
+"Chinese":"中文"
+"English":"English"

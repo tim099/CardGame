@@ -28,6 +28,7 @@ MonoBehaviour:
   m_OutputPath: Build/PC/
   m_OutputName: RCGWin64.exe
   m_ScenesInBuild:
+  - {fileID: 102900000, guid: b45373a914146ec44964d803c697bc7e, type: 3}
   - {fileID: 102900000, guid: 633ed79f04a7dd44a97d994e54bfa354, type: 3}
   - {fileID: 102900000, guid: cd833600b9986734d89dfec7a2b91fda, type: 3}
   - {fileID: 102900000, guid: 039af5cc215bdcd44aca89be99d2e837, type: 3}

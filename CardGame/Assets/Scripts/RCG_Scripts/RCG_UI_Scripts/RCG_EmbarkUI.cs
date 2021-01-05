@@ -16,7 +16,7 @@ namespace RCG {
         virtual public void Show(string selected_city_name) {
             gameObject.SetActive(true);
             m_SelectedCityName = selected_city_name;
-            m_SelectedCityNameText.text = selected_city_name;
+            m_SelectedCityNameText.text = UCL.Core.Game.UCL_LocalizeService.ins.Get(selected_city_name);
         }
         virtual public void Hide() {
             gameObject.SetActive(false);

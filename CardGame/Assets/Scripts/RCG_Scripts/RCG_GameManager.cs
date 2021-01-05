@@ -8,6 +8,7 @@ namespace RCG
     {
         protected override void Init() {
             base.Init();
+
         }
     }
 }
