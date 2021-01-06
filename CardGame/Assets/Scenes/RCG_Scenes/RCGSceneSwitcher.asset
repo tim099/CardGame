@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e017eb375c1a5d46aa01cc1f3ed0462, type: 3}
+  m_Name: RCGSceneSwitcher
+  m_EditorClassIdentifier: 
+  m_SceneDatas:
+  - m_Scene: {fileID: 102900000, guid: 633ed79f04a7dd44a97d994e54bfa354, type: 3}
+  - m_Scene: {fileID: 102900000, guid: cd833600b9986734d89dfec7a2b91fda, type: 3}
+  - m_Scene: {fileID: 102900000, guid: 039af5cc215bdcd44aca89be99d2e837, type: 3}
+  - m_Scene: {fileID: 102900000, guid: ac1af6a14070de4499775800e7e50e84, type: 3}
+  - m_Scene: {fileID: 102900000, guid: b45373a914146ec44964d803c697bc7e, type: 3}
+  m_LoadSceneName: RCG_MainMenu

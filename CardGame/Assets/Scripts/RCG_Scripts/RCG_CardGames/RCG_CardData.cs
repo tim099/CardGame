@@ -6,7 +6,8 @@ namespace RCG {
     public class RCG_CardData {
         public Sprite Icon { get { return m_Setting.m_Icon; } }
         virtual public string CardName { get { return m_Setting.m_CardName; } }
-        virtual public string Description { get {
+        virtual public string Description {
+            get {
                 string des = "";
                 if(Atk > 0) {
                     if(AtkTimes > 1) {
@@ -25,8 +26,8 @@ namespace RCG {
                     des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Instance.GetLocalize("DrawCard_Des", m_Setting.m_DrawCard) + "\n";
                 }
                 des += m_Setting.m_Description;
-                return des; 
-            } 
+                return des;
+            }
         }
         virtual public int Atk { get { return m_Setting.m_Atk; } }
         virtual public int AtkTimes { get { return m_Setting.m_AtkTimes; } }
