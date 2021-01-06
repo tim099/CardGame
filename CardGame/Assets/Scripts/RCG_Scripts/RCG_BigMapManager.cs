@@ -6,11 +6,11 @@ namespace RCG
 {
     public class RCG_BigMapManager : MonoBehaviour
     {
-        public RCG_BigMap[] m_BigMaps;
-        public RCG_BigMap m_CurBigMap;
-        public RCG_EmbarkUI m_EmbarkUI;
-        public RectTransform m_BigMapRoot;
-        public ScrollRect m_BigMapScrollRect;
+        public RCG_BigMap[] m_BigMaps = null;
+        public RCG_BigMap m_CurBigMap = null;
+        public RCG_EmbarkUI m_EmbarkUI = null;
+        public RectTransform m_BigMapRoot = null;
+        public ScrollRect m_BigMapScrollRect = null;
         public string m_LoadMapName = "";
         private void Awake() {
             Init();

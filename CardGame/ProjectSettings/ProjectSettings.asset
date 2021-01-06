@@ -168,7 +168,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Standalone: com.RCG.RoguelikeCarfGame
+    Standalone: com.RCG.RoguelikeCardGame
   buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 19
@@ -309,7 +309,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 20a104753b07d4b4d867200c9c7a1cb4, type: 3}
+      m_Icon: {fileID: 2800000, guid: 3f36efd64bef2744b8a8c4786dc7ae26, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
