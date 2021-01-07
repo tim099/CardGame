@@ -11,19 +11,19 @@ namespace RCG {
                 string des = "";
                 if(Atk > 0) {
                     if(AtkTimes > 1) {
-                        des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Instance.GetLocalize("Attack_Des", Atk, AtkTimes, AtkRange) + "\n";
+                        des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Attack_Des", Atk, AtkTimes, AtkRange) + "\n";
                     } else {
-                        des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Instance.GetLocalize("Attack_DesSingle", Atk, AtkRange) + "\n";
+                        des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Attack_DesSingle", Atk, AtkRange) + "\n";
                     }
                 }
                 if(Defense > 0) {
-                    des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Instance.GetLocalize("Def_Des", Defense) + "\n";
+                    des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Def_Des", Defense) + "\n";
                 }
                 if(Cost < 0) {
-                    des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Instance.GetLocalize("AddCost_Des", -Cost) + "\n";
+                    des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("AddCost_Des", -Cost) + "\n";
                 }
                 if(m_Setting.m_DrawCard > 0) {
-                    des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Instance.GetLocalize("DrawCard_Des", m_Setting.m_DrawCard) + "\n";
+                    des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("DrawCard_Des", m_Setting.m_DrawCard) + "\n";
                 }
                 des += m_Setting.m_Description;
                 return des;

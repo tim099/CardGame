@@ -1,5 +1,12 @@
+"NewGame":"New Game"
+
 "Attack_Des":"射程{2}\n對敵方造成{1}次\n{0}點傷害"
 "Attack_DesSingle":"射程{1}\n對敵方造成\n{0}點傷害"
 "Def_Des":"增加{0}點護甲"
 "AddCost_Des":"回復{0}點能量"
 "DrawCard_Des":"抽{0}張卡"
+
+
+
+"City_Constantinople":"Constantinople"
+"City_Galata":"Galata"

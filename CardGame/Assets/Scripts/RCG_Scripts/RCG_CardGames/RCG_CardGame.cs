@@ -9,7 +9,7 @@ namespace RCG {
         public RCG_BattleField m_battlefield;
         private void Awake() {
             ins = this;
-            UCL.Core.LocalizeLib.UCL_LocalizeManager.Instance.ResourceLoadLanguage(@"Language/Chinese/Lang");
+            //UCL.Core.LocalizeLib.UCL_LocalizeManager.Instance.ResourceLoadLanguage("Language", "Chinese");
             m_Player.Init();
             m_battlefield.Init();
             Debug.LogWarning("Application.systemLanguage:" + Application.systemLanguage.ToString());
