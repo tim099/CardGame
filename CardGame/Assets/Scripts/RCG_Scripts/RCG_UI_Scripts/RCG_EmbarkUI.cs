@@ -22,6 +22,7 @@ namespace RCG {
             gameObject.SetActive(false);
         }
         virtual public void Embark() {
+            RCG_GameManager.ins.m_LoadMapName = m_SelectedCityName;
             m_SceneLoader.Load();
         }
     }

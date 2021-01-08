@@ -1462,8 +1462,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9fc1989ca5965746aad2cbd151ed1cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Maps:
-  - {fileID: 7521714944329116237, guid: 6d6bead47256ca64f970df769ece6e07, type: 3}
   m_MapRoot: {fileID: 1272047328}
   m_MapScrollRect: {fileID: 309562476}
   m_LoadMapName: MapConstantinople
@@ -2373,7 +2371,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2052489473}
+  - {fileID: 7521714943350893392}
   m_Father: {fileID: 309562475}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2877,7 +2875,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1649186004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3764,12 +3762,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!224 &2052489473 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7521714944329116238, guid: 6d6bead47256ca64f970df769ece6e07,
-    type: 3}
-  m_PrefabInstance: {fileID: 7521714943350893391}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2060273771
 GameObject:
   m_ObjectHideFlags: 0
@@ -4101,3 +4093,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d6bead47256ca64f970df769ece6e07, type: 3}
+--- !u!4 &7521714943350893392 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 7521714943350893391}
+  m_PrefabAsset: {fileID: 0}

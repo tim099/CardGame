@@ -6,7 +6,6 @@ namespace RCG
 {
     public class RCG_BigMapManager : MonoBehaviour
     {
-        public RCG_BigMap[] m_BigMaps = null;
         public RCG_BigMap m_CurBigMap = null;
         public RCG_EmbarkUI m_EmbarkUI = null;
         public RectTransform m_BigMapRoot = null;
@@ -25,15 +24,10 @@ namespace RCG
                 Destroy(m_CurBigMap.gameObject);
                 m_CurBigMap = null;
             }
-            for(int i = 0; i < m_BigMaps.Length; i++) {
-                var map = m_BigMaps[i];
-                if(map.name == map_name) {
-                    m_CurBigMap = Instantiate(map, m_BigMapRoot);
-                    m_CurBigMap.name = map_name;
-                    m_BigMapScrollRect.content = m_CurBigMap.GetComponent<RectTransform>();
-                    return;
-                }
-            }
+            var map = Resources.Load<RCG_BigMap>(PathConst.BigMapResource + "/" + map_name);
+            m_CurBigMap = Instantiate(map, m_BigMapRoot);
+            m_CurBigMap.name = map_name;
+            m_BigMapScrollRect.content = m_CurBigMap.GetComponent<RectTransform>();
         }
     }
 }
