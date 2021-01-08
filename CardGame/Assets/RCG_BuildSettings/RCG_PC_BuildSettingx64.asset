@@ -23,9 +23,9 @@ MonoBehaviour:
   m_BuildTarget: 19
   m_BuildOption: 0
   m_Icons: []
-  m_DefaultIcon: {fileID: 2800000, guid: 20a104753b07d4b4d867200c9c7a1cb4, type: 3}
+  m_DefaultIcon: {fileID: 2800000, guid: 3f36efd64bef2744b8a8c4786dc7ae26, type: 3}
   m_BuildAppBundle: 0
-  m_OutputPath: Build/PC/
+  m_OutputPath: Build/PC/RCG/
   m_OutputName: RCGWin64.exe
   m_ScenesInBuild:
   - {fileID: 102900000, guid: b45373a914146ec44964d803c697bc7e, type: 3}

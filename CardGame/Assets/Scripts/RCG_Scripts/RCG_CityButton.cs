@@ -12,7 +12,7 @@ namespace RCG
         RCG_BigMap p_Map;
         virtual public void Init(RCG_BigMap _Map) {
             p_Map = _Map;
-            m_CityNameText.text = UCL.Core.Game.UCL_LocalizeService.ins.Get(m_CityName);
+            m_CityNameText.text = UCL.Core.LocalizeLib.UCL_LocalizeManager.Get(m_CityName);
             m_CityButton.onClick.AddListener(delegate () {
                 p_Map.SelectCity(m_CityName);
             });

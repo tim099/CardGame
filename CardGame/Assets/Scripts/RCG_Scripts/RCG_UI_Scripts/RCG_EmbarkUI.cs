@@ -16,12 +16,13 @@ namespace RCG {
         virtual public void Show(string selected_city_name) {
             gameObject.SetActive(true);
             m_SelectedCityName = selected_city_name;
-            m_SelectedCityNameText.text = UCL.Core.Game.UCL_LocalizeService.ins.Get(selected_city_name);
+            m_SelectedCityNameText.text = UCL.Core.LocalizeLib.UCL_LocalizeManager.Get(selected_city_name);
         }
         virtual public void Hide() {
             gameObject.SetActive(false);
         }
         virtual public void Embark() {
+            RCG_GameManager.ins.m_LoadMapName = m_SelectedCityName;
             m_SceneLoader.Load();
         }
     }
