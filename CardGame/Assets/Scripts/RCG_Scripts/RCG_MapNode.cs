@@ -17,8 +17,16 @@ namespace RCG {
             m_MapNodeContent.gameObject.SetActive(true);
             m_MapNodeContent.m_NodeText.SetText(m_NodeName);
             m_MapNodeContent.m_NodeButton.onClick.AddListener(delegate () {
+                p_RCGMap.PlayerMoveTo(this);
                 Debug.LogWarning("ClickNode" + m_NodeName);
             });
+        }
+        virtual public void UpdateSelectNode(RCG_MapNode node) {
+            if(node == this) {
+                m_MapNodeContent.m_NodeButton.interactable = false;
+            } else {
+                m_MapNodeContent.m_NodeButton.interactable = node.CanMoveTo(this);
+            }
         }
     }
 }
