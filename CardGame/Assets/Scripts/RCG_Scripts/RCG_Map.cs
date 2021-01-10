@@ -31,11 +31,19 @@ namespace RCG {
             foreach(var node in m_MapNodes) {
                 node.UpdateSelectNode(m_CurCity);
             }
+
             if(init_move) {
+                var parent_pos = transform.parent.position;
+                transform.position += parent_pos - m_CurCity.transform.position;
                 m_MapItems.m_PlayerIcon.transform.position = m_CurCity.transform.position;
             } else {
+                var pos_o = m_MapItems.m_PlayerIcon.transform.position;
                 UCL_TweenManager.Instance.KillAllOnTransform(m_MapItems.m_PlayerIcon.transform);
-                m_MapItems.m_PlayerIcon.transform.UCL_Move(0.5f, m_CurCity.transform).SetEase(EaseType.InSin).Start();
+                m_MapItems.m_PlayerIcon.transform.UCL_Move(0.5f, m_CurCity.transform).SetEase(EaseType.InSin)
+                    .OnUpdate(delegate(float pos) {
+                        var del = m_MapItems.m_PlayerIcon.transform.position - pos_o;
+                        transform.position -= del;
+                    }).Start();
             }
 
         }

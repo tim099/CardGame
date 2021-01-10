@@ -3320,6 +3320,7 @@ MonoBehaviour:
   m_MapNodeContentTmp: {fileID: 1628893063777615992}
   m_StartCity: {fileID: 0}
   m_MapItems: {fileID: 0}
+  m_CurCity: {fileID: 0}
 --- !u!1 &8487346057267751658
 GameObject:
   m_ObjectHideFlags: 0
