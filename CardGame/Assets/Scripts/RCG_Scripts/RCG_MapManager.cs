@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 namespace RCG {
     public class RCG_MapManager : MonoBehaviour {
+        public RCG_BattleManager m_BattleManager;
+
         public RectTransform m_MapRoot = null;
         public ScrollRect m_MapScrollRect = null;
         public string m_LoadMapName = "";
@@ -16,6 +18,7 @@ namespace RCG {
             Init();
         }
         virtual public void Init() {
+            m_BattleManager.Init();
             m_LoadMapName = RCG_GameManager.ins.m_LoadMapName;
             LoadMap(m_LoadMapName);
         }

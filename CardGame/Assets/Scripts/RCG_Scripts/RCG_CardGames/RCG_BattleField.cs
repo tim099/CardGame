@@ -19,7 +19,7 @@ namespace RCG {
             //Init();
         }
 
-        public void Init() {
+        virtual public void Init() {
             // RCG_Unit[] units = GetComponentsInChildren<RCG_Unit>();
             UCL_RectTransformCollider[] colliders = GetComponentsInChildren<UCL_RectTransformCollider>();
             // Debug.Log(units.Length);
