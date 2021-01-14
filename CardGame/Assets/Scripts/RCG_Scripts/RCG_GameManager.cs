@@ -12,6 +12,7 @@ namespace RCG
             ins = this;
             base.Init();
         }
+        //void OnApplicationPause(bool pauseStatus)
     }
 }
 

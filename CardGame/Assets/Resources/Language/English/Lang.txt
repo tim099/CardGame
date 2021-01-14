@@ -1,4 +1,5 @@
 "NewGame":"New Game"
+"Options":"Options"
 
 "Attack_Des":"射程{2}\n對敵方造成{1}次\n{0}點傷害"
 "Attack_DesSingle":"射程{1}\n對敵方造成\n{0}點傷害"
