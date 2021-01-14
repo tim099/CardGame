@@ -7,7 +7,7 @@ namespace RCG {
         static public RCG_CardGame ins = null; 
         public RCG_Player m_Player;
         public RCG_BattleField m_battlefield;
-        private void Awake() {
+        public void Init() {
             ins = this;
             //UCL.Core.LocalizeLib.UCL_LocalizeManager.Instance.ResourceLoadLanguage("Language", "Chinese");
             m_Player.Init();

@@ -587,6 +587,11 @@ PrefabInstance:
       propertyPath: m_Paths.Array.data[2]
       value: 
       objectReference: {fileID: 863115656288217623}
+    - target: {fileID: 2642996110641166330, guid: 777d550f3be779f48a5f3545409eea1f,
+        type: 3}
+      propertyPath: m_NodeName
+      value: EEE
+      objectReference: {fileID: 0}
     - target: {fileID: 5221876105133406786, guid: 777d550f3be779f48a5f3545409eea1f,
         type: 3}
       propertyPath: m_Name
@@ -911,6 +916,11 @@ PrefabInstance:
       propertyPath: m_Paths.Array.data[2]
       value: 
       objectReference: {fileID: 6172446570804274857}
+    - target: {fileID: 2642996110641166330, guid: 777d550f3be779f48a5f3545409eea1f,
+        type: 3}
+      propertyPath: m_NodeName
+      value: QAQ
+      objectReference: {fileID: 0}
     - target: {fileID: 5221876105133406786, guid: 777d550f3be779f48a5f3545409eea1f,
         type: 3}
       propertyPath: m_Name
@@ -1544,6 +1554,11 @@ PrefabInstance:
       propertyPath: m_Paths.Array.data[1]
       value: 
       objectReference: {fileID: 8558332538420222756}
+    - target: {fileID: 2642996110641166330, guid: 777d550f3be779f48a5f3545409eea1f,
+        type: 3}
+      propertyPath: m_NodeName
+      value: QWQ
+      objectReference: {fileID: 0}
     - target: {fileID: 5221876105133406786, guid: 777d550f3be779f48a5f3545409eea1f,
         type: 3}
       propertyPath: m_Name
@@ -2020,6 +2035,11 @@ PrefabInstance:
       propertyPath: m_Paths.Array.data[1]
       value: 
       objectReference: {fileID: 2989312010389148628}
+    - target: {fileID: 2642996110641166330, guid: 777d550f3be779f48a5f3545409eea1f,
+        type: 3}
+      propertyPath: m_NodeName
+      value: QoQ
+      objectReference: {fileID: 0}
     - target: {fileID: 5221876105133406786, guid: 777d550f3be779f48a5f3545409eea1f,
         type: 3}
       propertyPath: m_Name
@@ -2339,6 +2359,11 @@ PrefabInstance:
       propertyPath: m_Paths.Array.data[1]
       value: 
       objectReference: {fileID: 220917101292501769}
+    - target: {fileID: 2642996110641166330, guid: 777d550f3be779f48a5f3545409eea1f,
+        type: 3}
+      propertyPath: m_NodeName
+      value: RRR
+      objectReference: {fileID: 0}
     - target: {fileID: 5221876105133406786, guid: 777d550f3be779f48a5f3545409eea1f,
         type: 3}
       propertyPath: m_Name
@@ -2501,6 +2526,11 @@ PrefabInstance:
       propertyPath: m_Paths.Array.data[1]
       value: 
       objectReference: {fileID: 8558332538420222756}
+    - target: {fileID: 2642996110641166330, guid: 777d550f3be779f48a5f3545409eea1f,
+        type: 3}
+      propertyPath: m_NodeName
+      value: Galata
+      objectReference: {fileID: 0}
     - target: {fileID: 5221876105133406786, guid: 777d550f3be779f48a5f3545409eea1f,
         type: 3}
       propertyPath: m_Name
