@@ -7,12 +7,27 @@ namespace RCG {
         static public RCG_CardGame ins = null; 
         public RCG_Player m_Player;
         public RCG_BattleField m_battlefield;
+        bool m_Entered = false;
         public void Init() {
             ins = this;
-            //UCL.Core.LocalizeLib.UCL_LocalizeManager.Instance.ResourceLoadLanguage("Language", "Chinese");
-            m_Player.Init();
-            m_battlefield.Init();
+            //m_Player.Init();
             Debug.LogWarning("Application.systemLanguage:" + Application.systemLanguage.ToString());
+        }
+        virtual public void EnterBattle() {
+            if(m_Entered) {
+                Debug.LogError("EnterBattle() Fail!! Already Entered!!");
+                return;
+            }
+            m_Entered = true;
+            gameObject.SetActive(true);
+        }
+        public void ExitBattle() {
+            if(!m_Entered) {
+                Debug.LogError("ExitBattle() Fail!! Not Entered!!");
+                return;
+            }
+            m_Entered = false;
+            gameObject.SetActive(false);
         }
         public void EnemyEndTurn() {
 

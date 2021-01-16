@@ -22,10 +22,16 @@ namespace RCG {
             });
         }
         virtual public void UpdateSelectNode(RCG_MapNode node) {
-            if(node == this) {
+            if(node == this || node == null) {
                 m_MapNodeContent.m_NodeButton.interactable = false;
             } else {
                 m_MapNodeContent.m_NodeButton.interactable = node.CanMoveTo(this);
+            }
+        }
+        virtual public void Selected() {
+            if(m_Events != null && m_Events.Length > 0) {
+                var target_event = m_Events[UCL.Core.MathLib.UCL_Random.Instance.Next(m_Events.Length)];
+                if(target_event != null) target_event.StartEvent();
             }
         }
     }

@@ -8,7 +8,7 @@ namespace RCG {
     public class RCG_BattleField : MonoBehaviour
     {
         public List<RCG_Unit> m_units;
-
+        bool m_Entered = false;
         // Start is called before the first frame update
         void Start(){}
 
@@ -18,7 +18,22 @@ namespace RCG {
         private void Awake() {
             //Init();
         }
-
+        virtual public void EnterBattle() {
+            if(m_Entered) {
+                Debug.LogError("EnterBattle() Fail!! Already Entered!!");
+                return;
+            }
+            m_Entered = true;
+            gameObject.SetActive(true);
+        }
+        public void ExitBattle() {
+            if(!m_Entered) {
+                Debug.LogError("ExitBattle() Fail!! Not Entered!!");
+                return;
+            }
+            m_Entered = false;
+            gameObject.SetActive(false);
+        }
         virtual public void Init() {
             // RCG_Unit[] units = GetComponentsInChildren<RCG_Unit>();
             UCL_RectTransformCollider[] colliders = GetComponentsInChildren<UCL_RectTransformCollider>();
