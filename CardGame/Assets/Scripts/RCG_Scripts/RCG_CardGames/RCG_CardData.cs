@@ -35,6 +35,9 @@ namespace RCG {
         virtual public int Defense { get { return m_Setting.m_Defense; } }
         virtual public TargetType Target { get { return m_Setting.m_Target; } }
         virtual public int Cost { get { return m_Cost; } }
+        public RCG_CardData(UCL.Core.JsonLib.JsonData setting) {
+
+        }
         public RCG_CardData(RCG_CardSettings setting) {
             m_Setting = setting;
             m_Cost = m_Setting.m_Cost;
