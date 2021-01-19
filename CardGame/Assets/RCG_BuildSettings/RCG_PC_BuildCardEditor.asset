@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b8426d920d4e6d4ab622ad70ba5f108, type: 3}
-  m_Name: RCG_PC_BuildSettingx64
+  m_Name: RCG_PC_BuildCardEditor
   m_EditorClassIdentifier: 
   m_ApplySetting: 0
   m_LoadCurrentSetting: 0
@@ -18,21 +18,17 @@ MonoBehaviour:
   m_OpenOutputFolder: 0
   m_DefaultSetting: {fileID: 0}
   m_ProductName: RCG
-  m_ApplicationIdentifier: com.RCG.RoguelikeCardGame
+  m_ApplicationIdentifier: com.RCG.RoguelikeCardEditor
   m_BuildTargetGroup: 1
   m_BuildTarget: 19
   m_BuildOption: 0
   m_Icons: []
   m_DefaultIcon: {fileID: 2800000, guid: 3f36efd64bef2744b8a8c4786dc7ae26, type: 3}
   m_BuildAppBundle: 0
-  m_OutputPath: Build/PC/RCG/
-  m_OutputName: RCGWin64.exe
+  m_OutputPath: Build/PC/RCGCardEditor/
+  m_OutputName: RCGCardEditorWin64.exe
   m_ScenesInBuild:
-  - {fileID: 102900000, guid: b45373a914146ec44964d803c697bc7e, type: 3}
-  - {fileID: 102900000, guid: 633ed79f04a7dd44a97d994e54bfa354, type: 3}
-  - {fileID: 102900000, guid: cd833600b9986734d89dfec7a2b91fda, type: 3}
-  - {fileID: 102900000, guid: 039af5cc215bdcd44aca89be99d2e837, type: 3}
-  - {fileID: 102900000, guid: ac1af6a14070de4499775800e7e50e84, type: 3}
+  - {fileID: 102900000, guid: 8afd48478dbcbbb4db0e21f0471de8dd, type: 3}
   m_KeyStoreSetting:
     m_KeystoreName: 
     m_KeystorePass: 
