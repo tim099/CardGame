@@ -17,16 +17,16 @@ MonoBehaviour:
   m_Build: 0
   m_OpenOutputFolder: 0
   m_DefaultSetting: {fileID: 0}
-  m_ProductName: RCG
+  m_ProductName: RCG_CardEditor
   m_ApplicationIdentifier: com.RCG.RoguelikeCardEditor
   m_BuildTargetGroup: 1
   m_BuildTarget: 19
   m_BuildOption: 0
   m_Icons: []
-  m_DefaultIcon: {fileID: 2800000, guid: 3f36efd64bef2744b8a8c4786dc7ae26, type: 3}
+  m_DefaultIcon: {fileID: 2800000, guid: adba312a2ab7d0a44a6fdc7b4211fee7, type: 3}
   m_BuildAppBundle: 0
   m_OutputPath: Build/PC/RCGCardEditor/
-  m_OutputName: RCGCardEditorWin64.exe
+  m_OutputName: RCGCardEditor.exe
   m_ScenesInBuild:
   - {fileID: 102900000, guid: 8afd48478dbcbbb4db0e21f0471de8dd, type: 3}
   m_KeyStoreSetting:

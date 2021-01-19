@@ -5,6 +5,10 @@ using UnityEngine;
 using System.Linq;
 namespace RCG {
     public class RCG_CardEditor : MonoBehaviour {
+//#if UNITY_STANDALONE_WIN
+//        [System.Runtime.InteropServices.DllImport("user32.dll")]
+//        private static extern void FolderBrowserDialog(); //in your case : 
+//#endif
         public class CardEditData {
             public CardEditData(RCG_CardData _CardData,string _FilePath) {
                 m_CardData = _CardData;
@@ -39,18 +43,20 @@ namespace RCG {
 #if UNITY_EDITOR
             if(m_FolderPath == null) m_FolderPath = Application.dataPath;
 #endif
-            if(!Directory.Exists(m_FolderPath)) {
+            if(!string.IsNullOrEmpty(m_FolderPath) && !Directory.Exists(m_FolderPath)) {
                 Directory.CreateDirectory(m_FolderPath);
             }
             RefreshCardDataPaths();
         }
         virtual public void RefreshCardDataPaths() {
-            var files = UCL.Core.FileLib.Lib.GetFiles(m_FolderPath);
             if(m_CardDataPaths == null) {
                 m_CardDataPaths = new List<string>();
             } else {
                 m_CardDataPaths.Clear();
             }
+            if(string.IsNullOrEmpty(m_FolderPath)) return;
+            var files = UCL.Core.FileLib.Lib.GetFiles(m_FolderPath);
+
             if(files != null) {
                 int discard_len = m_FolderPath.Length + 1;
                 for(int i = 0; i < files.Length; i++) {
@@ -65,13 +71,26 @@ namespace RCG {
             GUILayout.BeginVertical();
             using(var scope = new GUILayout.VerticalScope("box")) {
                 GUILayout.BeginHorizontal();
-#if UNITY_EDITOR
+
                 if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Explore folder", 22)) {
+#if UNITY_EDITOR
                     m_FolderPath = UCL.Core.FileLib.EditorLib.OpenFolderExplorer(m_FolderPath);
+                    //OpenFileDialog
+//#elif UNITY_STANDALONE_WIN
+//#if UNITY_STANDALONE_WIN
+                    //System.Windows.Forms.FolderBrowserDialog dia = new System.Windows.Forms.FolderBrowserDialog();
+                    //dia.Description = "Explore folder";
+                    //dia.SelectedPath = m_FolderPath;
+                    //dia.ShowDialog();
+                    //Debug.LogWarning("dia.SelectedPath" + dia.SelectedPath);
+                    //if(!string.IsNullOrEmpty(dia.SelectedPath)) {
+                    //    m_FolderPath = dia.SelectedPath;
+                    //}
+#endif 
                     //bool flag = UnityEditor.EditorUtility.DisplayDialog("Test", "HiHi", "Ok", "QAQ");
                     //Debug.LogError("flag:" + flag);
                 }
-#endif
+
                 if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Refresh folder", 22)) {
                     RefreshCardDataPaths();
                 }
