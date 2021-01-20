@@ -4,13 +4,19 @@ using UnityEngine;
 
 namespace RCG {
     public class RCG_CardAttackEffect : RCG_BattleEffect {
+        [System.Serializable]
+        public struct AttackData {
+            public int m_Int;
+            public float m_Float;
+        }
         public int m_Atk = 0;
-
+        public int m_AtkRange = 0;
+        public AttackData m_AttackData;
         override public void OnGUI() {
-            using(var scope = new GUILayout.VerticalScope("box")) {
-                base.OnGUI();
-                m_Atk = UCL.Core.UI.UCL_GUILayout.IntField("Atk", m_Atk);
-            }
+            base.OnGUI();
+            //using(var scope = new GUILayout.VerticalScope("box")) {
+                //m_Atk = UCL.Core.UI.UCL_GUILayout.IntField("Atk", m_Atk);
+            //}
         }
         //override public void LoadJson(UCL.Core.JsonLib.JsonData data) {
         //    UCL.Core.JsonLib.JsonConvert.LoadDataFromJson(this, data);

@@ -1,21 +1,59 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 namespace RCG {
-    public class RCG_CardEffect {
+    public class RCG_CardEffect : UCL.Core.JsonLib.IJsonSerializable {
         virtual public string EffectType { get { return this.GetType().Name.Replace("RCG_Card",""); } }
 
-        virtual public void LoadJson(UCL.Core.JsonLib.JsonData data) {
+        virtual public void DeserializeFromJson(UCL.Core.JsonLib.JsonData data) {
             UCL.Core.JsonLib.JsonConvert.LoadDataFromJson(this, data);
         }
-        virtual public void OnGUI() { }
-        virtual public UCL.Core.JsonLib.JsonData ToJson() {
+        virtual public UCL.Core.JsonLib.JsonData SerializeToJson() {
             UCL.Core.JsonLib.JsonData data = new UCL.Core.JsonLib.JsonData();
             data["EffectType"] = EffectType;
             UCL.Core.JsonLib.JsonConvert.SaveDataToJson(this, data);
             return data;
         }
+        virtual public void DrawFieldData(object obj) {
+            using(var scope = new GUILayout.VerticalScope("box")) {
+                Type type = obj.GetType();
+                var fields = type.GetAllFieldsUntil(typeof(object), BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                foreach(var field in fields) {
+                    var data = field.GetValue(obj);
+                    string dp_name = field.Name;
+
+                    if(dp_name[0] == 'm' && dp_name[1] == '_') {
+                        dp_name = dp_name.Substring(2, dp_name.Length - 2);
+                    }
+                    if(data == null) {
+
+                    } else if(data.IsNumber()) {
+                        var result = UCL.Core.UI.UCL_GUILayout.NumField(dp_name, data);
+                        field.SetValue(obj, result);
+                    } else if(field.FieldType == typeof(string)) {
+                        var result = UCL.Core.UI.UCL_GUILayout.TextField(dp_name, (string)data);
+                        field.SetValue(obj, result);
+                    } else if(field.FieldType.IsStructOrClass()) {
+                        UCL.Core.UI.UCL_GUILayout.LabelAutoSize(dp_name);
+                        GUILayout.BeginHorizontal();
+                        GUILayout.Space(10);
+                        DrawFieldData(data);
+                        field.SetValue(obj, data);
+                        GUILayout.EndHorizontal();
+                    }
+
+                }
+            }
+        }
+        virtual public void OnGUI() {
+            using(var scope = new GUILayout.VerticalScope("box")) {
+                DrawFieldData(this);
+            }  
+        }
+
     }
 }
 

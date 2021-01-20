@@ -4,11 +4,8 @@ using System.IO;
 using UnityEngine;
 using System.Linq;
 namespace RCG {
+    [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_CardEditor : MonoBehaviour {
-//#if UNITY_STANDALONE_WIN
-//        [System.Runtime.InteropServices.DllImport("user32.dll")]
-//        private static extern void FolderBrowserDialog(); //in your case : 
-//#endif
         public class CardEditData {
             public CardEditData(RCG_CardData _CardData,string _FilePath) {
                 m_CardData = _CardData;
@@ -16,20 +13,24 @@ namespace RCG {
             }
             public string m_FilePath = "";
             public RCG_CardData m_CardData = null;
+            public Texture2D m_IconTexture = null;
         }
         const string FolderPathKey = "RCG_CardEditor_FolderPath";
         public string m_FolderPath = "";
         public string m_CardSetting = "";
-        public string ImagePath { get {
-                return Path.Combine(UCL.Core.FileLib.Lib.RemoveFolderPath(m_FolderPath,1), "Images");
+        public string IconPath { get {
+                return Path.Combine(UCL.Core.FileLib.Lib.RemoveFolderPath(m_FolderPath,1), "Icons");
             } }
-        Vector2 m_ScrollPos_SelectCard = default;
-        Vector2 m_ScrollPos_EditCard = default;
-        Rect m_WindowRect = default;
-        List<string> m_CardDataPaths = null;
-        CardEditData m_EditingData = null;
-        int m_CreateEffectID = 0;
-        bool m_CreateEffectOpened = false;
+        protected Vector2 m_ScrollPos_SelectCard = default;
+        protected Vector2 m_ScrollPos_EditCard = default;
+        protected Rect m_WindowRect = default;
+        protected List<string> m_CardDataPaths = null;
+        protected List<string> m_CardIconPaths = new List<string>();
+        protected CardEditData m_EditingData = null;
+        protected int m_CreateEffectID = 0;
+        protected bool m_CreateEffectOpened = false;
+        protected bool m_Inited = false;
+        protected Dictionary<string, object> m_CardEditTmpDatas = new Dictionary<string, object>();
         private void Awake() {
             Init();
         }
@@ -37,6 +38,8 @@ namespace RCG {
             PlayerPrefs.SetString(FolderPathKey, m_FolderPath);
         }
         virtual public void Init() {
+            if(m_Inited) return;
+            m_Inited = true;
             if(PlayerPrefs.HasKey(FolderPathKey)) {
                 m_FolderPath = PlayerPrefs.GetString(FolderPathKey);
             }
@@ -75,9 +78,10 @@ namespace RCG {
                 if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Explore folder", 22)) {
 #if UNITY_EDITOR
                     m_FolderPath = UCL.Core.FileLib.EditorLib.OpenFolderExplorer(m_FolderPath);
+                    RefreshCardDataPaths();
                     //OpenFileDialog
-//#elif UNITY_STANDALONE_WIN
-//#if UNITY_STANDALONE_WIN
+                    //#elif UNITY_STANDALONE_WIN
+                    //#if UNITY_STANDALONE_WIN
                     //System.Windows.Forms.FolderBrowserDialog dia = new System.Windows.Forms.FolderBrowserDialog();
                     //dia.Description = "Explore folder";
                     //dia.SelectedPath = m_FolderPath;
@@ -86,7 +90,7 @@ namespace RCG {
                     //if(!string.IsNullOrEmpty(dia.SelectedPath)) {
                     //    m_FolderPath = dia.SelectedPath;
                     //}
-#endif 
+#endif
                     //bool flag = UnityEditor.EditorUtility.DisplayDialog("Test", "HiHi", "Ok", "QAQ");
                     //Debug.LogError("flag:" + flag);
                 }
@@ -107,7 +111,7 @@ namespace RCG {
                     if(GUILayout.Button(card_path)) {
                         string data = File.ReadAllText(Path.Combine(m_FolderPath, card_path));
                         var json = UCL.Core.JsonLib.JsonData.ParseJson(data);
-                        m_EditingData = new CardEditData(new RCG_CardData(json), card_path);
+                        SetEditCardData(new CardEditData(new RCG_CardData(json), card_path));
                     }
                 }
             }
@@ -124,10 +128,12 @@ namespace RCG {
             GUILayout.BeginVertical();
             GUILayout.BeginHorizontal();
             UCL.Core.UI.UCL_GUILayout.LabelAutoSize("Edit Card", 22);
+            
             if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Back", 22)) {
                 m_EditingData = null;
                 return;
             }
+            m_EditingData.m_FilePath = UCL.Core.UI.UCL_GUILayout.TextField("SaveName", m_EditingData.m_FilePath);
             if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Save", 22)) {
                 var path = Path.Combine(m_FolderPath, m_EditingData.m_FilePath);
                 var data = card_data.ToJson();
@@ -137,27 +143,46 @@ namespace RCG {
                 File.WriteAllText(path, save_data);
                 RefreshCardDataPaths();
             }
+#if UNITY_STANDALONE_WIN
+            if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("OpenFile", 22)) {
+                var path = Path.Combine(m_FolderPath, m_EditingData.m_FilePath);
+                UCL.Core.FileLib.WindowsLib.OpenExplorer(path);
+            }
+#endif
+
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             using(var scope = new GUILayout.VerticalScope("box", GUILayout.Width(300))) {
-                m_EditingData.m_FilePath = UCL.Core.UI.UCL_GUILayout.TextField("SaveName", m_EditingData.m_FilePath);
 
                 card_data.CardName = UCL.Core.UI.UCL_GUILayout.TextField("CardName", card_data.CardName);
-                card_data.CardName = UCL.Core.UI.UCL_GUILayout.TextField("IconName", card_data.IconName);     
+                //card_data.IconName = UCL.Core.UI.UCL_GUILayout.TextField("IconName", card_data.IconName);
+                if(!m_CardEditTmpDatas.ContainsKey("CardIconPath")) m_CardEditTmpDatas.Add("CardIconPath", false);
+                bool flag = (bool)m_CardEditTmpDatas["CardIconPath"];
+                int index = m_CardIconPaths.FindIndex(a => a == card_data.IconName);
+                GUILayout.BeginHorizontal();
+                UCL.Core.UI.UCL_GUILayout.LabelAutoSize("IconName");
+                int new_index = UCL.Core.UI.UCL_GUILayout.Popup(index, m_CardIconPaths, ref flag);
+                GUILayout.EndHorizontal();
+                m_CardEditTmpDatas["CardIconPath"] = flag;
+                if(new_index != index) {
+                    card_data.IconName = m_CardIconPaths[new_index];
+                    UpdateCardIcon();
+                }
                 card_data.Cost = UCL.Core.UI.UCL_GUILayout.IntField("Cost", card_data.Cost);
-
+                if(m_EditingData.m_IconTexture != null) GUILayout.Box(m_EditingData.m_IconTexture,
+                    GUILayout.Width(64), GUILayout.Height(64));
 
             }
             using(var scope = new GUILayout.VerticalScope("box")) {
                 GUILayout.BeginHorizontal();
                 m_CreateEffectID = UCL.Core.UI.UCL_GUILayout.
-                    Popup(m_CreateEffectID, RCG_CardEffectCreator.m_EffectNameList.ToArray(), ref m_CreateEffectOpened);
+                    Popup(m_CreateEffectID, RCG_CardEffectCreator.m_EffectNameList, ref m_CreateEffectOpened);
                 if(GUILayout.Button("Add", GUILayout.Width(60))) {
                     card_data.AddCardEffect(RCG_CardEffectCreator.Create(m_CreateEffectID));
                 }
                 GUILayout.EndHorizontal();
-                card_data.OnGUI();
+                card_data.DrawCardEffects();
 
             }
             GUILayout.EndHorizontal();
@@ -165,13 +190,61 @@ namespace RCG {
             GUILayout.EndVertical();
             GUILayout.EndScrollView();
         }
-        virtual protected void EditWindow(int id) {
+        virtual protected void SetEditCardData(CardEditData data) {
+            if(m_EditingData != null) {
+                if(m_EditingData.m_IconTexture != null) {
+                    DestroyImmediate(m_EditingData.m_IconTexture);
+                }
+            }
+
+            m_EditingData = data;
+            m_CardEditTmpDatas.Clear();
+            m_CardIconPaths.Clear();
+            var icon_path = IconPath;
+            if(string.IsNullOrEmpty(icon_path)) return;
+            var files = UCL.Core.FileLib.Lib.GetFiles(icon_path);
+
+            if(files != null) {
+                int discard_len = icon_path.Length + 1;
+                for(int i = 0; i < files.Length; i++) {
+                    var card_path = files[i];
+                    m_CardIconPaths.Add(card_path.Substring(discard_len, card_path.Length - discard_len));
+                }
+            }
+
+            UpdateCardIcon();
+        }
+        virtual protected void UpdateCardIcon() {
+            if(m_EditingData == null) return;
+            var card_data = m_EditingData.m_CardData;
+            if(string.IsNullOrEmpty(card_data.IconName)) return;
+            string icon_path = Path.Combine(IconPath, card_data.IconName);
+            Debug.LogWarning("icon_path:" + icon_path);
+            if(File.Exists(icon_path)) {
+                var fileData = File.ReadAllBytes(icon_path);
+                var tex = new Texture2D(2, 2);
+                tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
+                if(m_EditingData.m_IconTexture != null) {
+                    DestroyImmediate(m_EditingData.m_IconTexture);
+                }
+                m_EditingData.m_IconTexture = tex;
+            } else {
+                Debug.LogError("icon_path:" + icon_path + ",not exist!!");
+            }
+        }
+#if UNITY_EDITOR
+        [UCL.Core.ATTR.UCL_FunctionButton]
+        public void ShowEditWindow() {
+            RCG_CardEditorWindow.ShowWindow(this);
+        }
+#endif
+
+        virtual public void EditWindow(int id) {
             if(m_EditingData == null) {
                 SelectCardWindow();
             } else {
                 EditCardWindow();
             }
-            
         }
         private void OnGUI() {
             const int edge = 5;//5 pixel

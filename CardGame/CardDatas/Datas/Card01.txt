@@ -1,6 +1,6 @@
 {
 	"m_CardName":"Card01",
-	"m_IconName":"coal.png",
+	"m_IconName":"02.png",
 	"m_Cost":4,
 	"CardEffect":
 	[

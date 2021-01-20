@@ -1,7 +1,7 @@
 {
-	"m_CardName":"Card01",
-	"m_IconName":"coal.png",
-	"m_Cost":4,
+	"m_CardName":"Card03",
+	"m_IconName":"filtration.png",
+	"m_Cost":8,
 	"CardEffect":
 	[
 		{
@@ -25,6 +25,10 @@
 				"m_Int":0,
 				"m_Float":0
 			}
+		},
+		{
+			"EffectType":"DrawEffect",
+			"m_DrawCardNum":30
 		}
 	]
 }

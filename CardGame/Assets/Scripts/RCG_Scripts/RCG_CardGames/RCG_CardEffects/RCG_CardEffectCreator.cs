@@ -25,6 +25,7 @@ namespace RCG {
             return Create(m_EffectNameList[id]);
         }
         public static RCG_CardEffect Create(string type) {
+            if(m_CreateDic == null) Init();
             if(m_CreateDic.ContainsKey(type)) return m_CreateDic[type].Invoke();
             Debug.LogError("RCG_CardEffectCreator Create:" + type + ",Fail!!");
             return null;
