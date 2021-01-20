@@ -1224,13 +1224,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96ea88fdcb34f954ca48b2ce0b69457a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BigMaps:
-  - {fileID: 3525224420330128148, guid: 9746509d2840dae41803035d80463589, type: 3}
   m_CurBigMap: {fileID: 0}
   m_EmbarkUI: {fileID: 54514739}
   m_BigMapRoot: {fileID: 1747784230}
   m_BigMapScrollRect: {fileID: 1870404544}
-  m_LoadMapName: BigMapConstantinople
+  m_LoadMapName: BigMap1
 --- !u!4 &1867402175
 Transform:
   m_ObjectHideFlags: 0
@@ -1298,7 +1296,7 @@ MonoBehaviour:
   m_Content: {fileID: 0}
   m_Horizontal: 1
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.001
