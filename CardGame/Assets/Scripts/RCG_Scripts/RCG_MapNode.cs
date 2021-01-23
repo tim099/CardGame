@@ -15,7 +15,7 @@ namespace RCG {
             p_RCGMap = _RCGMap;
             m_MapNodeContent = Instantiate(_MapNodeContent, transform);
             m_MapNodeContent.gameObject.SetActive(true);
-            m_MapNodeContent.m_NodeText.SetText(m_NodeName);
+            //m_MapNodeContent.m_NodeText.SetText(m_NodeName);
             m_MapNodeContent.m_NodeButton.onClick.AddListener(delegate () {
                 p_RCGMap.PlayerMoveTo(this);
                 Debug.LogWarning("ClickNode" + m_NodeName);
