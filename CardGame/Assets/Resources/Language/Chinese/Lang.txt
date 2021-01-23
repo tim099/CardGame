@@ -11,3 +11,14 @@
 
 "City_Constantinople":"君士坦丁堡"
 "City_Galata":"加拉達石塔"
+
+"Quest_0":"邊境之路"
+"Quest_1":"哨站"
+"Quest_2":"君士坦丁堡"
+"Quest_3":"加拉達石塔"
+"Quest_4":"君士坦丁堡"
+"Quest_5":"加拉達石塔"
+"Quest_6":"君士坦丁堡"
+"Quest_7":"加拉達石塔"
+"Quest_8":"君士坦丁堡"
+"Quest_9":"加拉達石塔"
