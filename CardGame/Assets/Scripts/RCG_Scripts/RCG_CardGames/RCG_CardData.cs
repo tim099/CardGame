@@ -4,10 +4,15 @@ using UnityEngine;
 namespace RCG {
 
     public class RCG_CardData {
+        public struct CardData {
+            public string m_CardName;
+            public string m_IconName;
+            public int m_Cost;
+        }
         public Sprite Icon { get { return m_Setting.m_Icon; } }
-        virtual public string CardName { get; set; }
-        virtual public int Cost { get; set; }
-        virtual public string IconName { get; set; }
+        virtual public string CardName { get { return m_Data.m_CardName; } set { m_Data.m_CardName = value; } }
+        virtual public int Cost { get { return m_Data.m_Cost; } set { m_Data.m_Cost = value; } }
+        virtual public string IconName { get { return m_Data.m_IconName; } set { m_Data.m_IconName = value; } }
         virtual public string Description {
             get {
                 string des = "";
@@ -36,26 +41,43 @@ namespace RCG {
         virtual public int AtkRange { get { return m_Setting.m_AtkRange; } }
         virtual public int Defense { get { return m_Setting.m_Defense; } }
         virtual public TargetType Target { get { return m_Setting.m_Target; } }
+        protected CardData m_Data;
         public List<RCG_CardEffect> m_CardEffects = null;
         public RCG_CardData(UCL.Core.JsonLib.JsonData setting) {
-            CardName = setting.GetString("CardName", "card_name");
-            IconName = setting.GetString("IconName", CardName);
-            Cost = setting.GetInt("Cost", 0);
+            LoadJson(setting);
+        }
+        public void LoadJson(UCL.Core.JsonLib.JsonData setting) {
+            m_Data = UCL.Core.JsonLib.JsonConvert.LoadDataFromJson<CardData>(setting);
+            //var test = UCL.Core.JsonLib.JsonConvert.LoadListFromJson<float>(setting["Test"]);
+            //Debug.LogWarning("test:" + test.UCL_ToString());
+            Debug.LogWarning("m_Data:" + m_Data.UCL_ToString());
             m_CardEffects = new List<RCG_CardEffect>();
             if(setting.Contains("CardEffect")) {
                 LoadCardEffect(setting["CardEffect"]);
             }
-
+        }
+        public UCL.Core.JsonLib.JsonData ToJson() {
+            UCL.Core.JsonLib.JsonData data = new UCL.Core.JsonLib.JsonData();
+            UCL.Core.JsonLib.JsonConvert.SaveDataToJson(m_Data, data);
+            data["CardEffect"] = new UCL.Core.JsonLib.JsonData(m_CardEffects);
+            //data["Test"] = new UCL.Core.JsonLib.JsonData(new List<float>() { 0.4f, 12.4f, 5.3f });
+            //data["Test2"] = new UCL.Core.JsonLib.JsonData(new List<string>() { "AAA", "BBB", "CCC" });
+            //UCL.Core.JsonLib.JsonData effect_data = new UCL.Core.JsonLib.JsonData().ToArray();
+            //data["CardEffect"] = effect_data;
+            //for(int i = 0; i < m_CardEffects.Count; i++) {
+            //    effect_data.Add(m_CardEffects[i].SerializeToJson());
+            //}
+            return data;
         }
         virtual protected void LoadCardEffect(UCL.Core.JsonLib.JsonData card_effect) {
-            Debug.LogWarning("CardEffect:" + card_effect.ToJson());
+            //Debug.LogWarning("CardEffect:" + card_effect.ToJson());
             for(int i = 0; i < card_effect.Count; i++) {
                 var effect_data = card_effect[i];
                 Debug.LogWarning("effect_data:" + effect_data.ToJson());
                 if(effect_data.Contains("EffectType")) {
                     var effect = RCG_CardEffectCreator.Create(effect_data["EffectType"].GetString());
                     if(effect != null) {
-                        effect.LoadJson(effect_data);
+                        effect.DeserializeFromJson(effect_data);
                         m_CardEffects.Add(effect);
                     } else {
                         Debug.LogError("effect == null!!");
@@ -67,19 +89,11 @@ namespace RCG {
         public void AddCardEffect(RCG_CardEffect effect) {
             m_CardEffects.Add(effect);
         }
-        public UCL.Core.JsonLib.JsonData ToJson() {
-            UCL.Core.JsonLib.JsonData data = new UCL.Core.JsonLib.JsonData();
-            data["CardName"] = CardName;
-            data["IconName"] = IconName;
-            data["Cost"] = Cost;
-            UCL.Core.JsonLib.JsonData effect_data = new UCL.Core.JsonLib.JsonData().ToArray();
-            data["CardEffect"] = effect_data;
-            for(int i = 0; i < m_CardEffects.Count; i++) {
-                effect_data.Add(m_CardEffects[i].ToJson());
-            }
-            return data;
+
+        public void DrawCardDatas() {
+
         }
-        public void OnGUI() {
+        public void DrawCardEffects() {
             int delete_at = -1;
             for(int i = 0; i < m_CardEffects.Count; i++) {
                 var effect = m_CardEffects[i];
@@ -102,7 +116,7 @@ namespace RCG {
         public RCG_CardData(RCG_CardSettings setting) {
             m_Setting = setting;
             CardName = m_Setting.m_CardName;
-            m_Cost = m_Setting.m_Cost;
+            m_Data.m_Cost = m_Setting.m_Cost;
             m_CardType = m_Setting.m_CardType;
         }
         public void LogSetting() {
@@ -110,7 +124,7 @@ namespace RCG {
         }
         virtual public bool TargetCheck(int target) {
             switch(m_Setting.m_Target) {
-                case TargetType.Null: {
+                case TargetType.None: {
                         return false;
                     }
                 case TargetType.Player: {
@@ -140,7 +154,6 @@ namespace RCG {
 
 
         protected RCG_CardSettings m_Setting;
-        public int m_Cost = 1;
         public CardType m_CardType = CardType.Attack;
 
     }

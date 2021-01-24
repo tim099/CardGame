@@ -1,17 +1,21 @@
 {
-	"CardName":"Card07",
-	"Cost":5,
-	"CardEffect":[
+	"m_CardName":"",
+	"m_IconName":"01.png",
+	"m_Cost":0,
+	"CardEffect":
+	[
 		{
 			"EffectType":"AttackEffect",
-			"m_Atk":15
-		}
-,
+			"m_Atk":15,
+			"m_AtkRange":0,
+			"m_AttackData":{
+				"m_Int":0,
+				"m_Float":0
+			}
+		},
 		{
 			"EffectType":"DrawEffect",
 			"m_DrawCardNum":3
 		}
-
 	]
-
 }

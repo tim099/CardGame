@@ -37,11 +37,11 @@ namespace RCG {
                 return false;
             }
             if(!m_Data.TargetCheck(target)) return false;
-            if(p_Player.m_Cost < m_Data.m_Cost) return false;
+            if(p_Player.m_Cost < m_Data.Cost) return false;
             m_Used = true;
-            p_Player.m_Cost -= m_Data.m_Cost;
+            p_Player.m_Cost -= m_Data.Cost;
             m_Data.TriggerEffect(p_Player);
-            RCG_CardGame.ins.m_battlefield.TriggerCardEffect(target, m_Data);
+            RCG_BattleField.ins.TriggerCardEffect(target, m_Data);
             return true;
         }
         virtual public bool IsEmpty {

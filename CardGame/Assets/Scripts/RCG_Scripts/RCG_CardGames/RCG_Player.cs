@@ -10,12 +10,15 @@ namespace RCG {
         public const int MaxCost = 3;
         public Text m_CostText = null;
         public RCG_Deck m_Deck = null;
+        public RCG_Card m_CardTemplate = null;
         public List<RCG_Card> m_Cards = null;
         public List<RCG_CardBeginSet> m_BeginSets = null;
         public List<UCL_RectTransformCollider> m_Targets = new List<UCL_RectTransformCollider>();
         public int m_Cost = 0;
         public int m_DrawCardCount = 0;
-        public Transform m_DrawCardPos;
+        public Transform m_DrawCardPos = null;
+        public Transform m_CardsRoot = null;
+        protected List<Transform> m_CardPositions = new List<Transform>();
         protected RCG_Card m_DraggingCard = null;
         protected UCL_RectTransformCollider m_Target = null;
         protected bool m_Blocking = false;
@@ -43,15 +46,17 @@ namespace RCG {
             if(m_Cards == null) {
                 m_Cards = new List<RCG_Card>();
             }
-            if(m_Cards.Count == 0) {
-                UCL.Core.GameObjectLib.SearchChild(transform, m_Cards);
+            UCL.Core.GameObjectLib.SearchChildNotIncludeParent(m_CardsRoot, m_CardPositions);
+            for(int i = 0; i < 7; i++) {
+                var card = Instantiate(m_CardTemplate, m_CardsRoot);
+                card.transform.position = m_CardPositions[i].position;
+                m_Cards.Add(card);
             }
+            
             if(m_BeginSets.Count == 0) {
                 return;
             }
-            for(int i = 0; i < m_Targets.Count; i++) {
-                m_Targets[i].m_ID = i;
-            }
+
             var set = m_BeginSets[UCL.Core.MathLib.UCL_Random.Instance.Next(m_BeginSets.Count)];
             m_Deck.Init(this);
             for(int i = 0, len = set.m_Settings.Count; i < len; i++) {
@@ -118,11 +123,6 @@ namespace RCG {
             foreach(var card in m_Cards) {
                 if(card.IsDragging) {
                     m_DraggingCard = card;
-                }
-            }
-            foreach(var target in m_Targets) {
-                if(target.IsMouseEntered) {
-                    m_Target = target;
                 }
             }
             m_CostText.SetText("" + m_Cost);
