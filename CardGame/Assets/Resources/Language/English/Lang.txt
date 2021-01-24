@@ -11,3 +11,14 @@
 
 "City_Constantinople":"Constantinople"
 "City_Galata":"Galata"
+
+"Quest_0":"Path to Border"
+"Quest_1":"Watch Tower"
+"Quest_2":"君士坦丁堡"
+"Quest_3":"加拉達石塔"
+"Quest_4":"君士坦丁堡"
+"Quest_5":"加拉達石塔"
+"Quest_6":"君士坦丁堡"
+"Quest_7":"加拉達石塔"
+"Quest_8":"君士坦丁堡"
+"Quest_9":"加拉達石塔"
