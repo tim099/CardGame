@@ -5,12 +5,12 @@ using UnityEngine;
 namespace RCG {
     public class RCG_CardGame : MonoBehaviour {
         static public RCG_CardGame ins = null; 
-        public RCG_Player m_Player;
-        public RCG_BattleField m_battlefield;
+        public RCG_Player m_Player = null;
         bool m_Entered = false;
         public void Init() {
             ins = this;
-            //m_Player.Init();
+
+            m_Player.Init();
             Debug.LogWarning("Application.systemLanguage:" + Application.systemLanguage.ToString());
         }
         virtual public void EnterBattle() {

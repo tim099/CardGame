@@ -7,6 +7,7 @@ namespace RCG {
     [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_BattleField : MonoBehaviour
     {
+        static public RCG_BattleField ins = null;
         public List<RCG_Unit> m_units;
         bool m_Entered = false;
         // Start is called before the first frame update
@@ -35,6 +36,7 @@ namespace RCG {
             gameObject.SetActive(false);
         }
         virtual public void Init() {
+            ins = this;
             // RCG_Unit[] units = GetComponentsInChildren<RCG_Unit>();
             UCL_RectTransformCollider[] colliders = GetComponentsInChildren<UCL_RectTransformCollider>();
             // Debug.Log(units.Length);

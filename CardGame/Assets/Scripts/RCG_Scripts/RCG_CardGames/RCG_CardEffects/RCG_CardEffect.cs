@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RCG {
     public class RCG_CardEffect : UCL.Core.JsonLib.IJsonSerializable {
-        virtual public string EffectType { get { return this.GetType().Name.Replace("RCG_Card",""); } }
+        virtual public string EffectType { get { return this.GetType().Name.Replace("RCG_Card", ""); } }
 
         virtual public void DeserializeFromJson(UCL.Core.JsonLib.JsonData data) {
             UCL.Core.JsonLib.JsonConvert.LoadDataFromJson(this, data);

@@ -116,7 +116,7 @@ namespace RCG {
         public RCG_CardData(RCG_CardSettings setting) {
             m_Setting = setting;
             CardName = m_Setting.m_CardName;
-            m_Cost = m_Setting.m_Cost;
+            m_Data.m_Cost = m_Setting.m_Cost;
             m_CardType = m_Setting.m_CardType;
         }
         public void LogSetting() {
@@ -154,7 +154,6 @@ namespace RCG {
 
 
         protected RCG_CardSettings m_Setting;
-        public int m_Cost = 1;
         public CardType m_CardType = CardType.Attack;
 
     }
