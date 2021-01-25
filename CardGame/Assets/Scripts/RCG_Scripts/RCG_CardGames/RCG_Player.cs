@@ -18,7 +18,8 @@ namespace RCG {
         public int m_DrawCardCount = 0;
         public Transform m_DrawCardPos = null;
         public Transform m_CardsRoot = null;
-        protected List<Transform> m_CardPositions = new List<Transform>();
+        public RCG_CardPosController m_CardPosController = null;
+        protected RCG_Card m_SelectedCard = null;
         protected RCG_Card m_DraggingCard = null;
         protected UCL_RectTransformCollider m_Target = null;
         protected bool m_Blocking = false;
@@ -43,14 +44,16 @@ namespace RCG {
         public void Init() {
             if(m_Inited) return;
             m_Inited = true;
+            m_CardPosController.Init();
             if(m_Cards == null) {
                 m_Cards = new List<RCG_Card>();
             }
-            UCL.Core.GameObjectLib.SearchChildNotIncludeParent(m_CardsRoot, m_CardPositions);
-            for(int i = 0; i < 7; i++) {
-                var card = Instantiate(m_CardTemplate, m_CardsRoot);
-                card.transform.position = m_CardPositions[i].position;
-                m_Cards.Add(card);
+            //UCL.Core.GameObjectLib.SearchChildNotIncludeParent(m_CardsRoot, m_CardPositions);
+            for(int i = 0; i < m_CardPosController.m_MaxCardCount; i++) {
+                var aCard = Instantiate(m_CardTemplate, m_CardsRoot);
+                aCard.Init(this);
+                m_CardPosController.AddCard(aCard);
+                m_Cards.Add(aCard);
             }
             
             if(m_BeginSets.Count == 0) {
@@ -63,11 +66,16 @@ namespace RCG {
                 m_Deck.Add(set.m_Settings[i].CreateCard());
             }
             m_Deck.Shuffle();
-            for(int i = 0; i < m_Cards.Count; i++) {
-                var card = m_Cards[i];
-                card.Init(this);
-            }
+
             TurnInit();
+        }
+        public void SelectCard(RCG_Card iCard) {
+            if(m_SelectedCard == iCard) return;
+            if(m_SelectedCard != null) {
+                m_SelectedCard.DeSelect();
+            }
+            m_SelectedCard = iCard;
+            m_SelectedCard.Select();
         }
         public void DrawCard(int count) {
             m_DrawCardCount += count;

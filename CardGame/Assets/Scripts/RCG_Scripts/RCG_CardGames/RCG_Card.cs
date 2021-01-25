@@ -10,6 +10,7 @@ using TMPro;
 namespace RCG {
 
     public class RCG_Card : MonoBehaviour {
+        public GameObject m_SelectedObject;
         public GameObject m_CardPanel;
         public UCL_Button m_Button;
         public UCL_Draggable m_Draggable;
@@ -18,9 +19,13 @@ namespace RCG {
         public bool m_Used = false;
         protected RCG_CardData m_Data;
         protected RCG_Player p_Player;
+        public RCG_CardPos p_CardPos;
         virtual public RCG_CardData Data { get { return m_Data; } }
         virtual public bool IsDragging {
             get { return m_Draggable.IsDragging; }
+        }
+        virtual public bool IsSelected {
+            get { return m_SelectedObject.activeSelf; }
         }
         /// <summary>
         /// target >=3 is enemy
@@ -50,13 +55,37 @@ namespace RCG {
                 return false;
             }
         }
+        virtual public void SetCardPos(RCG_CardPos iCardPos) {
+            p_CardPos = iCardPos;
+        }
         virtual public void Init(RCG_Player _Player) {
             p_Player = _Player;
+            m_SelectedObject.SetActive(false);
             m_Button.m_OnPointerUp.AddListener(p_Player.CardRelease);
+            m_Button.m_OnClick.AddListener(delegate () {
+                p_Player.SelectCard(this);
+            });
             m_CardDisplayer.m_OnSelected.AddListener(() => { transform.SetAsLastSibling(); });
+            m_CardDisplayer.OnPointerEnter(() => {
+                Debug.LogWarning("m_CardDisplayer.OnPointerEnter");
+                m_CardDisplayer.Select();
+            });
+            m_CardDisplayer.OnPointerExit(() => {
+                Debug.LogWarning("m_CardDisplayer.OnPointerExit");
+                if(!m_SelectedObject.activeSelf) {
+                    m_CardDisplayer.DeSelect();
+                }
+            });
         }
         virtual public void TurnInit(RCG_CardData _Data) {
             SetCardData(_Data);
+        }
+        virtual public void Select() {
+            m_SelectedObject.SetActive(true);
+        }
+        virtual public void DeSelect() {
+            m_SelectedObject.SetActive(false);
+            m_CardDisplayer.DeSelect();
         }
         virtual public void SetCardData(RCG_CardData _Data) {
             m_Data = _Data;

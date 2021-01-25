@@ -268,6 +268,7 @@ MonoBehaviour:
   m_Description: {fileID: 1834061518494477231}
   m_DescriptionText: {fileID: 1834061518494477224}
   m_CostText: {fileID: 1834061519075677221}
+  m_OnPointerEvent: {fileID: 6682943148800859605}
 --- !u!114 &6682943148800859605
 MonoBehaviour:
   m_ObjectHideFlags: 0
