@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace RCG {
     public class RCG_Deck : MonoBehaviour {
+        public int HandCardCount { get { return m_HandCardCount; } }
         public List<RCG_CardData> Cards { get { return m_Cards; } }
         public List<RCG_CardData> UsedCards { get { return m_UsedCards; } }
         public UCL.Core.UCL_Event m_OnDeckEmptyEvent = new UCL.Core.UCL_Event();
-        protected List<RCG_CardData> m_Cards = new List<RCG_CardData>();
-        protected List<RCG_CardData> m_UsedCards = new List<RCG_CardData>();
+
 
         public RCG_DeckUI m_CardUI;
         public RCG_DeckUI m_UsedCardUI;
 
+        protected List<RCG_CardData> m_Cards = new List<RCG_CardData>();
+        protected List<RCG_CardData> m_UsedCards = new List<RCG_CardData>();
+        protected int m_HandCardCount = 0;
         RCG_Player p_Player;
         virtual public void Init(RCG_Player player) {
             p_Player = player;
@@ -38,11 +41,17 @@ namespace RCG {
         public void Add(RCG_CardData card) {
             m_Cards.Add(card);
         }
+        /// <summary>
+        /// 回收使用完的卡牌
+        /// </summary>
+        /// <param name="card"></param>
         public void Used(RCG_CardData card) {
             if(card == null) {
                 Debug.LogError("Used card fail card == null");
                 return;
             }
+            --m_HandCardCount;
+            Debug.LogWarning("m_HandCardCount:" + m_HandCardCount);
             m_UsedCards.Add(card);
         }
         public void Shuffle() {
@@ -60,6 +69,8 @@ namespace RCG {
             }
             var card = m_Cards[0];
             m_Cards.RemoveAt(0);
+            ++m_HandCardCount;
+            Debug.LogWarning("m_HandCardCount:" + m_HandCardCount);
             return card;
         }
     }

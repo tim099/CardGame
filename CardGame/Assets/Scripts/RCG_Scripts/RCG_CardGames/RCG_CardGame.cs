@@ -29,6 +29,9 @@ namespace RCG {
             m_Entered = false;
             gameObject.SetActive(false);
         }
+        public void TriggerCard() {
+            m_Player.TriggerCard();
+        }
         public void EnemyEndTurn() {
 
         }

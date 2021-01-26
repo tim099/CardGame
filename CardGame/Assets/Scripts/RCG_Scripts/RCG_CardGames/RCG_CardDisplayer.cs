@@ -34,7 +34,8 @@ namespace RCG
                 int cost = m_Data.Cost;
                 if(cost < 0) cost = 0;
                 m_CostText.SetText(cost);
-                HideDescription();
+                //HideDescription();
+                ShowDescription();
             } else {
                 gameObject.SetActive(false);
             }
@@ -56,7 +57,7 @@ namespace RCG
         virtual public void Select() {
             if(m_BlockSelection) return;
             m_Selected = true;
-            ShowDescription();
+            //ShowDescription();
             m_ScaleBackTB.Kill();
             m_ScaleUpTB.StartTween();
             m_OnSelected.UCL_Invoke();
@@ -65,7 +66,7 @@ namespace RCG
         virtual public void DeSelect() {
             if(m_BlockSelection) return;
             m_Selected = false;
-            HideDescription();
+            //HideDescription();
             m_ScaleUpTB.Kill();
             m_ScaleBackTB.StartTween();
         }

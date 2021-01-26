@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace RCG {
     public class RCG_CardPosController : MonoBehaviour {
+
         public RCG_CardPos m_CardPosTmp = null;
         public Transform m_CardPosRoot = null;
         public List<RCG_CardPos> m_CardPosList = new List<RCG_CardPos>();
@@ -13,6 +14,7 @@ namespace RCG {
         public int m_MaxCardCount = 10;
         public float m_MaxMoveDeg = 0.1f;
         public float m_SelectedCardAngle = 3f;
+        public float m_CardAngle = 2f;
         virtual public void Init() {
             //for(int i = 0; i < m_MaxCardCount; i++) {
             //    var aCardPos = Instantiate(m_CardPosTmp, m_CardPosRoot);
@@ -27,34 +29,61 @@ namespace RCG {
             iCard.SetCardPos(aCardPos);
             m_CardPosList.Add(aCardPos);
         }
+        /// <summary>
+        /// 更新卡牌資訊 包含判斷玩家費用是否足夠
+        /// </summary>
+        virtual public void UpdateCardStatus() {
+            foreach(var aCardPos in m_CardPosList) {
+                aCardPos.m_Card.UpdateCardStatus();
+            }
+        }
+        virtual public RCG_Card GetAvaliableCard() {
+            if(m_InActiveCardPosList.Count == 0) return null;
+            return m_InActiveCardPosList[0].m_Card;
+        }
         private void Update() {
             m_ActiveCardPosList.Clear();
             m_InActiveCardPosList.Clear();
+            List<RCG_CardPos> aSelectedCardPos = new List<RCG_CardPos>();
             int aSelectedCardNum = 0;
             for(int i = 0; i < m_CardPosList.Count; i++) {
                 var aCardPos = m_CardPosList[i];
                 if(aCardPos.IsCardActive) {
                     m_ActiveCardPosList.Add(aCardPos);
-                    if(aCardPos.m_Card.IsSelected) {
-                        aSelectedCardNum++;
-                    }
                 } else {
                     m_InActiveCardPosList.Add(aCardPos);
                 }
             }
+            for(int i = 0; i < m_ActiveCardPosList.Count - 1; i++) {
+                var aCardPos = m_ActiveCardPosList[i];
+                if(aCardPos.m_Card.IsCardDisplayerSelected) {
+                    aSelectedCardNum++;
+                    aSelectedCardPos.Add(aCardPos);
+                }
+                //if(aCardPos.m_Card.IsSelected) {
+                //    aSelectedCardPos.Add(aCardPos);
+                //}
+            }
             m_CardPosList.Clear();
             int aDiv = m_ActiveCardPosList.Count - 1 - aSelectedCardNum;
             if(aDiv <= 0) aDiv = 1;
-            
+
+            float aMaxSpace = m_SelectedCardAngle * aSelectedCardNum + m_CardAngle * (m_ActiveCardPosList.Count - 1 - aSelectedCardNum);
+
             float aSpaceAngle = ((2 * m_MaxAngle - m_SelectedCardAngle * aSelectedCardNum) / (float)aDiv);
             //Debug.LogWarning("aSelectedCardNum:" + aSelectedCardNum+ ",aSpaceAngle:"+ aSpaceAngle+".aDiv:" + aDiv);
             float aAngleAt = m_MaxAngle;
+            if(aMaxSpace <= 2 * m_MaxAngle) {
+                aSpaceAngle = m_CardAngle;
+                aAngleAt = 0.5f * aMaxSpace;
+                //Debug.LogWarning("aMaxSpace:" + aMaxSpace + ",aAngleAt:" + aAngleAt);
+            }
             for(int i = 0; i < m_ActiveCardPosList.Count; i++) {
                 var aCardPos = m_ActiveCardPosList[i];
                 m_CardPosList.Add(aCardPos);
                 aCardPos.transform.SetAsLastSibling();
-                aCardPos.SetAngle(aAngleAt);
-                if(aCardPos.m_Card.IsSelected) {
+                aCardPos.SetTargetAngle(aAngleAt);
+                if(aCardPos.m_Card.IsCardDisplayerSelected) {
                     aAngleAt -= m_SelectedCardAngle;
                 } else {
                     aAngleAt -= aSpaceAngle;
@@ -63,7 +92,12 @@ namespace RCG {
             for(int i = 0; i < m_InActiveCardPosList.Count; i++) {
                 var aCardPos = m_InActiveCardPosList[i];
                 m_CardPosList.Add(aCardPos);
-                aCardPos.transform.SetAsLastSibling();
+                aCardPos.SetAngle(aAngleAt);
+                //aCardPos.transform.SetAsLastSibling();
+            }
+
+            foreach(var fSelectedCardPos in aSelectedCardPos) {
+                fSelectedCardPos.transform.SetAsLastSibling();
             }
         }
     }

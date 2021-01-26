@@ -163,5 +163,10 @@ MonoBehaviour:
     type: 3}
   m_CardPosRoot: {fileID: 105594827385555452}
   m_CardPosList: []
-  m_MaxDegree: 7
+  m_ActiveCardPosList: []
+  m_InActiveCardPosList: []
+  m_MaxAngle: 7
   m_MaxCardCount: 10
+  m_MaxMoveDeg: 0.1
+  m_SelectedCardAngle: 2.52
+  m_CardAngle: 2.3

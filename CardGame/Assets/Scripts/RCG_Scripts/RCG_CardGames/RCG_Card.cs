@@ -10,6 +10,14 @@ using TMPro;
 namespace RCG {
 
     public class RCG_Card : MonoBehaviour {
+        public enum BlockingStatus {
+            Cost = 1,
+            DrawCardAnime,
+        }
+        public bool IsBlocking {
+            get { return m_SelectionBlock.Count > 0; }
+        }
+        public GameObject m_BlockSelectionObject;
         public GameObject m_SelectedObject;
         public GameObject m_CardPanel;
         public UCL_Button m_Button;
@@ -20,12 +28,16 @@ namespace RCG {
         protected RCG_CardData m_Data;
         protected RCG_Player p_Player;
         public RCG_CardPos p_CardPos;
+        HashSet<BlockingStatus> m_SelectionBlock = new HashSet<BlockingStatus>();
         virtual public RCG_CardData Data { get { return m_Data; } }
         virtual public bool IsDragging {
             get { return m_Draggable.IsDragging; }
         }
         virtual public bool IsSelected {
             get { return m_SelectedObject.activeSelf; }
+        }
+        virtual public bool IsCardDisplayerSelected {
+            get { return m_CardDisplayer.IsSelected; }
         }
         /// <summary>
         /// target >=3 is enemy
@@ -41,14 +53,34 @@ namespace RCG {
                 Debug.LogError("m_Data == null");
                 return false;
             }
-            if(!m_Data.TargetCheck(target)) return false;
-            if(p_Player.m_Cost < m_Data.Cost) return false;
+            //if(!m_Data.TargetCheck(target)) return false;
+            if(!p_Player.AlterCost(-m_Data.Cost)) {
+                ///費用不足
+                return false;
+            }
             m_Used = true;
-            p_Player.m_Cost -= m_Data.Cost;
+            p_Player.IsUsingCard = true;
             m_Data.TriggerEffect(p_Player);
-            RCG_BattleField.ins.TriggerCardEffect(target, m_Data);
+            if(RCG_BattleField.ins != null) {
+                RCG_BattleField.ins.TriggerCardEffect(target, m_Data);
+            }
+            p_Player.IsUsingCard = false;
             return true;
         }
+        /// <summary>
+        /// 更新卡牌資訊 包含判斷玩家費用是否足夠等
+        /// </summary>
+        virtual public void UpdateCardStatus() {
+            if(m_Data == null) return;
+            if(m_Data.Cost > p_Player.Cost) {
+                BlockSelection(BlockingStatus.Cost);
+            } else {
+                UnBlockSelection(BlockingStatus.Cost);
+            }
+        }
+        /// <summary>
+        /// Avaliable Cards
+        /// </summary>
         virtual public bool IsEmpty {
             get {
                 if(m_Used || m_Data == null) return true;
@@ -63,15 +95,20 @@ namespace RCG {
             m_SelectedObject.SetActive(false);
             m_Button.m_OnPointerUp.AddListener(p_Player.CardRelease);
             m_Button.m_OnClick.AddListener(delegate () {
-                p_Player.SelectCard(this);
+                if(!IsBlocking) {
+                    p_Player.SetSelectedCard(this);
+                } else {
+                    Debug.LogError("SetSelectedCard Fail Blocking:" + m_SelectionBlock.UCL_ToString());
+                    p_Player.SetSelectedCard(null);
+                }
             });
-            m_CardDisplayer.m_OnSelected.AddListener(() => { transform.SetAsLastSibling(); });
+            //m_CardDisplayer.m_OnSelected.AddListener(() => { transform.SetAsLastSibling(); });
             m_CardDisplayer.OnPointerEnter(() => {
-                Debug.LogWarning("m_CardDisplayer.OnPointerEnter");
+                //Debug.LogWarning("m_CardDisplayer.OnPointerEnter");
                 m_CardDisplayer.Select();
             });
             m_CardDisplayer.OnPointerExit(() => {
-                Debug.LogWarning("m_CardDisplayer.OnPointerExit");
+                //Debug.LogWarning("m_CardDisplayer.OnPointerExit");
                 if(!m_SelectedObject.activeSelf) {
                     m_CardDisplayer.DeSelect();
                 }
@@ -83,10 +120,14 @@ namespace RCG {
         virtual public void Select() {
             m_SelectedObject.SetActive(true);
         }
-        virtual public void DeSelect() {
+        virtual public void Deselect() {
             m_SelectedObject.SetActive(false);
             m_CardDisplayer.DeSelect();
         }
+        /// <summary>
+        /// 設定顯示卡牌資料
+        /// </summary>
+        /// <param name="_Data"></param>
         virtual public void SetCardData(RCG_CardData _Data) {
             m_Data = _Data;
             m_CardDisplayer.Init(m_Data);
@@ -99,14 +140,31 @@ namespace RCG {
                 m_CardPanel.SetActive(false);
             }
             m_Used = false;
+            UpdateCardStatus();
         }
-        virtual public void DrawCardAnime(Vector3 start_pos, System.Action end_act) {
-            m_CardPanel.transform.position = start_pos;
+        virtual public void BlockSelection(BlockingStatus iBlock) {
+            m_BlockSelectionObject.SetActive(true);            
+            if(!m_SelectionBlock.Contains(iBlock))m_SelectionBlock.Add(iBlock);
+        }
+        virtual public void UnBlockSelection(BlockingStatus iBlock) {
+            if(m_SelectionBlock.Contains(iBlock)) m_SelectionBlock.Remove(iBlock);
+            if(IsBlocking) return;
+            m_BlockSelectionObject.SetActive(false);
+        }
+        /// <summary>
+        /// 抽牌演出
+        /// </summary>
+        /// <param name="iStartPos"></param>
+        /// <param name="iEndAct"></param>
+        virtual public void DrawCardAnime(Vector3 iStartPos, System.Action iEndAct) {
+            m_CardPanel.transform.position = iStartPos;
             m_CardPanel.SetActive(true);
             m_CardDisplayer.BlockSelection();
+            BlockSelection(BlockingStatus.DrawCardAnime);
             m_TB_Tweener.StartTween(()=> {
                 m_CardDisplayer.UnBlockSelection();
-                if(end_act != null) end_act.Invoke();
+                UnBlockSelection(BlockingStatus.DrawCardAnime);
+                if(iEndAct != null) iEndAct.Invoke();
             });
         }
         virtual public void CardUsed() {

@@ -283,32 +283,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_OnPointerEnter:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1834061517717232813}
-        m_MethodName: ShowDescription
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_OnPointerExit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1834061517717232813}
-        m_MethodName: HideDescription
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_Enter: 0
 --- !u!1 &1834061517906098239
 GameObject:
@@ -740,8 +718,24 @@ MonoBehaviour:
     m_LookAtFront: []
     m_UCL_TC_Event: []
     m_Vector3:
-    - {x: 1.2, y: 1.2, z: 1}
+    - {x: 1.3, y: 1.3, z: 1}
     - {x: 0, y: 0, z: 0}
+    m_Vector2: []
+    m_Boolean: 0100
+    m_Byte: 
+    m_Int32: 
+    m_Single: []
+    m_Foldout: 1
+  - m_Type: 1
+    m_Transform:
+    - {fileID: 1834061517717232784}
+    - {fileID: 0}
+    m_Quaternion: []
+    m_UCL_Path: []
+    m_LookAtFront: []
+    m_UCL_TC_Event: []
+    m_Vector3:
+    - {x: 0, y: 40, z: 0}
     m_Vector2: []
     m_Boolean: 0100
     m_Byte: 
@@ -822,6 +816,22 @@ MonoBehaviour:
     m_UCL_TC_Event: []
     m_Vector3:
     - {x: 1, y: 1, z: 1}
+    - {x: 0, y: 0, z: 0}
+    m_Vector2: []
+    m_Boolean: 0100
+    m_Byte: 
+    m_Int32: 
+    m_Single: []
+    m_Foldout: 1
+  - m_Type: 1
+    m_Transform:
+    - {fileID: 1834061517717232784}
+    - {fileID: 0}
+    m_Quaternion: []
+    m_UCL_Path: []
+    m_LookAtFront: []
+    m_UCL_TC_Event: []
+    m_Vector3:
     - {x: 0, y: 0, z: 0}
     m_Vector2: []
     m_Boolean: 0100
