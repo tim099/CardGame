@@ -122,11 +122,11 @@ RectTransform:
   m_Father: {fileID: 1834061517717232784}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -90, y: 149}
-  m_SizeDelta: {x: 60, y: 60}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 40, y: 40}
+  m_Pivot: {x: 0, y: 1}
 --- !u!222 &1834061517449448931
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -154,7 +154,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: ae6eb9d3c93f5c742a1f23371a6a2e99, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -230,13 +230,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.754717, g: 0.754717, b: 0.754717, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c7c45f492c491cf468395d54af2d607c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 47490e1ac42d3cd449c3e5f16874bc61, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -268,6 +268,7 @@ MonoBehaviour:
   m_Description: {fileID: 1834061518494477231}
   m_DescriptionText: {fileID: 1834061518494477224}
   m_CostText: {fileID: 1834061519075677221}
+  m_OnPointerEvent: {fileID: 6682943148800859605}
 --- !u!114 &6682943148800859605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -282,32 +283,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_OnPointerEnter:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1834061517717232813}
-        m_MethodName: ShowDescription
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_OnPointerExit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1834061517717232813}
-        m_MethodName: HideDescription
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_Enter: 0
 --- !u!1 &1834061517906098239
 GameObject:
@@ -604,10 +583,10 @@ RectTransform:
   m_Father: {fileID: 1834061517449448929}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 60, y: 60}
+  m_SizeDelta: {x: -4, y: -4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1834061519075677220
 CanvasRenderer:
@@ -665,7 +644,7 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 2, y: -2}
   m_UseGraphicAlpha: 1
-  m_Size: 3
+  m_Size: 1
 --- !u!1 &2483673694183496883
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,8 +718,24 @@ MonoBehaviour:
     m_LookAtFront: []
     m_UCL_TC_Event: []
     m_Vector3:
-    - {x: 1.2, y: 1.2, z: 1}
+    - {x: 1.3, y: 1.3, z: 1}
     - {x: 0, y: 0, z: 0}
+    m_Vector2: []
+    m_Boolean: 0100
+    m_Byte: 
+    m_Int32: 
+    m_Single: []
+    m_Foldout: 1
+  - m_Type: 1
+    m_Transform:
+    - {fileID: 1834061517717232784}
+    - {fileID: 0}
+    m_Quaternion: []
+    m_UCL_Path: []
+    m_LookAtFront: []
+    m_UCL_TC_Event: []
+    m_Vector3:
+    - {x: 0, y: 40, z: 0}
     m_Vector2: []
     m_Boolean: 0100
     m_Byte: 
@@ -821,6 +816,22 @@ MonoBehaviour:
     m_UCL_TC_Event: []
     m_Vector3:
     - {x: 1, y: 1, z: 1}
+    - {x: 0, y: 0, z: 0}
+    m_Vector2: []
+    m_Boolean: 0100
+    m_Byte: 
+    m_Int32: 
+    m_Single: []
+    m_Foldout: 1
+  - m_Type: 1
+    m_Transform:
+    - {fileID: 1834061517717232784}
+    - {fileID: 0}
+    m_Quaternion: []
+    m_UCL_Path: []
+    m_LookAtFront: []
+    m_UCL_TC_Event: []
+    m_Vector3:
     - {x: 0, y: 0, z: 0}
     m_Vector2: []
     m_Boolean: 0100
