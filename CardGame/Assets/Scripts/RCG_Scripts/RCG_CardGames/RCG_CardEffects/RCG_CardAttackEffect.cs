@@ -11,12 +11,10 @@ namespace RCG {
         }
         public int m_Atk = 0;
         public int m_AtkRange = 0;
-        public AttackData m_AttackData;
+        public int m_AtkTimes = 1;
+        //public AttackData m_AttackData;
         override public void OnGUI() {
             base.OnGUI();
-            //using(var scope = new GUILayout.VerticalScope("box")) {
-                //m_Atk = UCL.Core.UI.UCL_GUILayout.IntField("Atk", m_Atk);
-            //}
         }
         //override public void LoadJson(UCL.Core.JsonLib.JsonData data) {
         //    UCL.Core.JsonLib.JsonConvert.LoadDataFromJson(this, data);

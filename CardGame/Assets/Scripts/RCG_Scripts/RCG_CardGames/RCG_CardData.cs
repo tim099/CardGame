@@ -4,6 +4,11 @@ using UnityEngine;
 namespace RCG {
 
     public class RCG_CardData {
+        public static string CardDataPath {
+            get {
+                return Application.streamingAssetsPath+ "/.CardDatas/Datas";
+            }
+        }
         public struct CardData {
             public string m_CardName;
             public string m_IconName;

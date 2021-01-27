@@ -43,12 +43,11 @@ namespace RCG {
             if(PlayerPrefs.HasKey(FolderPathKey)) {
                 m_FolderPath = PlayerPrefs.GetString(FolderPathKey);
             }
-#if UNITY_EDITOR
-            if(m_FolderPath == null) m_FolderPath = Application.dataPath;
-#endif
-            if(!string.IsNullOrEmpty(m_FolderPath) && !Directory.Exists(m_FolderPath)) {
-                Directory.CreateDirectory(m_FolderPath);
-            }
+            if(string.IsNullOrEmpty(m_FolderPath) || !Directory.Exists(m_FolderPath)) ResetFolderPath();
+
+            //if(!string.IsNullOrEmpty(m_FolderPath) && !Directory.Exists(m_FolderPath)) {
+            //    Directory.CreateDirectory(m_FolderPath);
+            //}
             RefreshCardDataPaths();
         }
         virtual public void RefreshCardDataPaths() {
@@ -79,23 +78,14 @@ namespace RCG {
 #if UNITY_EDITOR
                     m_FolderPath = UCL.Core.FileLib.EditorLib.OpenFolderExplorer(m_FolderPath);
                     RefreshCardDataPaths();
-                    //OpenFileDialog
-                    //#elif UNITY_STANDALONE_WIN
-                    //#if UNITY_STANDALONE_WIN
-                    //System.Windows.Forms.FolderBrowserDialog dia = new System.Windows.Forms.FolderBrowserDialog();
-                    //dia.Description = "Explore folder";
-                    //dia.SelectedPath = m_FolderPath;
-                    //dia.ShowDialog();
-                    //Debug.LogWarning("dia.SelectedPath" + dia.SelectedPath);
-                    //if(!string.IsNullOrEmpty(dia.SelectedPath)) {
-                    //    m_FolderPath = dia.SelectedPath;
-                    //}
 #endif
                     //bool flag = UnityEditor.EditorUtility.DisplayDialog("Test", "HiHi", "Ok", "QAQ");
                     //Debug.LogError("flag:" + flag);
                 }
-
-                if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Refresh folder", 22)) {
+                if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Reset folder", 22)) {
+                    ResetFolderPath();
+                }
+                if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Refresh CardDatas", 22)) {
                     RefreshCardDataPaths();
                 }
                 GUILayout.EndHorizontal();
@@ -108,11 +98,17 @@ namespace RCG {
             using(var scope = new GUILayout.VerticalScope("box")) {
                 for(int i = 0; i < m_CardDataPaths.Count; i++) {
                     string card_path = m_CardDataPaths[i];
+                    GUILayout.BeginHorizontal();
                     if(GUILayout.Button(card_path)) {
                         string data = File.ReadAllText(Path.Combine(m_FolderPath, card_path));
                         var json = UCL.Core.JsonLib.JsonData.ParseJson(data);
                         SetEditCardData(new CardEditData(new RCG_CardData(json), card_path));
                     }
+                    if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Delete", 18)) {
+                        File.Delete(Path.Combine(m_FolderPath, card_path));
+                        RefreshCardDataPaths();
+                    }
+                    GUILayout.EndHorizontal();
                 }
             }
 
@@ -120,6 +116,17 @@ namespace RCG {
 
             GUILayout.EndVertical();
             GUILayout.EndScrollView();
+        }
+        virtual protected void ResetFolderPath() {
+            m_FolderPath = RCG_CardData.CardDataPath;
+            Debug.LogWarning("System.Environment.CurrentDirectory:" + System.Environment.CurrentDirectory);
+            var aCurrentDirectory = System.Environment.CurrentDirectory.Replace('\\', '/')+"/";
+//#if UNITY_EDITOR
+            if(m_FolderPath.Contains(aCurrentDirectory)) {
+                m_FolderPath = m_FolderPath.Replace(aCurrentDirectory, string.Empty);
+            }
+//#endif
+            RefreshCardDataPaths();
         }
         virtual protected void EditCardWindow() {
             if(m_EditingData == null) return;
