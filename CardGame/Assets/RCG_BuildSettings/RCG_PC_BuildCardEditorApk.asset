@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b8426d920d4e6d4ab622ad70ba5f108, type: 3}
+  m_Name: RCG_PC_BuildCardEditorApk
+  m_EditorClassIdentifier: 
+  m_ApplySetting: 0
+  m_LoadCurrentSetting: 0
+  m_Build: 0
+  m_OpenOutputFolder: 0
+  m_DefaultSetting: {fileID: 0}
+  m_ProductName: RCGEditor
+  m_ApplicationIdentifier: com.RCG.RoguelikeCardGame
+  m_BuildTargetGroup: 7
+  m_BuildTarget: 13
+  m_BuildOption: 0
+  m_Icons: []
+  m_DefaultIcon: {fileID: 2800000, guid: 2e905c61bb0d688448daf5c21b2a9d49, type: 3}
+  m_BuildAppBundle: 0
+  m_OutputPath: Build/Apk/RCG/
+  m_OutputName: RCGEditor.apk
+  m_ScenesInBuild:
+  - {fileID: 102900000, guid: 8afd48478dbcbbb4db0e21f0471de8dd, type: 3}
+  m_KeyStoreSetting:
+    m_KeystoreName: KeyStores/rcg.keystore
+    m_KeystorePass: 1q3e5t7U
+    m_KeyaliasName: rcg
+    m_KeyaliasPass: 1q3e5t7U
+  m_VersionSetting:
+    m_BundleVersion: 1.0.0
+    m_BundleVersionCode: 1
+    m_BuildNumber: 1
+  m_ScriptingDefineSymbols: 

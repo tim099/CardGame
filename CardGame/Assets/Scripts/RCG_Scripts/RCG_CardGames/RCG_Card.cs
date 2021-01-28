@@ -21,7 +21,6 @@ namespace RCG {
         public GameObject m_SelectedObject;
         public GameObject m_CardPanel;
         public UCL_Button m_Button;
-        public UCL_Draggable m_Draggable;
         public UCL.TweenLib.UCL_TB_Tweener m_TB_Tweener;
         public RCG_CardDisplayer m_CardDisplayer;
         public bool m_Used = false;
@@ -30,9 +29,6 @@ namespace RCG {
         public RCG_CardPos p_CardPos;
         HashSet<BlockingStatus> m_SelectionBlock = new HashSet<BlockingStatus>();
         virtual public RCG_CardData Data { get { return m_Data; } }
-        virtual public bool IsDragging {
-            get { return m_Draggable.IsDragging; }
-        }
         virtual public bool IsSelected {
             get { return m_SelectedObject.activeSelf; }
         }
@@ -96,6 +92,7 @@ namespace RCG {
             m_Button.m_OnPointerUp.AddListener(p_Player.CardRelease);
             m_Button.m_OnClick.AddListener(delegate () {
                 if(!IsBlocking) {
+                    Debug.Log("SetSelected:" + name);
                     p_Player.SetSelectedCard(this);
                 } else {
                     Debug.LogError("SetSelectedCard Fail Blocking:" + m_SelectionBlock.UCL_ToString());

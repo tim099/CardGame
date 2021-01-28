@@ -6,9 +6,9 @@
 	[
 		{
 			"EffectType":"AttackEffect",
-			"m_Atk":8,
+			"m_Atk":3,
 			"m_AtkRange":5,
-			"m_AtkTimes":2
+			"m_AtkTimes":3
 		},
 		{
 			"EffectType":"DrawEffect",

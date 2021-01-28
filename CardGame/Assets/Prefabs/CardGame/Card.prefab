@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 870112678151016184}
   - component: {fileID: 870112678151016132}
   - component: {fileID: 870112678151016135}
-  - component: {fileID: 470288688579936899}
   m_Layer: 5
   m_Name: CardPanel
   m_TagString: Untagged
@@ -65,18 +64,7 @@ MonoBehaviour:
       m_Calls: []
   m_OnPointerUp:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 870112678151016135}
-        m_MethodName: StartTween
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_OnPointerEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -130,35 +118,6 @@ MonoBehaviour:
     m_Int32: 
     m_Single: []
     m_Foldout: 1
---- !u!114 &470288688579936899
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 870112678151016187}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c274ebea990b374780b514bb2f8c9d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_OnBeginDragEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 870112677363859462}
-        m_MethodName: DeSelect
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_OnEndDragEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &870112678433552047
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,7 +171,6 @@ MonoBehaviour:
   m_SelectedObject: {fileID: 1434462057552279899}
   m_CardPanel: {fileID: 870112678151016187}
   m_Button: {fileID: 870112678151016132}
-  m_Draggable: {fileID: 470288688579936899}
   m_TB_Tweener: {fileID: 870112678151016135}
   m_CardDisplayer: {fileID: 870112677363859462}
   m_Used: 0

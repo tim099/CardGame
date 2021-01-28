@@ -6,6 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/RCG_Scenes/RCG_CardEditScene.unity
-    guid: 8afd48478dbcbbb4db0e21f0471de8dd
+    path: Assets/Scenes/RCG_Scenes/RCG_StartScene.unity
+    guid: b45373a914146ec44964d803c697bc7e
+  - enabled: 1
+    path: Assets/Scenes/RCG_Scenes/RCG_MainMenu.unity
+    guid: 633ed79f04a7dd44a97d994e54bfa354
+  - enabled: 1
+    path: Assets/Scenes/RCG_Scenes/RCG_BigMap.unity
+    guid: cd833600b9986734d89dfec7a2b91fda
+  - enabled: 1
+    path: Assets/Scenes/RCG_Scenes/RCG_Map.unity
+    guid: 039af5cc215bdcd44aca89be99d2e837
+  - enabled: 1
+    path: Assets/Scenes/RCG_Scenes/RCG_Prototype.unity
+    guid: ac1af6a14070de4499775800e7e50e84
   m_configObjects: {}
