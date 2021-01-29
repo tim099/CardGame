@@ -1,0 +1,13 @@
+{
+	"m_CardType":"Attack",
+	"m_CardName":"CostAdd01",
+	"m_IconName":"filtration.png",
+	"m_Cost":0,
+	"CardEffect":
+	[
+		{
+			"EffectType":"CostEffect",
+			"m_CostAlter":2
+		}
+	]
+}

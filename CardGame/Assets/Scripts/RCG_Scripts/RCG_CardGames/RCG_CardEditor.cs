@@ -6,6 +6,7 @@ using System.Linq;
 namespace RCG {
     [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_CardEditor : MonoBehaviour {
+        public static RCG_CardEditor ins = null;
         public class CardEditData {
             public CardEditData(RCG_CardData _CardData,string _FilePath) {
                 m_CardData = _CardData;
@@ -40,15 +41,15 @@ namespace RCG {
         virtual public void Init() {
             if(m_Inited) return;
             m_Inited = true;
+            ins = this;
             if(PlayerPrefs.HasKey(FolderPathKey)) {
                 m_FolderPath = PlayerPrefs.GetString(FolderPathKey);
             }
-#if UNITY_EDITOR
-            if(m_FolderPath == null) m_FolderPath = Application.dataPath;
-#endif
-            if(!string.IsNullOrEmpty(m_FolderPath) && !Directory.Exists(m_FolderPath)) {
-                Directory.CreateDirectory(m_FolderPath);
-            }
+            if(string.IsNullOrEmpty(m_FolderPath) || !Directory.Exists(m_FolderPath)) ResetFolderPath();
+
+            //if(!string.IsNullOrEmpty(m_FolderPath) && !Directory.Exists(m_FolderPath)) {
+            //    Directory.CreateDirectory(m_FolderPath);
+            //}
             RefreshCardDataPaths();
         }
         virtual public void RefreshCardDataPaths() {
@@ -79,25 +80,20 @@ namespace RCG {
 #if UNITY_EDITOR
                     m_FolderPath = UCL.Core.FileLib.EditorLib.OpenFolderExplorer(m_FolderPath);
                     RefreshCardDataPaths();
-                    //OpenFileDialog
-                    //#elif UNITY_STANDALONE_WIN
-                    //#if UNITY_STANDALONE_WIN
-                    //System.Windows.Forms.FolderBrowserDialog dia = new System.Windows.Forms.FolderBrowserDialog();
-                    //dia.Description = "Explore folder";
-                    //dia.SelectedPath = m_FolderPath;
-                    //dia.ShowDialog();
-                    //Debug.LogWarning("dia.SelectedPath" + dia.SelectedPath);
-                    //if(!string.IsNullOrEmpty(dia.SelectedPath)) {
-                    //    m_FolderPath = dia.SelectedPath;
-                    //}
 #endif
                     //bool flag = UnityEditor.EditorUtility.DisplayDialog("Test", "HiHi", "Ok", "QAQ");
                     //Debug.LogError("flag:" + flag);
                 }
-
-                if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Refresh folder", 22)) {
+                if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Reset folder", 22)) {
+                    ResetFolderPath();
+                }
+                if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Refresh CardDatas", 22)) {
                     RefreshCardDataPaths();
                 }
+                if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Create CardData", 22)) {
+                    SetEditCardData(new CardEditData(new RCG_CardData(), "NewCard.json"));
+                }
+                
                 GUILayout.EndHorizontal();
                 GUILayout.BeginHorizontal();
                 UCL.Core.UI.UCL_GUILayout.LabelAutoSize("Folder Path", 18);
@@ -108,11 +104,17 @@ namespace RCG {
             using(var scope = new GUILayout.VerticalScope("box")) {
                 for(int i = 0; i < m_CardDataPaths.Count; i++) {
                     string card_path = m_CardDataPaths[i];
+                    GUILayout.BeginHorizontal();
                     if(GUILayout.Button(card_path)) {
                         string data = File.ReadAllText(Path.Combine(m_FolderPath, card_path));
                         var json = UCL.Core.JsonLib.JsonData.ParseJson(data);
                         SetEditCardData(new CardEditData(new RCG_CardData(json), card_path));
                     }
+                    if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Delete", 18)) {
+                        File.Delete(Path.Combine(m_FolderPath, card_path));
+                        RefreshCardDataPaths();
+                    }
+                    GUILayout.EndHorizontal();
                 }
             }
 
@@ -120,6 +122,31 @@ namespace RCG {
 
             GUILayout.EndVertical();
             GUILayout.EndScrollView();
+        }
+        virtual protected void ResetFolderPath() {
+            m_FolderPath = RCG_CardData.CardDataPath;
+            Debug.LogWarning("System.Environment.CurrentDirectory:" + System.Environment.CurrentDirectory);
+            var aCurrentDirectory = System.Environment.CurrentDirectory.Replace('\\', '/')+"/";
+//#if UNITY_EDITOR
+            if(m_FolderPath.Contains(aCurrentDirectory)) {
+                m_FolderPath = m_FolderPath.Replace(aCurrentDirectory, string.Empty);
+            }
+//#endif
+            RefreshCardDataPaths();
+        }
+        //static public object GetCardEditTmpData(string iKey, object iDefaultValue) {
+        //    if(ins == null) return iDefaultValue;
+        //    if(!ins.m_CardEditTmpDatas.ContainsKey(iKey)) ins.m_CardEditTmpDatas.Add(iKey, iDefaultValue);
+        //    return ins.m_CardEditTmpDatas[iKey];
+        //}
+        static public T GetCardEditTmpData<T>(string iKey, T iDefaultValue) {
+            if(ins == null) return iDefaultValue;
+            if(!ins.m_CardEditTmpDatas.ContainsKey(iKey)) ins.m_CardEditTmpDatas.Add(iKey, iDefaultValue);
+            return (T)ins.m_CardEditTmpDatas[iKey];
+        }
+        static public void SetCardEditTmpData<T>(string iKey, T iValue) {
+            if(ins == null) return;
+            ins.m_CardEditTmpDatas[iKey] = iValue;
         }
         virtual protected void EditCardWindow() {
             if(m_EditingData == null) return;
@@ -157,17 +184,27 @@ namespace RCG {
 
                 card_data.CardName = UCL.Core.UI.UCL_GUILayout.TextField("CardName", card_data.CardName);
                 //card_data.IconName = UCL.Core.UI.UCL_GUILayout.TextField("IconName", card_data.IconName);
-                if(!m_CardEditTmpDatas.ContainsKey("CardIconPath")) m_CardEditTmpDatas.Add("CardIconPath", false);
-                bool flag = (bool)m_CardEditTmpDatas["CardIconPath"];
-                int index = m_CardIconPaths.FindIndex(a => a == card_data.IconName);
-                GUILayout.BeginHorizontal();
-                UCL.Core.UI.UCL_GUILayout.LabelAutoSize("IconName");
-                int new_index = UCL.Core.UI.UCL_GUILayout.Popup(index, m_CardIconPaths, ref flag);
-                GUILayout.EndHorizontal();
-                m_CardEditTmpDatas["CardIconPath"] = flag;
-                if(new_index != index) {
-                    card_data.IconName = m_CardIconPaths[new_index];
-                    UpdateCardIcon();
+
+                {
+                    GUILayout.BeginHorizontal();
+                    UCL.Core.UI.UCL_GUILayout.LabelAutoSize("CardType");
+                    bool flag = GetCardEditTmpData("CardType", false);
+                    card_data.CardType = UCL.Core.UI.UCL_GUILayout.Popup(card_data.CardType, ref flag);
+                    SetCardEditTmpData("CardType", flag);
+                    GUILayout.EndHorizontal();
+                }
+                {
+                    bool flag = GetCardEditTmpData("CardIconPath", false);
+                    int index = m_CardIconPaths.FindIndex(a => a == card_data.IconName);
+                    GUILayout.BeginHorizontal();
+                    UCL.Core.UI.UCL_GUILayout.LabelAutoSize("IconName");
+                    int new_index = UCL.Core.UI.UCL_GUILayout.Popup(index, m_CardIconPaths, ref flag);
+                    GUILayout.EndHorizontal();
+                    SetCardEditTmpData("CardIconPath", flag);
+                    if(new_index != index) {
+                        card_data.IconName = m_CardIconPaths[new_index];
+                        UpdateCardIcon();
+                    }
                 }
                 card_data.Cost = UCL.Core.UI.UCL_GUILayout.IntField("Cost", card_data.Cost);
                 if(m_EditingData.m_IconTexture != null) GUILayout.Box(m_EditingData.m_IconTexture,

@@ -32,9 +32,10 @@ namespace RCG {
         private void Update() {
             if(m_TargetAngle != m_Angle) {
                 float aDel = m_TargetAngle - m_Angle;
-                const float Vel = 0.12f;
-                const float MinVel = 0.16f;
-                if(Mathf.Abs(aDel) < Vel) {
+                const float Vel = 0.09f;
+                const float MinVel = 0.01f;
+                const float EndDel = 0.15f * Vel;
+                if(Mathf.Abs(aDel) <= EndDel) {
                     m_Angle = m_TargetAngle;
                 } else {
                     float V = Mathf.Abs(aDel);
@@ -47,7 +48,6 @@ namespace RCG {
                     } else {
                         m_Angle -= V * Vel;
                     }
-                    
                 }
                 transform.rotation = Quaternion.Euler(0, 0, m_Angle);
             }

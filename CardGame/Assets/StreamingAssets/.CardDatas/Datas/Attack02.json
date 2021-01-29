@@ -1,0 +1,22 @@
+{
+	"m_CardType":"Attack",
+	"m_CardName":"Attack02",
+	"m_IconName":"02.png",
+	"m_Cost":2,
+	"CardEffect":
+	[
+		{
+			"EffectType":"AttackEffect",
+			"<ID>k__BackingField":0,
+			"m_Atk":9,
+			"m_AtkRange":2,
+			"m_AtkTimes":3,
+			"m_AttackType":"Normal"
+		},
+		{
+			"EffectType":"DrawEffect",
+			"<ID>k__BackingField":1,
+			"m_DrawCardNum":1
+		}
+	]
+}
