@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fa31fe68dff5704b90182d071b1418d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FolderPath: CardDatas
+  m_FolderPath: Assets/StreamingAssets/.CardDatas/Datas
   m_CardSetting: 
 --- !u!4 &163662783
 Transform:

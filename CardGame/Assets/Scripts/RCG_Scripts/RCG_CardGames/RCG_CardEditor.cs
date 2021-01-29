@@ -6,6 +6,7 @@ using System.Linq;
 namespace RCG {
     [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_CardEditor : MonoBehaviour {
+        public static RCG_CardEditor ins = null;
         public class CardEditData {
             public CardEditData(RCG_CardData _CardData,string _FilePath) {
                 m_CardData = _CardData;
@@ -40,6 +41,7 @@ namespace RCG {
         virtual public void Init() {
             if(m_Inited) return;
             m_Inited = true;
+            ins = this;
             if(PlayerPrefs.HasKey(FolderPathKey)) {
                 m_FolderPath = PlayerPrefs.GetString(FolderPathKey);
             }
@@ -88,6 +90,10 @@ namespace RCG {
                 if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Refresh CardDatas", 22)) {
                     RefreshCardDataPaths();
                 }
+                if(UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Create CardData", 22)) {
+                    SetEditCardData(new CardEditData(new RCG_CardData(), "NewCard.json"));
+                }
+                
                 GUILayout.EndHorizontal();
                 GUILayout.BeginHorizontal();
                 UCL.Core.UI.UCL_GUILayout.LabelAutoSize("Folder Path", 18);
@@ -128,6 +134,20 @@ namespace RCG {
 //#endif
             RefreshCardDataPaths();
         }
+        //static public object GetCardEditTmpData(string iKey, object iDefaultValue) {
+        //    if(ins == null) return iDefaultValue;
+        //    if(!ins.m_CardEditTmpDatas.ContainsKey(iKey)) ins.m_CardEditTmpDatas.Add(iKey, iDefaultValue);
+        //    return ins.m_CardEditTmpDatas[iKey];
+        //}
+        static public T GetCardEditTmpData<T>(string iKey, T iDefaultValue) {
+            if(ins == null) return iDefaultValue;
+            if(!ins.m_CardEditTmpDatas.ContainsKey(iKey)) ins.m_CardEditTmpDatas.Add(iKey, iDefaultValue);
+            return (T)ins.m_CardEditTmpDatas[iKey];
+        }
+        static public void SetCardEditTmpData<T>(string iKey, T iValue) {
+            if(ins == null) return;
+            ins.m_CardEditTmpDatas[iKey] = iValue;
+        }
         virtual protected void EditCardWindow() {
             if(m_EditingData == null) return;
             var card_data = m_EditingData.m_CardData;
@@ -164,17 +184,27 @@ namespace RCG {
 
                 card_data.CardName = UCL.Core.UI.UCL_GUILayout.TextField("CardName", card_data.CardName);
                 //card_data.IconName = UCL.Core.UI.UCL_GUILayout.TextField("IconName", card_data.IconName);
-                if(!m_CardEditTmpDatas.ContainsKey("CardIconPath")) m_CardEditTmpDatas.Add("CardIconPath", false);
-                bool flag = (bool)m_CardEditTmpDatas["CardIconPath"];
-                int index = m_CardIconPaths.FindIndex(a => a == card_data.IconName);
-                GUILayout.BeginHorizontal();
-                UCL.Core.UI.UCL_GUILayout.LabelAutoSize("IconName");
-                int new_index = UCL.Core.UI.UCL_GUILayout.Popup(index, m_CardIconPaths, ref flag);
-                GUILayout.EndHorizontal();
-                m_CardEditTmpDatas["CardIconPath"] = flag;
-                if(new_index != index) {
-                    card_data.IconName = m_CardIconPaths[new_index];
-                    UpdateCardIcon();
+
+                {
+                    GUILayout.BeginHorizontal();
+                    UCL.Core.UI.UCL_GUILayout.LabelAutoSize("CardType");
+                    bool flag = GetCardEditTmpData("CardType", false);
+                    card_data.CardType = UCL.Core.UI.UCL_GUILayout.Popup(card_data.CardType, ref flag);
+                    SetCardEditTmpData("CardType", flag);
+                    GUILayout.EndHorizontal();
+                }
+                {
+                    bool flag = GetCardEditTmpData("CardIconPath", false);
+                    int index = m_CardIconPaths.FindIndex(a => a == card_data.IconName);
+                    GUILayout.BeginHorizontal();
+                    UCL.Core.UI.UCL_GUILayout.LabelAutoSize("IconName");
+                    int new_index = UCL.Core.UI.UCL_GUILayout.Popup(index, m_CardIconPaths, ref flag);
+                    GUILayout.EndHorizontal();
+                    SetCardEditTmpData("CardIconPath", flag);
+                    if(new_index != index) {
+                        card_data.IconName = m_CardIconPaths[new_index];
+                        UpdateCardIcon();
+                    }
                 }
                 card_data.Cost = UCL.Core.UI.UCL_GUILayout.IntField("Cost", card_data.Cost);
                 if(m_EditingData.m_IconTexture != null) GUILayout.Box(m_EditingData.m_IconTexture,

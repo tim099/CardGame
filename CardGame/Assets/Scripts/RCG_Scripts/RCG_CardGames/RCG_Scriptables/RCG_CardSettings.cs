@@ -68,7 +68,7 @@ namespace RCG
     public class RCG_CardSettings : ScriptableObject
     {
         public RCG_CardData CreateCard() {
-            return new RCG_CardData(this);
+            return new RCG_CardData();
         }
 
         public RCG_CardSettings m_FortifyCard = null;//Fortify version of this card

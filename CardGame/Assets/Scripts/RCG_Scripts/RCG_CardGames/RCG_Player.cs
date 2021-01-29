@@ -52,6 +52,7 @@ namespace RCG {
             //UCL.Core.GameObjectLib.SearchChildNotIncludeParent(m_CardsRoot, m_CardPositions);
             for(int i = 0; i < m_CardPosController.m_MaxCardCount; i++) {
                 var aCard = Instantiate(m_CardTemplate, m_CardsRoot);
+                aCard.name = m_CardTemplate.name + "_" + i;
                 aCard.Init(this);
                 m_CardPosController.AddCard(aCard);
                 m_Cards.Add(aCard);
@@ -60,12 +61,15 @@ namespace RCG {
             if(m_BeginSets.Count == 0) {
                 return;
             }
-
-            var set = m_BeginSets[UCL.Core.MathLib.UCL_Random.Instance.Next(m_BeginSets.Count)];
             m_Deck.Init(this);
-            for(int i = 0, len = set.m_Settings.Count; i < len; i++) {
-                m_Deck.Add(set.m_Settings[i].CreateCard());
+            int aCardCount = RCG_CardDataService.ins.CardCount;
+            for(int i = 0; i < 16; i++) {
+                m_Deck.Add(RCG_CardDataService.ins.GetCardData(UCL.Core.MathLib.UCL_Random.Instance.Next(aCardCount)));
             }
+            //var set = m_BeginSets[UCL.Core.MathLib.UCL_Random.Instance.Next(m_BeginSets.Count)];            
+            //for(int i = 0, len = set.m_Settings.Count; i < len; i++) {
+            //    m_Deck.Add(set.m_Settings[i].CreateCard());
+            //}
             m_Deck.Shuffle();
 
             TurnInit();
@@ -77,7 +81,7 @@ namespace RCG {
             if(m_Blocking) return;
             if(m_SelectedCard == null) return;
             m_SelectedCard.Deselect();
-            m_SelectedCard.TriggerCardEffect(0);
+            m_SelectedCard.TriggerCardEffect(new TriggerEffectData(this));
             m_Deck.Used(m_SelectedCard.Data);
             m_SelectedCard.CardUsed();
         }
@@ -88,6 +92,9 @@ namespace RCG {
         public void SetSelectedCard(RCG_Card iCard) {
             if(m_SelectedCard == iCard) {
                 Debug.LogWarning("m_SelectedCard == iCard");
+                if(iCard != null && !iCard.IsSelected) {
+                    iCard.Select();
+                }
                 return;
             }
             if(m_SelectedCard != null) {

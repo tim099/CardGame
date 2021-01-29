@@ -8,12 +8,30 @@ using UnityEngine.UI;
 using TMPro;
 
 namespace RCG {
-
-    public class RCG_Card : MonoBehaviour {
-        public enum BlockingStatus {
-            Cost = 1,
-            DrawCardAnime,
+    /// <summary>
+    /// 觸發卡牌效果的資料 包含目標對象等...
+    /// </summary>
+    public class TriggerEffectData {
+        public TriggerEffectData(RCG_Player iPlayer) {
+            p_Player = iPlayer;
         }
+        public RCG_Player p_Player;
+    }
+
+    /// <summary>
+    /// 對戰時的手牌(卡牌資料存在RCG_CardData中)
+    /// </summary>
+    public class RCG_Card : MonoBehaviour {
+        /// <summary>
+        /// 卡牌無法打出的狀態
+        /// </summary>
+        public enum BlockingStatus {
+            Cost = 1,//費用不足
+            DrawCardAnime,//抽牌演出中
+        }
+        /// <summary>
+        /// Blocking狀態下無法出牌 選擇
+        /// </summary>
         public bool IsBlocking {
             get { return m_SelectionBlock.Count > 0; }
         }
@@ -30,7 +48,7 @@ namespace RCG {
         HashSet<BlockingStatus> m_SelectionBlock = new HashSet<BlockingStatus>();
         virtual public RCG_CardData Data { get { return m_Data; } }
         virtual public bool IsSelected {
-            get { return m_SelectedObject.activeSelf; }
+            get; protected set;
         }
         virtual public bool IsCardDisplayerSelected {
             get { return m_CardDisplayer.IsSelected; }
@@ -39,8 +57,8 @@ namespace RCG {
         /// target >=3 is enemy
         /// </summary>
         /// <param name="target"></param>
-        virtual public bool TriggerCardEffect(int target) {
-            Debug.LogWarning("target:" + target);
+        virtual public bool TriggerCardEffect(TriggerEffectData iTriggerEffectData) {
+            //Debug.LogWarning("target:" + target);
             if(p_Player == null) {
                 Debug.LogError("p_Player == null");
                 return false;
@@ -56,10 +74,11 @@ namespace RCG {
             }
             m_Used = true;
             p_Player.IsUsingCard = true;
-            m_Data.TriggerEffect(p_Player);
+            m_Data.TriggerEffect(iTriggerEffectData);
             if(RCG_BattleField.ins != null) {
-                RCG_BattleField.ins.TriggerCardEffect(target, m_Data);
+                RCG_BattleField.ins.TriggerCardEffect(0, m_Data);
             }
+            
             p_Player.IsUsingCard = false;
             return true;
         }
@@ -87,6 +106,7 @@ namespace RCG {
             p_CardPos = iCardPos;
         }
         virtual public void Init(RCG_Player _Player) {
+            IsSelected = false;
             p_Player = _Player;
             m_SelectedObject.SetActive(false);
             m_Button.m_OnPointerUp.AddListener(p_Player.CardRelease);
@@ -115,9 +135,11 @@ namespace RCG {
             SetCardData(_Data);
         }
         virtual public void Select() {
+            IsSelected = true;
             m_SelectedObject.SetActive(true);
         }
         virtual public void Deselect() {
+            IsSelected = false;
             m_SelectedObject.SetActive(false);
             m_CardDisplayer.DeSelect();
         }
@@ -140,6 +162,7 @@ namespace RCG {
             UpdateCardStatus();
         }
         virtual public void BlockSelection(BlockingStatus iBlock) {
+            if(IsSelected) p_Player.SetSelectedCard(null);//Deselect
             m_BlockSelectionObject.SetActive(true);            
             if(!m_SelectionBlock.Contains(iBlock))m_SelectionBlock.Add(iBlock);
         }
@@ -166,6 +189,7 @@ namespace RCG {
         }
         virtual public void CardUsed() {
             SetCardData(null);
+            p_Player.SetSelectedCard(null);
         }
         virtual protected void Update() {
 

@@ -70,7 +70,7 @@ namespace RCG {
             var card = m_Cards[0];
             m_Cards.RemoveAt(0);
             ++m_HandCardCount;
-            Debug.LogWarning("m_HandCardCount:" + m_HandCardCount);
+            //Debug.LogWarning("m_HandCardCount:" + m_HandCardCount);
             return card;
         }
     }
