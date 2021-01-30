@@ -4,8 +4,8 @@ using UnityEngine;
 namespace RCG {
     public class RCG_CardDrawEffect : RCG_CardEffect {
         public int m_DrawCardNum = 0;
-        override public void OnGUI() {
-            base.OnGUI();
+        override public void OnGUI(int iID) {
+            base.OnGUI(iID);
             //using(var scope = new GUILayout.VerticalScope("box")) {
                 
             //    m_DrawCardNum = UCL.Core.UI.UCL_GUILayout.IntField("DrawCardNum", m_DrawCardNum);

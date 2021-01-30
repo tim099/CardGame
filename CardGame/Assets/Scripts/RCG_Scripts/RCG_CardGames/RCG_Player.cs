@@ -7,6 +7,12 @@ using UnityEngine.UI;
 namespace RCG {
     [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_Player : MonoBehaviour {
+        public enum PlayerState {
+            Idle = 0,
+            DrawCard,//開始抽牌
+            DrawingCard,//抽牌中
+            TriggerCard,//出牌中
+        }
         /// <summary>
         /// 手牌剩餘空間
         /// </summary>
@@ -25,12 +31,13 @@ namespace RCG {
         public RCG_Card m_CardTemplate = null;
         public List<RCG_Card> m_Cards = null;
         public List<RCG_CardBeginSet> m_BeginSets = null;
-        public List<UCL_RectTransformCollider> m_Targets = new List<UCL_RectTransformCollider>();
         
         public int m_DrawCardCount = 0;
-        public Transform m_DrawCardPos = null;
+        public Transform m_DrawCardPos = null;//抽牌位置
+        public Transform m_TriggerCardPos = null;//出牌目標位置
         public Transform m_CardsRoot = null;
         public RCG_CardPosController m_CardPosController = null;
+        protected PlayerState m_PlayerState = PlayerState.Idle;
         protected RCG_Card m_SelectedCard = null;
         protected UCL_RectTransformCollider m_Target = null;
         protected bool m_Blocking = false;
@@ -45,6 +52,7 @@ namespace RCG {
         public void Init() {
             if(m_Inited) return;
             m_Inited = true;
+            m_TriggerCardPos.gameObject.SetActive(false);
             m_CardPosController.Init();
             if(m_Cards == null) {
                 m_Cards = new List<RCG_Card>();
@@ -80,16 +88,31 @@ namespace RCG {
         public void TriggerCard() {
             if(m_Blocking) return;
             if(m_SelectedCard == null) return;
-            m_SelectedCard.Deselect();
-            m_SelectedCard.TriggerCardEffect(new TriggerEffectData(this));
-            m_Deck.Used(m_SelectedCard.Data);
-            m_SelectedCard.CardUsed();
+            //Debug.LogError("TriggerCard()");
+            SetState(PlayerState.TriggerCard);
+            m_TriggerCardPos.gameObject.SetActive(true);
+            m_SelectedCard.TriggerCardAnime(m_TriggerCardPos, delegate () {
+                if(m_SelectedCard == null) {
+                    Debug.LogError("TriggerCard()m_SelectedCard == null");
+                    return;
+                }
+                m_SelectedCard.Deselect();
+                m_SelectedCard.TriggerCardEffect(new TriggerEffectData(this));
+                m_Deck.Used(m_SelectedCard.Data);
+                m_SelectedCard.CardUsed();
+                SetState(PlayerState.Idle);
+            });
+
         }
         /// <summary>
         /// 設定選中的手牌
         /// </summary>
         /// <param name="iCard"></param>
         public void SetSelectedCard(RCG_Card iCard) {
+            if(m_Blocking || m_PlayerState!= PlayerState.Idle) {
+                Debug.LogWarning("SetSelectedCard Fail, Blocking!!");
+                return;
+            }
             if(m_SelectedCard == iCard) {
                 Debug.LogWarning("m_SelectedCard == iCard");
                 if(iCard != null && !iCard.IsSelected) {
@@ -103,6 +126,9 @@ namespace RCG {
             m_SelectedCard = iCard;
             if(m_SelectedCard == null) return;
             m_SelectedCard.Select();
+        }
+        public void SetState(PlayerState iPlayerState) {
+            m_PlayerState = iPlayerState;
         }
         public void DrawCard(int count) {
             m_DrawCardCount += count;
@@ -147,29 +173,68 @@ namespace RCG {
             }
             SetCost(TurnInitCost);
         }
-        /// <summary>
-        /// 點擊卡牌後放開觸發
-        /// </summary>
-        public void CardRelease() {
-            if(m_Blocking) return;
+        public void StartBlocking() {
+            if(m_Blocking) {
+                Debug.LogError("StartBlocking() Fail!!Already Blocking!!");
+                return;
+            }
+            m_Blocking = true;
+            foreach(var aCard in m_Cards) {
+                aCard.BlockSelection(RCG_Card.BlockingStatus.Player);
+            }
+        }
+        public void EndBlocking() {
+            if(!m_Blocking) {
+                Debug.LogError("EndBlocking() Fail!!Not yet Blocking!!");
+                return;
+            }
+            m_Blocking = false;
+            foreach(var aCard in m_Cards) {
+                aCard.UnBlockSelection(RCG_Card.BlockingStatus.Player);
+            }
+        }
+        private void DrawCardUpdate() {
+            if(m_DrawCardCount > 0) {
+                var card = m_CardPosController.GetAvaliableCard();
+                if(card != null && card.IsEmpty) {
+                    StartBlocking();
+                    SetState(PlayerState.DrawingCard);
+                    card.SetCardData(m_Deck.Draw());
+                    --m_DrawCardCount;
+                    card.DrawCardAnime(m_DrawCardPos.position, delegate () {
+                        if(m_DrawCardCount == 0) {
+                            SetState(PlayerState.Idle);
+                            EndBlocking();
+                        } else {
+                            SetState(PlayerState.DrawCard);
+                        }
+                    });
+                }
+            } else {
+                SetState(PlayerState.Idle);
+            }
         }
         private void Update() {
             if(!m_Inited) return;
             m_Target = null;
             m_CostText.SetText("" + Cost);
-
-            m_Deck.PlayerUpdate();
-            if(!m_Blocking) {
-                if(m_DrawCardCount > 0) {
-                    var card = m_CardPosController.GetAvaliableCard();
-                    if(card != null && card.IsEmpty) {
-                        m_Blocking = true;
-                        card.SetCardData(m_Deck.Draw());
-                        card.DrawCardAnime(m_DrawCardPos.position, () => { m_Blocking = false; });
-                        m_DrawCardCount--;
+            switch(m_PlayerState) {
+                case PlayerState.Idle: {
+                        if(m_DrawCardCount > 0) {
+                            SetState(PlayerState.DrawCard);
+                        }
+                        break;
                     }
-                }
+                case PlayerState.DrawCard: {
+                        DrawCardUpdate();
+                        break;
+                    }
+                case PlayerState.DrawingCard: {
+                        break;
+                    }
             }
+            m_Deck.PlayerUpdate();
+
         }
     }
 }

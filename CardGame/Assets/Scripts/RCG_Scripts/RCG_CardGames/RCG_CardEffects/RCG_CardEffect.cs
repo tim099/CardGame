@@ -6,9 +6,8 @@ using UnityEngine;
 
 namespace RCG {
     public class RCG_CardEffect : UCL.Core.JsonLib.IJsonSerializable {
-        public int ID { get; private set; } = 0;
         virtual public void Init(int iID) {
-            ID = iID;
+
         }
         virtual public string EffectType { get { return this.GetType().Name.Replace("RCG_Card", ""); } }
         virtual public string Description { get { return string.Empty; } }
@@ -26,7 +25,7 @@ namespace RCG {
         virtual public void TriggerEffect(TriggerEffectData iTriggerEffectData) {
 
         }
-        virtual public void DrawFieldData(object obj) {
+        virtual public void DrawFieldData(object obj, int iID) {
             using(var scope = new GUILayout.VerticalScope("box")) {
                 Type type = obj.GetType();
                 var fields = type.GetAllFieldsUntil(typeof(RCG_CardEffect), BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
@@ -48,7 +47,7 @@ namespace RCG {
                     } else if(field.FieldType.IsEnum) {
                         GUILayout.BeginHorizontal();
                         UCL.Core.UI.UCL_GUILayout.LabelAutoSize(dp_name);
-                        string aKey = ID.ToString() + dp_name;
+                        string aKey = iID.ToString() + dp_name;
                         bool flag = RCG_CardEditor.GetCardEditTmpData(aKey, false);
                         field.SetValue(obj, UCL.Core.UI.UCL_GUILayout.Popup((System.Enum)data, ref flag));
                         RCG_CardEditor.SetCardEditTmpData(aKey, flag);
@@ -57,7 +56,7 @@ namespace RCG {
                         UCL.Core.UI.UCL_GUILayout.LabelAutoSize(dp_name);
                         GUILayout.BeginHorizontal();
                         GUILayout.Space(10);
-                        DrawFieldData(data);
+                        DrawFieldData(data, iID);
                         field.SetValue(obj, data);
                         GUILayout.EndHorizontal();
                     }
@@ -65,9 +64,9 @@ namespace RCG {
                 }
             }
         }
-        virtual public void OnGUI() {
+        virtual public void OnGUI(int iID) {
             using(var scope = new GUILayout.VerticalScope("box")) {
-                DrawFieldData(this);
+                DrawFieldData(this, iID);
             }  
         }
 
