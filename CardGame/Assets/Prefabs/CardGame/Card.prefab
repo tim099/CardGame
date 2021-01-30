@@ -98,7 +98,7 @@ MonoBehaviour:
       m_Calls: []
   m_CompleteWhenKill: 0
   m_Ease: 33
-  m_Duration: 0.4
+  m_Duration: 0.25
   m_DrawGizmos: 1
   m_TimeManager: {fileID: 0}
   m_TweenerComponents:
@@ -107,6 +107,23 @@ MonoBehaviour:
     - {fileID: 870112678151016184}
     - {fileID: 870112678433552044}
     m_Quaternion: []
+    m_UCL_Path: []
+    m_LookAtFront: []
+    m_UCL_TC_Event: []
+    m_Vector3:
+    - {x: 0, y: 0, z: 0}
+    m_Vector2: []
+    m_Boolean: 0000
+    m_Byte: 
+    m_Int32: 
+    m_Single: []
+    m_Foldout: 1
+  - m_Type: 2
+    m_Transform:
+    - {fileID: 870112678151016184}
+    - {fileID: 870112678433552044}
+    m_Quaternion:
+    - {x: 0, y: 0, z: 0, w: 0}
     m_UCL_Path: []
     m_LookAtFront: []
     m_UCL_TC_Event: []

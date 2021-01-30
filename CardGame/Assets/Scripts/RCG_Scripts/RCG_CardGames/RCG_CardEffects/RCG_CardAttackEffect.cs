@@ -18,8 +18,8 @@ namespace RCG {
         public int m_AtkTimes = 1;
         public AttackType m_AttackType = AttackType.Normal;
         //public AttackData m_AttackData;
-        override public void OnGUI() {
-            base.OnGUI();
+        override public void OnGUI(int iID) {
+            base.OnGUI(iID);
         }
         override public string Description {
             get {

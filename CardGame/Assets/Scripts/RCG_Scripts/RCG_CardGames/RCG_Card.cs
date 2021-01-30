@@ -28,6 +28,8 @@ namespace RCG {
         public enum BlockingStatus {
             Cost = 1,//費用不足
             DrawCardAnime,//抽牌演出中
+            TriggerCardAnime,//出牌演出中
+            Player,//玩家行動中
         }
         /// <summary>
         /// Blocking狀態下無法出牌 選擇
@@ -109,7 +111,7 @@ namespace RCG {
             IsSelected = false;
             p_Player = _Player;
             m_SelectedObject.SetActive(false);
-            m_Button.m_OnPointerUp.AddListener(p_Player.CardRelease);
+            //m_Button.m_OnPointerUp.AddListener(p_Player.CardRelease);
             m_Button.m_OnClick.AddListener(delegate () {
                 if(!IsBlocking) {
                     Debug.Log("SetSelected:" + name);
@@ -161,9 +163,10 @@ namespace RCG {
             m_Used = false;
             UpdateCardStatus();
         }
-        virtual public void BlockSelection(BlockingStatus iBlock) {
+        virtual public void BlockSelection(BlockingStatus iBlock, bool iActiveBlockSelectionObject = true) {
+            Debug.LogWarning("BlockSelection");
             if(IsSelected) p_Player.SetSelectedCard(null);//Deselect
-            m_BlockSelectionObject.SetActive(true);            
+            m_BlockSelectionObject.SetActive(iActiveBlockSelectionObject);
             if(!m_SelectionBlock.Contains(iBlock))m_SelectionBlock.Add(iBlock);
         }
         virtual public void UnBlockSelection(BlockingStatus iBlock) {
@@ -184,6 +187,31 @@ namespace RCG {
             m_TB_Tweener.StartTween(()=> {
                 m_CardDisplayer.UnBlockSelection();
                 UnBlockSelection(BlockingStatus.DrawCardAnime);
+                if(iEndAct != null) iEndAct.Invoke();
+            });
+        }
+        /// <summary>
+        /// 出牌演出
+        /// </summary>
+        /// <param name="iTargetPos"></param>
+        /// <param name="iEndAct"></param>
+        virtual public void TriggerCardAnime(Transform iTargetPos, System.Action iEndAct) {
+            Vector3 aPosO = transform.position;
+            Quaternion aRotO = transform.rotation;
+            transform.position = iTargetPos.position;
+            transform.rotation = iTargetPos.rotation;
+
+            m_CardPanel.transform.position = aPosO;
+            m_CardPanel.SetActive(true);
+            //m_CardDisplayer.BlockSelection();
+            BlockSelection(BlockingStatus.TriggerCardAnime, false);
+            m_TB_Tweener.StartTween(() => {
+                //m_CardDisplayer.UnBlockSelection();
+                UnBlockSelection(BlockingStatus.TriggerCardAnime);
+                transform.position = aPosO;
+                m_CardPanel.transform.position = aPosO;
+                transform.rotation = aRotO;
+                m_CardPanel.transform.rotation = aRotO;
                 if(iEndAct != null) iEndAct.Invoke();
             });
         }

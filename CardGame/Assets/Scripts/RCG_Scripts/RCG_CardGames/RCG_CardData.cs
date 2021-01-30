@@ -3,6 +3,53 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 namespace RCG {
+    public enum TargetType : int
+    {
+        /// <summary>
+        /// 不需要指定目標 如抽牌
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// 使用腳色
+        /// </summary>
+        Player,
+        /// <summary>
+        /// 除了使用腳色外的我方
+        /// </summary>
+        Friend,
+        /// <summary>
+        /// 我方全體
+        /// </summary>
+        Allied,
+        /// <summary>
+        /// 我方前排
+        /// </summary>
+        AlliedFront,
+        /// <summary>
+        /// 我方後排
+        /// </summary>
+        AlliedBack,
+
+        /// <summary>
+        /// 敵方全體
+        /// </summary>
+        Enemy,
+
+        /// <summary>
+        /// 敵方前排
+        /// </summary>
+        EnemyFront,
+
+        /// <summary>
+        /// 敵方後排
+        /// </summary>
+        EnemyBack,
+
+        /// <summary>
+        /// 全體目標皆為對象
+        /// </summary>
+        All,
+    }
     [System.Serializable]
     public class RCG_CardData {
         public static string CardDataPath {
@@ -18,6 +65,7 @@ namespace RCG {
         [System.Serializable]
         public struct CardData {
             public CardType m_CardType;
+            public TargetType m_TargetType;
             public string m_CardName;
             public string m_IconName;
             public int m_Cost;
@@ -36,7 +84,6 @@ namespace RCG {
                         des += aDes;
                     }
                 }
-                //des += m_Setting.m_Description;
                 return des;
             }
         }
@@ -48,6 +95,7 @@ namespace RCG {
 
         public List<RCG_CardEffect> m_CardEffects = new List<RCG_CardEffect>();
         public CardType CardType { get { return m_Data.m_CardType; } set { m_Data.m_CardType = value; } }
+        public TargetType TargetType { get { return m_Data.m_TargetType; } set { m_Data.m_TargetType = value; } }
         [SerializeField] protected CardData m_Data;
         public RCG_CardData() {
 
@@ -91,13 +139,13 @@ namespace RCG {
                 Debug.LogWarning("effect_data:" + effect_data.ToJson());
                 if(effect_data.Contains("EffectType")) {
                     var effect = RCG_CardEffectCreator.Create(effect_data["EffectType"].GetString());
-                    effect.Init(i);
                     if(effect != null) {
                         effect.DeserializeFromJson(effect_data);
                         m_CardEffects.Add(effect);
                     } else {
                         Debug.LogError("effect == null!!");
                     }
+                    effect.Init(i);
                 }
 
             }
@@ -122,7 +170,7 @@ namespace RCG {
                         delete_at = i;
                     }
                     GUILayout.EndHorizontal();
-                    effect.OnGUI();
+                    effect.OnGUI(i);
                 }
             }
             if(delete_at >= 0) {

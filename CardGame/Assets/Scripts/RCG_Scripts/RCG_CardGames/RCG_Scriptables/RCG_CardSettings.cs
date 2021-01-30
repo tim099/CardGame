@@ -12,53 +12,7 @@ namespace RCG
         Unknow,
     }
 
-    public enum TargetType : int
-    {
-        /// <summary>
-        /// 不需要指定目標 如抽牌
-        /// </summary>
-        None = 0,
-        /// <summary>
-        /// 使用腳色
-        /// </summary>
-        Player,
-        /// <summary>
-        /// 除了使用腳色外的我方
-        /// </summary>
-        Friend,
-        /// <summary>
-        /// 我方全體
-        /// </summary>
-        Allied,
-        /// <summary>
-        /// 我方前排
-        /// </summary>
-        AlliedFront,
-        /// <summary>
-        /// 我方後排
-        /// </summary>
-        AlliedBack,
 
-        /// <summary>
-        /// 敵方全體
-        /// </summary>
-        Enemy,
-
-        /// <summary>
-        /// 敵方前排
-        /// </summary>
-        EnemyFront,
-
-        /// <summary>
-        /// 敵方後排
-        /// </summary>
-        EnemyBack,
-
-        /// <summary>
-        /// 全體目標皆為對象
-        /// </summary>
-        All,
-    }
     public enum Entry
     {
         Discard = 0,//Removed after used in this battle
