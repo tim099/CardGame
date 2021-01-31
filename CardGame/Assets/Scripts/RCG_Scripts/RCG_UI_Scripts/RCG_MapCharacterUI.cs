@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RCG { 
     public class RCG_MapCharacterUI : MonoBehaviour
@@ -39,6 +40,7 @@ namespace RCG {
             foreach (var character_data in m_all_character_data)
             {
                 var new_panel = Instantiate(m_character_panel, transform);
+                new_panel.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprite/" + character_data.m_character_name);
                 m_panels.Add(new_panel);
             }
         }

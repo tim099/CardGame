@@ -24,7 +24,7 @@ namespace RCG
             ins = this;
 
             m_all_character_data = new List<RCG_CharacterData>();
-            m_all_character_data.Add(new RCG_CharacterData("Tina", 20, 20, 1));
+            m_all_character_data.Add(new RCG_CharacterData("Trist", 20, 20, 1));
         }
     }
 }
