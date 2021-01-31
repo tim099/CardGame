@@ -185,6 +185,10 @@ namespace RCG {
             m_CardDisplayer.BlockSelection();
             BlockSelection(BlockingStatus.DrawCardAnime);
             m_TB_Tweener.StartTween(()=> {
+                transform.position = transform.parent.position;
+                m_CardPanel.transform.position = transform.parent.position;
+                transform.rotation = transform.parent.rotation;
+                m_CardPanel.transform.rotation = transform.parent.rotation;
                 m_CardDisplayer.UnBlockSelection();
                 UnBlockSelection(BlockingStatus.DrawCardAnime);
                 if(iEndAct != null) iEndAct.Invoke();
@@ -196,22 +200,22 @@ namespace RCG {
         /// <param name="iTargetPos"></param>
         /// <param name="iEndAct"></param>
         virtual public void TriggerCardAnime(Transform iTargetPos, System.Action iEndAct) {
-            Vector3 aPosO = transform.position;
-            Quaternion aRotO = transform.rotation;
+            //Vector3 aPosO = transform.position;
+            //Quaternion aRotO = transform.rotation;
             transform.position = iTargetPos.position;
             transform.rotation = iTargetPos.rotation;
 
-            m_CardPanel.transform.position = aPosO;
+            m_CardPanel.transform.position = transform.parent.position;
             m_CardPanel.SetActive(true);
             //m_CardDisplayer.BlockSelection();
             BlockSelection(BlockingStatus.TriggerCardAnime, false);
             m_TB_Tweener.StartTween(() => {
                 //m_CardDisplayer.UnBlockSelection();
                 UnBlockSelection(BlockingStatus.TriggerCardAnime);
-                transform.position = aPosO;
-                m_CardPanel.transform.position = aPosO;
-                transform.rotation = aRotO;
-                m_CardPanel.transform.rotation = aRotO;
+                transform.position = transform.parent.position;
+                m_CardPanel.transform.position = transform.parent.position;
+                transform.rotation = transform.parent.rotation;
+                m_CardPanel.transform.rotation = transform.parent.rotation;
                 if(iEndAct != null) iEndAct.Invoke();
             });
         }
