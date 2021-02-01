@@ -15,7 +15,8 @@ namespace RCG {
         public TriggerEffectData(RCG_Player iPlayer) {
             p_Player = iPlayer;
         }
-        public RCG_Player p_Player;
+        public RCG_Player p_Player = null;
+        public List<RCG_Unit> m_Targets = null;
     }
 
     /// <summary>
@@ -127,7 +128,7 @@ namespace RCG {
                     p_Player.SetSelectedCard(this);
                 } else {
                     Debug.LogError("SetSelectedCard Fail Blocking:" + m_SelectionBlock.UCL_ToString());
-                    p_Player.SetSelectedCard(null);
+                    p_Player.ClearSelectedCard();
                 }
             });
             //m_CardDisplayer.m_OnSelected.AddListener(() => { transform.SetAsLastSibling(); });
@@ -174,7 +175,8 @@ namespace RCG {
         }
         virtual public void BlockSelection(BlockingStatus iBlock, bool iActiveBlockSelectionObject = true) {
             Debug.LogWarning("BlockSelection");
-            if(IsSelected) p_Player.SetSelectedCard(null);//Deselect
+            if (IsSelected) Deselect();
+            //if(IsSelected) p_Player.ClearSelectedCard();//Deselect
             m_BlockSelectionObject.SetActive(iActiveBlockSelectionObject);
             if(!m_SelectionBlock.Contains(iBlock))m_SelectionBlock.Add(iBlock);
         }
@@ -230,7 +232,7 @@ namespace RCG {
         }
         virtual public void CardUsed() {
             SetCardData(null);
-            p_Player.SetSelectedCard(null);
+            p_Player.ClearSelectedCard();
         }
         virtual protected void Update() {
 

@@ -21,7 +21,7 @@ namespace RCG {
             m_BattleManager.Init();
             m_BattleManager.EnterBattle();
             m_DeselectButton.onClick.AddListener(delegate () {
-                m_Game.m_Player.SetSelectedCard(null);
+                m_Game.m_Player.ClearSelectedCard();
             });
         }
 

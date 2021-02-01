@@ -30,6 +30,19 @@ namespace RCG {
                 }
             }
         }
+        public override void TriggerEffect(TriggerEffectData iTriggerEffectData)
+        {
+            base.TriggerEffect(iTriggerEffectData);
+            var aTargets = iTriggerEffectData.m_Targets;
+            if (aTargets != null)
+            {
+                foreach (var aTarget in aTargets)
+                {
+                    aTarget.Hp -= m_Atk * m_AtkTimes;
+                }
+            }
+            
+        }
         //override public void LoadJson(UCL.Core.JsonLib.JsonData data) {
         //    UCL.Core.JsonLib.JsonConvert.LoadDataFromJson(this, data);
         //}

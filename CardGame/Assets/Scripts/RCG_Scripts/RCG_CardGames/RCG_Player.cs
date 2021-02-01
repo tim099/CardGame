@@ -105,6 +105,28 @@ namespace RCG {
                 SetState(PlayerState.Idle);
             });
         }
+        public void TriggerCard(List<RCG_Unit> iSelectUnits)
+        {
+            if (m_Blocking) return;
+            if (m_SelectedCard == null) return;
+            //Debug.LogError("TriggerCard()");
+            SetState(PlayerState.TriggerCard);
+            m_TriggerCardPos.gameObject.SetActive(true);
+            m_SelectedCard.TriggerCardAnime(m_TriggerCardPos, delegate () {
+                if (m_SelectedCard == null)
+                {
+                    Debug.LogError("TriggerCard()m_SelectedCard == null");
+                    return;
+                }
+                m_SelectedCard.Deselect();
+                var aData = new TriggerEffectData(this);
+                aData.m_Targets = iSelectUnits;
+                m_SelectedCard.TriggerCardEffect(aData);
+                m_Deck.Used(m_SelectedCard.Data);
+                m_SelectedCard.CardUsed();
+                SetState(PlayerState.Idle);
+            });
+        }
         /// <summary>
         /// 選中的卡牌觸發目標
         /// </summary>
@@ -116,13 +138,14 @@ namespace RCG {
                 TriggerCard();
                 return;
             }
+            TriggerCard(iTargets);
         }
         /// <summary>
         /// 設定選中的手牌
         /// </summary>
         /// <param name="iCard"></param>
         public void SetSelectedCard(RCG_Card iCard) {
-            if(m_Blocking || m_PlayerState!= PlayerState.Idle) {
+            if(m_Blocking || m_PlayerState != PlayerState.Idle) {
                 Debug.LogWarning("SetSelectedCard Fail, Blocking!!");
                 return;
             }
@@ -134,7 +157,7 @@ namespace RCG {
                 return;
             }
             if(m_SelectedCard != null) {
-                m_SelectedCard.Deselect();
+                ClearSelectedCard();
             }
             m_SelectedCard = iCard;
             if (m_SelectedCard == null) {
@@ -153,6 +176,16 @@ namespace RCG {
             }
             
         }
+        public void ClearSelectedCard()
+        {
+            //Debug.LogError("ClearSelectedCard()");
+            if (m_SelectedCard != null)
+            {
+                m_SelectedCard.Deselect();
+            }
+            m_SelectedCard = null;
+            RCG_BattleField.ins.SetSelectMode(TargetType.Close);
+        }
         public void SetState(PlayerState iPlayerState) {
             m_PlayerState = iPlayerState;
         }
@@ -162,7 +195,7 @@ namespace RCG {
             if(m_DrawCardCount > space) m_DrawCardCount = space;
         }
         public void EndTurn() {
-            SetSelectedCard(null);
+            ClearSelectedCard();
         }
         public bool AlterCost(int iAlter) {
             if(m_Cost + iAlter < 0) return false;

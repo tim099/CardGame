@@ -10,6 +10,7 @@ namespace RCG {
         static public RCG_BattleField ins = null;
         public Button m_SelectNoneButton = null;
         public UCL.Core.FileLib.UCL_FileInspector m_MonsterFiles = null;
+        public List<RCG_Unit> m_SelectedUnits = new List<RCG_Unit>();
         public List<RCG_Unit> m_Units = new List<RCG_Unit>();
         public RCG_BattlePositionSetting m_PlayerBattlePositionSetting = null;
         public RCG_BattlePositionSetting m_EnemyBattlePositionSetting = null;
@@ -20,6 +21,8 @@ namespace RCG {
             ins = this;
             m_SelectNoneButton.onClick.AddListener(SelectNone);
             m_SelectNoneButton.gameObject.SetActive(false);
+            m_PlayerBattlePositionSetting.Init();
+            m_EnemyBattlePositionSetting.Init();
         }
         private void Awake() {
             m_MonsterFiles = Resources.Load<UCL.Core.FileLib.UCL_FileInspector>(PathConst.MonsterResource + "/MonsterFileInspector");
@@ -83,26 +86,90 @@ namespace RCG {
         }
         public void SetSelectMode(TargetType iTargetType)
         {
-            if(iTargetType == TargetType.Close)
+            m_SelectedUnits.Clear();
+            if (iTargetType == TargetType.Close)
             {
                 m_SelectNoneButton.gameObject.SetActive(false);
+                m_PlayerBattlePositionSetting.SetAllSelection(false);
+                m_EnemyBattlePositionSetting.SetAllSelection(false);
                 return;
             }
+            Debug.LogError("iTargetType:" + iTargetType.ToString());
             switch (iTargetType)
             {
                 case TargetType.None:
                     {
                         m_SelectNoneButton.gameObject.SetActive(true);
+                        m_PlayerBattlePositionSetting.SetAllSelection(false);
+                        m_EnemyBattlePositionSetting.SetAllSelection(false);
+                        break;
+                    }
+                case TargetType.All:
+                    {
+                        m_SelectNoneButton.gameObject.SetActive(false);
+                        m_PlayerBattlePositionSetting.SetAllSelection(true);
+                        m_EnemyBattlePositionSetting.SetAllSelection(true);
+                        break;
+                    }
+                case TargetType.Allied:
+                    {
+                        m_SelectNoneButton.gameObject.SetActive(false);
+                        m_PlayerBattlePositionSetting.SetAllSelection(true);
+                        m_EnemyBattlePositionSetting.SetAllSelection(false);
+                        break;
+                    }
+                case TargetType.AlliedFront:
+                    {
+                        m_SelectNoneButton.gameObject.SetActive(false);
+                        m_PlayerBattlePositionSetting.SetFrontSelection(true);
+                        m_PlayerBattlePositionSetting.SetBackSelection(false);
+                        m_EnemyBattlePositionSetting.SetAllSelection(false);
+                        break;
+                    }
+                case TargetType.AlliedBack:
+                    {
+                        m_SelectNoneButton.gameObject.SetActive(false);
+                        m_PlayerBattlePositionSetting.SetFrontSelection(false);
+                        m_PlayerBattlePositionSetting.SetBackSelection(true);
+                        m_EnemyBattlePositionSetting.SetAllSelection(false);
+                        break;
+                    }
+                case TargetType.Enemy:
+                    {
+                        m_SelectNoneButton.gameObject.SetActive(false);
+                        m_PlayerBattlePositionSetting.SetAllSelection(false);
+                        m_EnemyBattlePositionSetting.SetAllSelection(true);
+                        break;
+                    }
+                case TargetType.EnemyFront:
+                    {
+                        m_SelectNoneButton.gameObject.SetActive(false);
+                        m_PlayerBattlePositionSetting.SetAllSelection(false);
+                        m_EnemyBattlePositionSetting.SetFrontSelection(true);
+                        m_EnemyBattlePositionSetting.SetBackSelection(false);
+                        break;
+                    }
+                case TargetType.EnemyBack:
+                    {
+                        m_SelectNoneButton.gameObject.SetActive(false);
+                        m_PlayerBattlePositionSetting.SetAllSelection(false);
+                        m_EnemyBattlePositionSetting.SetFrontSelection(false);
+                        m_EnemyBattlePositionSetting.SetBackSelection(true);
                         break;
                     }
             }
+        }
+        public void SelectUnit(RCG_Unit iUnit)
+        {
+            m_SelectedUnits.Add(iUnit);
+            RCG_Player.ins.SelectTargets(m_SelectedUnits);
         }
         /// <summary>
         /// 選擇無目標按鈕
         /// </summary>
         public void SelectNone()
         {
-            RCG_Player.ins.SelectTargets(null);
+            RCG_Player.ins.SelectTargets(m_SelectedUnits);
             SetSelectMode(TargetType.Close);
         }
 
