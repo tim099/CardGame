@@ -49,6 +49,11 @@ namespace RCG {
         /// 全體目標皆為對象
         /// </summary>
         All,
+
+        /// <summary>
+        /// 關閉選擇
+        /// </summary>
+        Close,
     }
     [System.Serializable]
     public class RCG_CardData {

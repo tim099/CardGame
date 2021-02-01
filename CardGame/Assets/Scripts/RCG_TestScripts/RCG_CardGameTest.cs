@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace RCG {
     public class RCG_CardGameTest : MonoBehaviour {
+        public RCG_BattleManager m_BattleManager;
         public RCG_CardGame m_Game;
         public Button m_DeselectButton;
         public bool m_AutoInit = true;
@@ -17,9 +18,10 @@ namespace RCG {
         public void Init() {
             if(m_Inited) return;
             m_Inited = true;
-            m_Game.Init();
+            m_BattleManager.Init();
+            m_BattleManager.EnterBattle();
             m_DeselectButton.onClick.AddListener(delegate () {
-                m_Game.m_Player.SetSelectedCard(null);
+                m_Game.m_Player.ClearSelectedCard();
             });
         }
 

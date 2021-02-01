@@ -7,29 +7,33 @@ using UCL.Core.UI;
 namespace RCG {
     [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_Unit : MonoBehaviour {
-        public int _m_Hp = 0;
-        public int _m_MaxHp = 0;
+        [SerializeField] protected int m_MaxHp = 0;
+        protected int m_Hp = 0;
         public bool  m_is_dead = false;
         private Queue<RCG_UnitAction> m_action_queue;
         private RCG_UnitAction m_action = null;
 
-        public int m_Hp{
-            get{return _m_Hp;}
+        public int Hp {
+            get{return m_Hp;}
             set{
-                _m_Hp = value;
+                m_Hp = value;
                 m_unit_HUD.UpdateHUD();
             }
         }
-        public int m_MaxHp{
-            get{return _m_MaxHp;}
+        public int MaxHp {
+            get{return m_MaxHp;}
             set{
-                _m_MaxHp = value;
+                m_MaxHp = value;
                 m_unit_HUD.UpdateHUD();
             }
         }
         public List<RCG_Status> m_status_list;
         private RCG_UnitHUD m_unit_HUD;
 
+        virtual public void Init()
+        {
+            Hp = MaxHp;
+        }
         private void Awake() {
             m_action = null;
             if(!m_unit_HUD){
@@ -39,13 +43,13 @@ namespace RCG {
         }
 
         public int RestoreHP(int amount){
-            m_Hp += amount;
+            Hp += amount;
             return 0;
         }
 
         public int DamageHP(int amount){
-            m_Hp -= amount;
-            if(m_Hp <= 0){
+            Hp -= amount;
+            if(Hp <= 0){
                 Die();
             }
             return 0;

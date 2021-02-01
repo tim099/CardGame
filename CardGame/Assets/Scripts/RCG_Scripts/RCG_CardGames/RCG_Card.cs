@@ -15,7 +15,8 @@ namespace RCG {
         public TriggerEffectData(RCG_Player iPlayer) {
             p_Player = iPlayer;
         }
-        public RCG_Player p_Player;
+        public RCG_Player p_Player = null;
+        public List<RCG_Unit> m_Targets = null;
     }
 
     /// <summary>
@@ -77,10 +78,19 @@ namespace RCG {
             m_Used = true;
             p_Player.IsUsingCard = true;
             m_Data.TriggerEffect(iTriggerEffectData);
-            if(RCG_BattleField.ins != null) {
-                RCG_BattleField.ins.TriggerCardEffect(0, m_Data);
+            try
+            {
+                if (RCG_BattleField.ins != null)
+                {
+                    RCG_BattleField.ins.TriggerCardEffect(0, m_Data);
+                }
             }
-            
+            catch (System.Exception e)
+            {
+                Debug.LogError("Exception:" + e);
+            }
+
+
             p_Player.IsUsingCard = false;
             return true;
         }
@@ -118,7 +128,7 @@ namespace RCG {
                     p_Player.SetSelectedCard(this);
                 } else {
                     Debug.LogError("SetSelectedCard Fail Blocking:" + m_SelectionBlock.UCL_ToString());
-                    p_Player.SetSelectedCard(null);
+                    p_Player.ClearSelectedCard();
                 }
             });
             //m_CardDisplayer.m_OnSelected.AddListener(() => { transform.SetAsLastSibling(); });
@@ -165,7 +175,8 @@ namespace RCG {
         }
         virtual public void BlockSelection(BlockingStatus iBlock, bool iActiveBlockSelectionObject = true) {
             Debug.LogWarning("BlockSelection");
-            if(IsSelected) p_Player.SetSelectedCard(null);//Deselect
+            if (IsSelected) Deselect();
+            //if(IsSelected) p_Player.ClearSelectedCard();//Deselect
             m_BlockSelectionObject.SetActive(iActiveBlockSelectionObject);
             if(!m_SelectionBlock.Contains(iBlock))m_SelectionBlock.Add(iBlock);
         }
@@ -185,6 +196,10 @@ namespace RCG {
             m_CardDisplayer.BlockSelection();
             BlockSelection(BlockingStatus.DrawCardAnime);
             m_TB_Tweener.StartTween(()=> {
+                transform.position = transform.parent.position;
+                m_CardPanel.transform.position = transform.parent.position;
+                transform.rotation = transform.parent.rotation;
+                m_CardPanel.transform.rotation = transform.parent.rotation;
                 m_CardDisplayer.UnBlockSelection();
                 UnBlockSelection(BlockingStatus.DrawCardAnime);
                 if(iEndAct != null) iEndAct.Invoke();
@@ -196,28 +211,28 @@ namespace RCG {
         /// <param name="iTargetPos"></param>
         /// <param name="iEndAct"></param>
         virtual public void TriggerCardAnime(Transform iTargetPos, System.Action iEndAct) {
-            Vector3 aPosO = transform.position;
-            Quaternion aRotO = transform.rotation;
+            //Vector3 aPosO = transform.position;
+            //Quaternion aRotO = transform.rotation;
             transform.position = iTargetPos.position;
             transform.rotation = iTargetPos.rotation;
 
-            m_CardPanel.transform.position = aPosO;
+            m_CardPanel.transform.position = transform.parent.position;
             m_CardPanel.SetActive(true);
             //m_CardDisplayer.BlockSelection();
             BlockSelection(BlockingStatus.TriggerCardAnime, false);
             m_TB_Tweener.StartTween(() => {
                 //m_CardDisplayer.UnBlockSelection();
                 UnBlockSelection(BlockingStatus.TriggerCardAnime);
-                transform.position = aPosO;
-                m_CardPanel.transform.position = aPosO;
-                transform.rotation = aRotO;
-                m_CardPanel.transform.rotation = aRotO;
+                transform.position = transform.parent.position;
+                m_CardPanel.transform.position = transform.parent.position;
+                transform.rotation = transform.parent.rotation;
+                m_CardPanel.transform.rotation = transform.parent.rotation;
                 if(iEndAct != null) iEndAct.Invoke();
             });
         }
         virtual public void CardUsed() {
             SetCardData(null);
-            p_Player.SetSelectedCard(null);
+            p_Player.ClearSelectedCard();
         }
         virtual protected void Update() {
 

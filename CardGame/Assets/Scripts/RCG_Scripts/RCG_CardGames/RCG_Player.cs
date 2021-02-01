@@ -7,6 +7,7 @@ using UnityEngine.UI;
 namespace RCG {
     [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_Player : MonoBehaviour {
+        public static RCG_Player ins = null;
         public enum PlayerState {
             Idle = 0,
             DrawCard,//開始抽牌
@@ -52,6 +53,7 @@ namespace RCG {
         public void Init() {
             if(m_Inited) return;
             m_Inited = true;
+            ins = this;
             m_TriggerCardPos.gameObject.SetActive(false);
             m_CardPosController.Init();
             if(m_Cards == null) {
@@ -102,14 +104,48 @@ namespace RCG {
                 m_SelectedCard.CardUsed();
                 SetState(PlayerState.Idle);
             });
-
+        }
+        public void TriggerCard(List<RCG_Unit> iSelectUnits)
+        {
+            if (m_Blocking) return;
+            if (m_SelectedCard == null) return;
+            //Debug.LogError("TriggerCard()");
+            SetState(PlayerState.TriggerCard);
+            m_TriggerCardPos.gameObject.SetActive(true);
+            m_SelectedCard.TriggerCardAnime(m_TriggerCardPos, delegate () {
+                if (m_SelectedCard == null)
+                {
+                    Debug.LogError("TriggerCard()m_SelectedCard == null");
+                    return;
+                }
+                m_SelectedCard.Deselect();
+                var aData = new TriggerEffectData(this);
+                aData.m_Targets = iSelectUnits;
+                m_SelectedCard.TriggerCardEffect(aData);
+                m_Deck.Used(m_SelectedCard.Data);
+                m_SelectedCard.CardUsed();
+                SetState(PlayerState.Idle);
+            });
+        }
+        /// <summary>
+        /// 選中的卡牌觸發目標
+        /// </summary>
+        /// <param name="iTargets"></param>
+        public void SelectTargets(List<RCG_Unit> iTargets)
+        {
+            if(iTargets == null || iTargets.Count == 0)
+            {//None target!!
+                TriggerCard();
+                return;
+            }
+            TriggerCard(iTargets);
         }
         /// <summary>
         /// 設定選中的手牌
         /// </summary>
         /// <param name="iCard"></param>
         public void SetSelectedCard(RCG_Card iCard) {
-            if(m_Blocking || m_PlayerState!= PlayerState.Idle) {
+            if(m_Blocking || m_PlayerState != PlayerState.Idle) {
                 Debug.LogWarning("SetSelectedCard Fail, Blocking!!");
                 return;
             }
@@ -121,11 +157,34 @@ namespace RCG {
                 return;
             }
             if(m_SelectedCard != null) {
-                m_SelectedCard.Deselect();
+                ClearSelectedCard();
             }
             m_SelectedCard = iCard;
-            if(m_SelectedCard == null) return;
+            if (m_SelectedCard == null) {
+                RCG_BattleField.ins.SetSelectMode(TargetType.Close);
+                return;
+            }
             m_SelectedCard.Select();
+            if (m_SelectedCard.Data != null)
+            {
+                RCG_BattleField.ins.SetSelectMode(m_SelectedCard.Data.TargetType);
+            }
+            else
+            {
+                Debug.LogError("m_SelectedCard.Data == null!!");
+                RCG_BattleField.ins.SetSelectMode(TargetType.Close);
+            }
+            
+        }
+        public void ClearSelectedCard()
+        {
+            //Debug.LogError("ClearSelectedCard()");
+            if (m_SelectedCard != null)
+            {
+                m_SelectedCard.Deselect();
+            }
+            m_SelectedCard = null;
+            RCG_BattleField.ins.SetSelectMode(TargetType.Close);
         }
         public void SetState(PlayerState iPlayerState) {
             m_PlayerState = iPlayerState;
@@ -136,7 +195,7 @@ namespace RCG {
             if(m_DrawCardCount > space) m_DrawCardCount = space;
         }
         public void EndTurn() {
-            SetSelectedCard(null);
+            ClearSelectedCard();
         }
         public bool AlterCost(int iAlter) {
             if(m_Cost + iAlter < 0) return false;

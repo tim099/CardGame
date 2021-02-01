@@ -6,6 +6,7 @@ using System.Linq;
 namespace RCG {
     [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_CardEditor : MonoBehaviour {
+        static protected Dictionary<string, object> m_CardEditTmpDatas = new Dictionary<string, object>();
         public static RCG_CardEditor ins = null;
         public class CardEditData {
             public CardEditData(RCG_CardData _CardData,string _FilePath) {
@@ -31,7 +32,7 @@ namespace RCG {
         protected int m_CreateEffectID = 0;
         protected bool m_CreateEffectOpened = false;
         protected bool m_Inited = false;
-        protected Dictionary<string, object> m_CardEditTmpDatas = new Dictionary<string, object>();
+        
         private void Awake() {
             Init();
         }
@@ -140,13 +141,13 @@ namespace RCG {
         //    return ins.m_CardEditTmpDatas[iKey];
         //}
         static public T GetCardEditTmpData<T>(string iKey, T iDefaultValue) {
-            if(ins == null) return iDefaultValue;
-            if(!ins.m_CardEditTmpDatas.ContainsKey(iKey)) ins.m_CardEditTmpDatas.Add(iKey, iDefaultValue);
-            return (T)ins.m_CardEditTmpDatas[iKey];
+            if(m_CardEditTmpDatas == null) return iDefaultValue;
+            if(!m_CardEditTmpDatas.ContainsKey(iKey)) m_CardEditTmpDatas.Add(iKey, iDefaultValue);
+            return (T)m_CardEditTmpDatas[iKey];
         }
         static public void SetCardEditTmpData<T>(string iKey, T iValue) {
-            if(ins == null) return;
-            ins.m_CardEditTmpDatas[iKey] = iValue;
+            if(m_CardEditTmpDatas == null) return;
+            m_CardEditTmpDatas[iKey] = iValue;
         }
         virtual protected void EditCardWindow() {
             if(m_EditingData == null) return;
