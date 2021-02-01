@@ -7,6 +7,7 @@ using UnityEngine.UI;
 namespace RCG {
     [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_Player : MonoBehaviour {
+        public static RCG_Player ins = null;
         public enum PlayerState {
             Idle = 0,
             DrawCard,//開始抽牌
@@ -52,6 +53,7 @@ namespace RCG {
         public void Init() {
             if(m_Inited) return;
             m_Inited = true;
+            ins = this;
             m_TriggerCardPos.gameObject.SetActive(false);
             m_CardPosController.Init();
             if(m_Cards == null) {
@@ -102,7 +104,18 @@ namespace RCG {
                 m_SelectedCard.CardUsed();
                 SetState(PlayerState.Idle);
             });
-
+        }
+        /// <summary>
+        /// 選中的卡牌觸發目標
+        /// </summary>
+        /// <param name="iTargets"></param>
+        public void SelectTargets(List<RCG_Unit> iTargets)
+        {
+            if(iTargets == null || iTargets.Count == 0)
+            {//None target!!
+                TriggerCard();
+                return;
+            }
         }
         /// <summary>
         /// 設定選中的手牌
@@ -124,8 +137,21 @@ namespace RCG {
                 m_SelectedCard.Deselect();
             }
             m_SelectedCard = iCard;
-            if(m_SelectedCard == null) return;
+            if (m_SelectedCard == null) {
+                RCG_BattleField.ins.SetSelectMode(TargetType.Close);
+                return;
+            }
             m_SelectedCard.Select();
+            if (m_SelectedCard.Data != null)
+            {
+                RCG_BattleField.ins.SetSelectMode(m_SelectedCard.Data.TargetType);
+            }
+            else
+            {
+                Debug.LogError("m_SelectedCard.Data == null!!");
+                RCG_BattleField.ins.SetSelectMode(TargetType.Close);
+            }
+            
         }
         public void SetState(PlayerState iPlayerState) {
             m_PlayerState = iPlayerState;

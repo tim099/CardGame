@@ -37,9 +37,9 @@ namespace RCG {
         }
 
         public void UpdateHUD(){
-            m_hp_slider.value = m_unit.m_Hp;
-            m_hp_slider.maxValue = m_unit.m_MaxHp;
-            m_hp_text.text = m_unit.m_Hp + "/" + m_unit.m_MaxHp;
+            m_hp_slider.value = m_unit.Hp;
+            m_hp_slider.maxValue = m_unit.MaxHp;
+            m_hp_text.text = m_unit.Hp + "/" + m_unit.MaxHp;
         }
     }
 }

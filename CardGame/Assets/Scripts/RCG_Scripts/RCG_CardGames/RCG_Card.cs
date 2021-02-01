@@ -77,10 +77,19 @@ namespace RCG {
             m_Used = true;
             p_Player.IsUsingCard = true;
             m_Data.TriggerEffect(iTriggerEffectData);
-            if(RCG_BattleField.ins != null) {
-                RCG_BattleField.ins.TriggerCardEffect(0, m_Data);
+            try
+            {
+                if (RCG_BattleField.ins != null)
+                {
+                    RCG_BattleField.ins.TriggerCardEffect(0, m_Data);
+                }
             }
-            
+            catch (System.Exception e)
+            {
+                Debug.LogError("Exception:" + e);
+            }
+
+
             p_Player.IsUsingCard = false;
             return true;
         }
