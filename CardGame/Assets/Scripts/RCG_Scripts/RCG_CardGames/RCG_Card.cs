@@ -105,7 +105,7 @@ namespace RCG {
             } else {
                 UnBlockSelection(BlockingStatus.Cost);
             }
-            if(RCG_BattleField.ins.ActiveUnit == null)
+            if(RCG_BattleField.ins.ActiveUnit == null || !m_Data.CheckRequireSkill(RCG_BattleField.ins.ActiveUnit.m_SkillSets))
             {
                 BlockSelection(BlockingStatus.NoSkill);
             }

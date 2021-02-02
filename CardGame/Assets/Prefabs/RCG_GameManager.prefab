@@ -43,6 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b62a6162fc2974aba1bd47afbefd5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_UnitSkillSprites:
+  - m_UnitSkill: 0
+    m_Sprite: {fileID: 21300000, guid: 378b46eb28d200644bfa88ca9faf87cf, type: 3}
+  - m_UnitSkill: 1
+    m_Sprite: {fileID: 21300000, guid: 5913c0b18bb5355419f7e9ea57f8b9b7, type: 3}
+  - m_UnitSkill: 2
+    m_Sprite: {fileID: 21300000, guid: 412f8b496eeed934c9739eacd0582d4a, type: 3}
   m_CardDatas: []
 --- !u!1 &4404322839546865585
 GameObject:

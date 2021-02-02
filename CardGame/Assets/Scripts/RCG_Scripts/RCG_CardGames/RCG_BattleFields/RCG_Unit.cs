@@ -46,6 +46,7 @@ namespace RCG {
             get; protected set;
         }
         public bool m_is_dead = false;
+        public HashSet<UnitSkill> m_SkillSets = new HashSet<UnitSkill>();
         public List<UnitSkill> m_Skills = new List<UnitSkill>();
         public List<RCG_Status> m_status_list;
         public Transform m_UnitDisplay = null;
@@ -67,6 +68,10 @@ namespace RCG {
                 m_UnitDisplay.rotation = Quaternion.Euler(0, 180, 0);
             }
             m_UnitUI.Init();
+            foreach(var aSkill in m_Skills)
+            {
+                m_SkillSets.Add(aSkill);
+            }
         }
         private void Awake() {
             m_action = null;

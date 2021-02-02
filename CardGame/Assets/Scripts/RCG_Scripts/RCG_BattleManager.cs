@@ -27,6 +27,7 @@ namespace RCG {
         }
         public void TurnInit()
         {
+            Debug.LogError("RCG_BattleManager TurnInit()");
             m_BattleField.TurnInit();
             m_CardGame.TurnInit();
         }

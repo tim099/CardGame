@@ -216,6 +216,7 @@ namespace RCG {
         /// </summary>
         public void TurnEnd()
         {
+            Debug.LogError("RCG_BattleField TurnEnd()");
             foreach (RCG_Unit u in m_Units)
             {
                 if (u == null)

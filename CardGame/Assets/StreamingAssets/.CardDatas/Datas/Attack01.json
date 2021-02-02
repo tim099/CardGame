@@ -4,6 +4,10 @@
 	"m_CardName":"Attack01",
 	"m_IconName":"01.png",
 	"m_Cost":0,
+	"m_RequireSkills":
+	[
+		"Magic"
+	],
 	"CardEffect":
 	[
 		{

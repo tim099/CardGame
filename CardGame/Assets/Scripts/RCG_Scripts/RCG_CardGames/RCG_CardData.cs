@@ -99,14 +99,17 @@ namespace RCG {
         virtual public int Defense { get; protected set; }
         virtual public TargetType Target { get; protected set; }
 
+        public List<UnitSkill> RequireSkills { get { return m_Data.m_RequireSkills; } }
         public List<RCG_CardEffect> m_CardEffects = new List<RCG_CardEffect>();
         public CardType CardType { get { return m_Data.m_CardType; } set { m_Data.m_CardType = value; } }
         public TargetType TargetType { get { return m_Data.m_TargetType; } set { m_Data.m_TargetType = value; } }
         [SerializeField] protected CardData m_Data;
+        //protected HashSet<UnitSkill> m_RequireSkillSets = new HashSet<UnitSkill>();
         public RCG_CardData() {
 
         }
         public RCG_CardData(string iJson) {
+            Debug.LogWarning("iJson:" + iJson);
             LoadJson(UCL.Core.JsonLib.JsonData.ParseJson(iJson));
         }
         public RCG_CardData(UCL.Core.JsonLib.JsonData iSetting) {
@@ -124,6 +127,15 @@ namespace RCG {
             if(RCG_CardDataService.ins != null) {
                 m_Icon = RCG_CardDataService.ins.GetCardIcon(m_Data.m_IconName);
             }
+
+        }
+        public bool CheckRequireSkill(HashSet<UnitSkill> iSkills)
+        {
+            foreach (var aSkill in m_Data.m_RequireSkills)
+            {
+                if (!iSkills.Contains(aSkill)) return false;
+            }
+            return true;
         }
         public UCL.Core.JsonLib.JsonData ToJson() {
             UCL.Core.JsonLib.JsonData data = new UCL.Core.JsonLib.JsonData();

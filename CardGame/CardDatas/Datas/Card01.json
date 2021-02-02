@@ -1,14 +1,21 @@
 {
+	"m_CardType":"Unknow",
+	"m_TargetType":"None",
 	"m_CardName":"Card01",
 	"m_IconName":"01.png",
 	"m_Cost":4,
+	"m_RequireSkills":
+	[
+		"Magic"
+	],
 	"CardEffect":
 	[
 		{
 			"EffectType":"AttackEffect",
 			"m_Atk":8,
 			"m_AtkRange":5,
-			"m_AtkTimes":2
+			"m_AtkTimes":2,
+			"m_AttackType":"Normal"
 		},
 		{
 			"EffectType":"DrawEffect",
@@ -18,7 +25,8 @@
 			"EffectType":"AttackEffect",
 			"m_Atk":11,
 			"m_AtkRange":33,
-			"m_AtkTimes":1
+			"m_AtkTimes":1,
+			"m_AttackType":"Normal"
 		}
 	]
 }
