@@ -1,5 +1,6 @@
 {
 	"m_CardType":"Buff",
+	"m_TargetType":"Allied",
 	"m_CardName":"Defense01",
 	"m_IconName":"brick.png",
 	"m_Cost":0,

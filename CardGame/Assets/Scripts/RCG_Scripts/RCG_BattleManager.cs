@@ -23,6 +23,26 @@ namespace RCG {
             gameObject.SetActive(true);
             m_BattleField.EnterBattle();
             m_CardGame.EnterBattle();
+            TurnInit();
+        }
+        public void TurnInit()
+        {
+            m_BattleField.TurnInit();
+            m_CardGame.TurnInit();
+        }
+        /// <summary>
+        /// 玩家行動結束
+        /// </summary>
+        public void PlayerTurnEnd()
+        {
+            m_BattleField.TurnStart();
+        }
+        /// <summary>
+        /// 敵人行動結束
+        /// </summary>
+        public void EnemyTurnEnd()
+        {
+            TurnInit();
         }
         private void OnGUI() {
             if(m_Entered) {
