@@ -51,7 +51,7 @@ namespace RCG {
         All,
 
         /// <summary>
-        /// 關閉選擇
+        /// 關閉選擇狀態 開放切換玩家腳色
         /// </summary>
         Close,
     }
@@ -68,12 +68,13 @@ namespace RCG {
             }
         }
         [System.Serializable]
-        public struct CardData {
-            public CardType m_CardType;
-            public TargetType m_TargetType;
-            public string m_CardName;
-            public string m_IconName;
-            public int m_Cost;
+        public class CardData {
+            public CardType m_CardType = CardType.Unknow;
+            public TargetType m_TargetType = TargetType.None;
+            public string m_CardName = string.Empty;
+            public string m_IconName = string.Empty;
+            public int m_Cost = 0;
+            public List<UnitSkill> m_RequireSkills = new List<UnitSkill>();
         }
         public Sprite Icon { get { return m_Icon; } }
         public Sprite m_Icon = null;
@@ -98,14 +99,17 @@ namespace RCG {
         virtual public int Defense { get; protected set; }
         virtual public TargetType Target { get; protected set; }
 
+        public List<UnitSkill> RequireSkills { get { return m_Data.m_RequireSkills; } }
         public List<RCG_CardEffect> m_CardEffects = new List<RCG_CardEffect>();
         public CardType CardType { get { return m_Data.m_CardType; } set { m_Data.m_CardType = value; } }
         public TargetType TargetType { get { return m_Data.m_TargetType; } set { m_Data.m_TargetType = value; } }
         [SerializeField] protected CardData m_Data;
+        //protected HashSet<UnitSkill> m_RequireSkillSets = new HashSet<UnitSkill>();
         public RCG_CardData() {
 
         }
         public RCG_CardData(string iJson) {
+            Debug.LogWarning("iJson:" + iJson);
             LoadJson(UCL.Core.JsonLib.JsonData.ParseJson(iJson));
         }
         public RCG_CardData(UCL.Core.JsonLib.JsonData iSetting) {
@@ -115,7 +119,7 @@ namespace RCG {
             m_Data = UCL.Core.JsonLib.JsonConvert.LoadDataFromJson<CardData>(iSetting);
             //var test = UCL.Core.JsonLib.JsonConvert.LoadListFromJson<float>(setting["Test"]);
             //Debug.LogWarning("test:" + test.UCL_ToString());
-            Debug.LogWarning("m_Data:" + m_Data.UCL_ToString());
+            //Debug.LogWarning("m_Data:" + m_Data.UCL_ToString());
             m_CardEffects.Clear();
             if(iSetting.Contains("CardEffect")) {
                 LoadCardEffect(iSetting["CardEffect"]);
@@ -123,6 +127,15 @@ namespace RCG {
             if(RCG_CardDataService.ins != null) {
                 m_Icon = RCG_CardDataService.ins.GetCardIcon(m_Data.m_IconName);
             }
+
+        }
+        public bool CheckRequireSkill(HashSet<UnitSkill> iSkills)
+        {
+            foreach (var aSkill in m_Data.m_RequireSkills)
+            {
+                if (!iSkills.Contains(aSkill)) return false;
+            }
+            return true;
         }
         public UCL.Core.JsonLib.JsonData ToJson() {
             UCL.Core.JsonLib.JsonData data = new UCL.Core.JsonLib.JsonData();
@@ -141,7 +154,7 @@ namespace RCG {
             //Debug.LogWarning("CardEffect:" + card_effect.ToJson());
             for(int i = 0; i < card_effect.Count; i++) {
                 var effect_data = card_effect[i];
-                Debug.LogWarning("effect_data:" + effect_data.ToJson());
+                //Debug.LogWarning("effect_data:" + effect_data.ToJson());
                 if(effect_data.Contains("EffectType")) {
                     var effect = RCG_CardEffectCreator.Create(effect_data["EffectType"].GetString());
                     if(effect != null) {
@@ -180,6 +193,47 @@ namespace RCG {
             }
             if(delete_at >= 0) {
                 m_CardEffects.RemoveAt(delete_at);
+            }
+        }
+        public void DrawRequireSkills()
+        {
+            {
+                GUILayout.BeginHorizontal();
+                UCL.Core.UI.UCL_GUILayout.LabelAutoSize("Skill");
+                string aKey = "AddSkill";
+                UnitSkill aSkill = RCG_CardEditor.GetCardEditTmpData(aKey, UnitSkill.Melee);
+                bool flag = RCG_CardEditor.GetCardEditTmpData(aKey + "_Flag", false);
+                aSkill = UCL.Core.UI.UCL_GUILayout.Popup(aSkill, ref flag);
+                RCG_CardEditor.SetCardEditTmpData(aKey, aSkill);
+                RCG_CardEditor.SetCardEditTmpData(aKey + "_Flag", flag);
+                if (UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Add",16))
+                {
+                    m_Data.m_RequireSkills.Add(aSkill);
+                }
+                GUILayout.EndHorizontal();
+            }
+
+
+            int delete_at = -1;
+            for (int i = 0; i < m_Data.m_RequireSkills.Count; i++)
+            {
+                var aSkill = m_Data.m_RequireSkills[i];
+
+                using (var scope = new GUILayout.VerticalScope("box"))
+                {
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label(aSkill.ToString());
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("Delete"))
+                    {
+                        delete_at = i;
+                    }
+                    GUILayout.EndHorizontal();
+                }
+            }
+            if (delete_at >= 0)
+            {
+                m_Data.m_RequireSkills.RemoveAt(delete_at);
             }
         }
         #endregion

@@ -4,6 +4,10 @@
 	"m_CardName":"Attack02",
 	"m_IconName":"02.png",
 	"m_Cost":2,
+	"m_RequireSkills":
+	[
+		"Melee"
+	],
 	"CardEffect":
 	[
 		{

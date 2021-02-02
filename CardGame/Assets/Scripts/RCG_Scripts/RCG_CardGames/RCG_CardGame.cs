@@ -13,6 +13,13 @@ namespace RCG {
             m_Player.Init();
             Debug.LogWarning("Application.systemLanguage:" + Application.systemLanguage.ToString());
         }
+        /// <summary>
+        /// 回合開始初始化
+        /// </summary>
+        public void TurnInit()
+        {
+            m_Player.TurnInit();
+        }
         virtual public void EnterBattle() {
             if(m_Entered) {
                 Debug.LogError("EnterBattle() Fail!! Already Entered!!");
@@ -34,9 +41,6 @@ namespace RCG {
         }
         public void EnemyEndTurn() {
 
-        }
-        public void PlayerEndTurn() {
-            m_Player.EndTurn();
         }
         private void Update() {
             //Debug.LogWarning("Update()");

@@ -204,8 +204,10 @@ namespace RCG {
                     SetCardEditTmpData(aFieldName, flag);
                     GUILayout.EndHorizontal();
                 }
-                //TargetType
                 {
+                    card_data.DrawRequireSkills();
+                }
+                {//Draw Icon
                     bool flag = GetCardEditTmpData("CardIconPath", false);
                     int index = m_CardIconPaths.FindIndex(a => a == card_data.IconName);
                     GUILayout.BeginHorizontal();

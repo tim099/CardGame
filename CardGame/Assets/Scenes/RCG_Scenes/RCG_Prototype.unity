@@ -737,11 +737,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RCG_BattleManager
       objectReference: {fileID: 0}
-    - target: {fileID: 820961799216540621, guid: fbb2882cfdbb7d74a937fc43498626e9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 820961799216540622, guid: fbb2882cfdbb7d74a937fc43498626e9,
         type: 3}
       propertyPath: m_LocalPosition.x

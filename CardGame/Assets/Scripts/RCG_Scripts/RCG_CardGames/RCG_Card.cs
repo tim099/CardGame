@@ -31,6 +31,7 @@ namespace RCG {
             DrawCardAnime,//抽牌演出中
             TriggerCardAnime,//出牌演出中
             Player,//玩家行動中
+            NoSkill,//腳色技能不符合
         }
         /// <summary>
         /// Blocking狀態下無法出牌 選擇
@@ -104,6 +105,14 @@ namespace RCG {
             } else {
                 UnBlockSelection(BlockingStatus.Cost);
             }
+            if(RCG_BattleField.ins.ActiveUnit == null || !m_Data.CheckRequireSkill(RCG_BattleField.ins.ActiveUnit.m_SkillSets))
+            {
+                BlockSelection(BlockingStatus.NoSkill);
+            }
+            else
+            {
+                UnBlockSelection(BlockingStatus.NoSkill);
+            }
         }
         /// <summary>
         /// Avaliable Cards
@@ -163,18 +172,17 @@ namespace RCG {
             m_Data = _Data;
             m_CardDisplayer.Init(m_Data);
             m_TB_Tweener.Kill();
-            if(m_Data != null) {
-                m_CardPanel.transform.position = transform.position;
+            m_CardPanel.transform.position = transform.position;
+            if (m_Data != null) {
                 m_CardPanel.SetActive(true);
             } else {
-                m_CardPanel.transform.position = transform.position;
                 m_CardPanel.SetActive(false);
             }
             m_Used = false;
             UpdateCardStatus();
         }
         virtual public void BlockSelection(BlockingStatus iBlock, bool iActiveBlockSelectionObject = true) {
-            Debug.LogWarning("BlockSelection");
+            //Debug.LogWarning("BlockSelection");
             if (IsSelected) Deselect();
             //if(IsSelected) p_Player.ClearSelectedCard();//Deselect
             m_BlockSelectionObject.SetActive(iActiveBlockSelectionObject);

@@ -81,8 +81,6 @@ namespace RCG {
             //    m_Deck.Add(set.m_Settings[i].CreateCard());
             //}
             m_Deck.Shuffle();
-
-            TurnInit();
         }
         /// <summary>
         /// 測試用 強制使用卡牌
@@ -194,9 +192,6 @@ namespace RCG {
             int space = CardSpace;
             if(m_DrawCardCount > space) m_DrawCardCount = space;
         }
-        public void EndTurn() {
-            ClearSelectedCard();
-        }
         public bool AlterCost(int iAlter) {
             if(m_Cost + iAlter < 0) return false;
             SetCost(m_Cost + iAlter);
@@ -217,6 +212,14 @@ namespace RCG {
                 }
             }
         }
+        /// <summary>
+        /// 玩家行動結束
+        /// </summary>
+        public void TurnEnd()
+        {
+            ClearSelectedCard();
+            RCG_BattleManager.ins.PlayerTurnEnd();
+        }
         public void TurnInit() {
             if(m_Blocking) return;
             SetSelectedCard(null);
@@ -231,6 +234,13 @@ namespace RCG {
                 if(data != null) card.DrawCardAnime(m_DrawCardPos.position, null);
             }
             SetCost(TurnInitCost);
+        }
+        /// <summary>
+        /// 更新卡牌資訊 包含判斷玩家費用是否足夠 技能是否符合等...
+        /// </summary>
+        virtual public void UpdateCardStatus()
+        {
+            m_CardPosController.UpdateCardStatus();
         }
         public void StartBlocking() {
             if(m_Blocking) {

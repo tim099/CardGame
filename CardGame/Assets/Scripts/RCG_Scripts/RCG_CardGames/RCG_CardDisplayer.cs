@@ -21,6 +21,7 @@ namespace RCG
         public Text m_DescriptionText = null;
         public Text m_CostText = null;
         public UCL_OnPointerEvent m_OnPointerEvent = null;
+        public List<Image> m_RequireSkillImages = new List<Image>();
         protected RCG_CardData m_Data;
         protected bool m_Selected = false;
         protected bool m_BlockSelection = false;
@@ -34,6 +35,20 @@ namespace RCG
                 int cost = m_Data.Cost;
                 if(cost < 0) cost = 0;
                 m_CostText.SetText(cost);
+                var aRequireSkill = m_Data.RequireSkills;
+                for (int i = 0; i < m_RequireSkillImages.Count; i++)
+                {
+                    var aImg = m_RequireSkillImages[i];
+                    if (i < aRequireSkill.Count)
+                    {
+                        aImg.gameObject.SetActive(true);
+                        aImg.sprite = RCG_CardDataService.ins.GetUnitSkillSprite(aRequireSkill[i]);
+                    }
+                    else
+                    {
+                        aImg.gameObject.SetActive(false);
+                    }
+                }
                 //HideDescription();
                 ShowDescription();
             } else {

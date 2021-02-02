@@ -5,14 +5,28 @@ using UnityEngine.UI;
 using UCL.Core.UI;
 
 namespace RCG {
+    /// <summary>
+    /// 角色技能組 決定能使用的卡牌
+    /// </summary>
+    public enum UnitSkill
+    {
+        /// <summary>
+        /// 基礎魔法
+        /// </summary>
+        Magic = 0,
+
+        /// <summary>
+        /// 基礎弓箭技能
+        /// </summary>
+        Archery,
+
+        /// <summary>
+        /// 基礎近戰
+        /// </summary>
+        Melee,
+    }
     [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_Unit : MonoBehaviour {
-        [SerializeField] protected int m_MaxHp = 0;
-        protected int m_Hp = 0;
-        public bool  m_is_dead = false;
-        private Queue<RCG_UnitAction> m_action_queue;
-        private RCG_UnitAction m_action = null;
-
         public int Hp {
             get{return m_Hp;}
             set{
@@ -27,12 +41,37 @@ namespace RCG {
                 m_unit_HUD.UpdateHUD();
             }
         }
+        public bool IsEnemy
+        {
+            get; protected set;
+        }
+        public bool m_is_dead = false;
+        public HashSet<UnitSkill> m_SkillSets = new HashSet<UnitSkill>();
+        public List<UnitSkill> m_Skills = new List<UnitSkill>();
         public List<RCG_Status> m_status_list;
+        public Transform m_UnitDisplay = null;
+
+        [SerializeField] protected int m_MaxHp = 0;
+        [SerializeField] protected RCG_UnitUI m_UnitUI = null;
+        protected int m_Hp = 0;
+
+        private Queue<RCG_UnitAction> m_action_queue;
+        private RCG_UnitAction m_action = null;
         private RCG_UnitHUD m_unit_HUD;
 
-        virtual public void Init()
+        virtual public void Init(bool _IsEnemy)
         {
             Hp = MaxHp;
+            IsEnemy = _IsEnemy;
+            if (IsEnemy)
+            {
+                m_UnitDisplay.rotation = Quaternion.Euler(0, 180, 0);
+            }
+            m_UnitUI.Init();
+            foreach(var aSkill in m_Skills)
+            {
+                m_SkillSets.Add(aSkill);
+            }
         }
         private void Awake() {
             m_action = null;
@@ -41,7 +80,14 @@ namespace RCG {
                 //QWQ
             }
         }
-
+        virtual public void SelectUnit()
+        {
+            m_UnitUI.m_SelectedItem.SetActive(true);
+        }
+        virtual public void DeselectUnit()
+        {
+            m_UnitUI.m_SelectedItem.SetActive(false);
+        }
         public int RestoreHP(int amount){
             Hp += amount;
             return 0;

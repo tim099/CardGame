@@ -5,9 +5,9 @@ using UnityEngine;
 namespace RCG
 {
     /// <summary>
-    /// 怪物站位
+    /// 單位站位
     /// </summary>
-    public enum MonsterPos
+    public enum UnitPos
     {
         Front = 0,//前排
         Back,//後排
@@ -37,6 +37,17 @@ namespace RCG
             foreach (var aPos in m_BackPositions)
             {
                 aPos.Init();
+            }
+        }
+        public void SelectPlayer(HashSet<RCG_Unit> iActivatedPlayer)
+        {
+            foreach (var aPos in m_FrontPositions)
+            {
+                aPos.ShowSelection(!iActivatedPlayer.Contains(aPos.m_Unit));
+            }
+            foreach (var aPos in m_BackPositions)
+            {
+                aPos.ShowSelection(!iActivatedPlayer.Contains(aPos.m_Unit));
             }
         }
         public void SetAllSelection(bool iSelection)
@@ -69,9 +80,9 @@ namespace RCG
         /// </summary>
         /// <param name="iPosition"></param>
         /// <param name="iUnit"></param>
-        virtual public void SetUnit(MonsterPos iMonsterPos, int iPosition, RCG_Unit iUnit)
+        virtual public void SetUnit(UnitPos iMonsterPos, int iPosition, RCG_Unit iUnit)
         {
-            var aPositions = iMonsterPos == MonsterPos.Front? m_FrontPositions : m_BackPositions;
+            var aPositions = iMonsterPos == UnitPos.Front? m_FrontPositions : m_BackPositions;
             
             if (iPosition < 0 || iPosition >= aPositions.Count)
             {

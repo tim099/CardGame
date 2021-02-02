@@ -10,18 +10,41 @@ namespace RCG {
     /// </summary>
     public class RCG_CardDataService : UCL.Core.Game.UCL_GameService {
         static public RCG_CardDataService ins = null;
+        [System.Serializable]
+        public struct UnitSkillSprite
+        {
+            public UnitSkill m_UnitSkill;
+            public Sprite m_Sprite;
+        }
         public int CardCount {
             get { return m_CardDatas.Count; }
         }
-
+        public List<UnitSkillSprite> m_UnitSkillSprites = new List<UnitSkillSprite>();
         public List<RCG_CardData> m_CardDatas = new List<RCG_CardData>();
         public Dictionary<string, RCG_CardData> m_CardDataDic = new Dictionary<string, RCG_CardData>();
         public Dictionary<string, Sprite> m_CardSprites = new Dictionary<string, Sprite>();
+        public Dictionary<UnitSkill, Sprite> m_UnitSkillSpriteDic = new Dictionary<UnitSkill, Sprite>();
         //public string
         public override void Init() {
             base.Init();
             ins = this;
+            foreach(var aSkill in m_UnitSkillSprites)
+            {
+                if (!m_UnitSkillSpriteDic.ContainsKey(aSkill.m_UnitSkill))
+                {
+                    m_UnitSkillSpriteDic.Add(aSkill.m_UnitSkill, aSkill.m_Sprite);
+                }
+            }
             LoadCardData();
+        }
+        public Sprite GetUnitSkillSprite(UnitSkill iSkill)
+        {
+            if (!m_UnitSkillSpriteDic.ContainsKey(iSkill))
+            {
+                Debug.LogError("!m_UnitSkillSpriteDic.ContainsKey(" + iSkill + ")");
+                return null;
+            }
+            return m_UnitSkillSpriteDic[iSkill];
         }
         public Sprite GetCardIcon(string iIconName) {
             if(m_CardSprites.ContainsKey(iIconName)) {
