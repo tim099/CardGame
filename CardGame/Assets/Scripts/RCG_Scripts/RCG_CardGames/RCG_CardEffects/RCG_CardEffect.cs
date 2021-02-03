@@ -22,8 +22,9 @@ namespace RCG {
             UCL.Core.JsonLib.JsonConvert.SaveDataToJson(this, data);
             return data;
         }
-        virtual public void TriggerEffect(TriggerEffectData iTriggerEffectData) {
-
+        virtual public void TriggerEffect(TriggerEffectData iTriggerEffectData, Action iEndAction)
+        {
+            iEndAction.Invoke();
         }
         virtual public void DrawFieldData(object obj, int iID) {
             using(var scope = new GUILayout.VerticalScope("box")) {

@@ -59,7 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -698,11 +698,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 8666879625666183874, guid: ec73941152bc08c40868adfc1963f298,
-        type: 3}
-      propertyPath: m_TweenerComponents.Array.data[0].m_Transform.Array.data[1]
-      value: 
-      objectReference: {fileID: 3415500922006632036}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec73941152bc08c40868adfc1963f298, type: 3}
 --- !u!224 &470257154635093750 stripped
@@ -723,9 +718,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dba420b61959354468fbbf6cd7a4f7e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &3415500922006632036 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8036314467235210377, guid: ec73941152bc08c40868adfc1963f298,
-    type: 3}
-  m_PrefabInstance: {fileID: 4675003113782530797}
-  m_PrefabAsset: {fileID: 0}

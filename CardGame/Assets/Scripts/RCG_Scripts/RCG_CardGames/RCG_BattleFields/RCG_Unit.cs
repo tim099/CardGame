@@ -80,6 +80,13 @@ namespace RCG {
                 //QWQ
             }
         }
+        /// <summary>
+        /// 被擊中後的演出
+        /// </summary>
+        virtual public void UnitHit()
+        {
+            m_UnitUI.Hit();
+        }
         virtual public void SelectUnit()
         {
             m_UnitUI.m_SelectedItem.SetActive(true);
