@@ -36,8 +36,12 @@ namespace RCG {
             m_Entered = false;
             gameObject.SetActive(false);
         }
-        public void TriggerCard() {
-            m_Player.TriggerCard();
+        /// <summary>
+        /// 背景按鈕被按下
+        /// </summary>
+        virtual public void BackgroundClick()
+        {
+            m_Player.BackgroundClick();
         }
         public void EnemyEndTurn() {
 

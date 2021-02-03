@@ -83,26 +83,9 @@ namespace RCG {
             m_Deck.Shuffle();
         }
         /// <summary>
-        /// 測試用 強制使用卡牌
+        /// 使用手牌
         /// </summary>
-        public void TriggerCard() {
-            if(m_Blocking) return;
-            if(m_SelectedCard == null) return;
-            //Debug.LogError("TriggerCard()");
-            SetState(PlayerState.TriggerCard);
-            m_TriggerCardPos.gameObject.SetActive(true);
-            m_SelectedCard.TriggerCardAnime(m_TriggerCardPos, delegate () {
-                if(m_SelectedCard == null) {
-                    Debug.LogError("TriggerCard()m_SelectedCard == null");
-                    return;
-                }
-                m_SelectedCard.Deselect();
-                m_SelectedCard.TriggerCardEffect(new TriggerEffectData(this));
-                m_Deck.Used(m_SelectedCard.Data);
-                m_SelectedCard.CardUsed();
-                SetState(PlayerState.Idle);
-            });
-        }
+        /// <param name="iSelectUnits"></param>
         public void TriggerCard(List<RCG_Unit> iSelectUnits)
         {
             if (m_Blocking) return;
@@ -110,7 +93,8 @@ namespace RCG {
             //Debug.LogError("TriggerCard()");
             SetState(PlayerState.TriggerCard);
             m_TriggerCardPos.gameObject.SetActive(true);
-            m_SelectedCard.TriggerCardAnime(m_TriggerCardPos, delegate () {
+            m_SelectedCard.TriggerCardAnime(m_TriggerCardPos, //打出卡牌演出
+            delegate () {
                 if (m_SelectedCard == null)
                 {
                     Debug.LogError("TriggerCard()m_SelectedCard == null");
@@ -119,24 +103,36 @@ namespace RCG {
                 m_SelectedCard.Deselect();
                 var aData = new TriggerEffectData(this);
                 aData.m_Targets = iSelectUnits;
-                m_SelectedCard.TriggerCardEffect(aData);
-                m_Deck.Used(m_SelectedCard.Data);
-                m_SelectedCard.CardUsed();
-                SetState(PlayerState.Idle);
+                IsUsingCard = true;
+                UpdateCardStatus();
+                m_SelectedCard.TriggerCardEffect(aData,
+                delegate (bool iTriggerSuccess) {//卡牌效果觸發完畢
+                    if (iTriggerSuccess)
+                    {
+                        m_Deck.Used(m_SelectedCard.Data);
+                        m_SelectedCard.CardUsed();
+                    }
+                    IsUsingCard = false;
+                    UpdateCardStatus();
+                    SetState(PlayerState.Idle);
+                });
             });
         }
+
         /// <summary>
         /// 選中的卡牌觸發目標
         /// </summary>
         /// <param name="iTargets"></param>
         public void SelectTargets(List<RCG_Unit> iTargets)
         {
-            if(iTargets == null || iTargets.Count == 0)
-            {//None target!!
-                TriggerCard();
-                return;
-            }
             TriggerCard(iTargets);
+        }
+        /// <summary>
+        /// 背景按鈕被按下
+        /// </summary>
+        virtual public void BackgroundClick()
+        {
+            if (m_SelectedCard != null) ClearSelectedCard();
         }
         /// <summary>
         /// 設定選中的手牌
@@ -149,8 +145,8 @@ namespace RCG {
             }
             if(m_SelectedCard == iCard) {
                 Debug.LogWarning("m_SelectedCard == iCard");
-                if(iCard != null && !iCard.IsSelected) {
-                    iCard.Select();
+                if(iCard != null) {
+                    ClearSelectedCard();
                 }
                 return;
             }
@@ -222,7 +218,7 @@ namespace RCG {
         }
         public void TurnInit() {
             if(m_Blocking) return;
-            SetSelectedCard(null);
+            ClearSelectedCard();
             m_DrawCardCount = 0;
             ClearAllHandCard();
 

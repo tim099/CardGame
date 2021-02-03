@@ -5,7 +5,7 @@ using UnityEngine;
 namespace RCG {
     public class RCG_CardPos : MonoBehaviour {
         public bool IsCardActive {
-            get { return !m_Card.IsEmpty; }
+            get { return !m_Card.IsEmpty && !m_Card.m_Used; }
         }
         public Transform m_CardPos = null;
         public RCG_Card m_Card = null;

@@ -24,6 +24,7 @@ namespace RCG
                 m_SelectButton.gameObject.SetActive(false);
                 return;
             }
+            m_SelectButton.GetComponent<RectTransform>().CopyValue(m_Unit.GetComponent<RectTransform>());
             m_SelectButton.gameObject.SetActive(iShow);
         }
         virtual public void SelectAction()

@@ -32,6 +32,7 @@ namespace RCG {
             TriggerCardAnime,//出牌演出中
             Player,//玩家行動中
             NoSkill,//腳色技能不符合
+            UsingCard,//卡牌正在觸發效果中
         }
         /// <summary>
         /// Blocking狀態下無法出牌 選擇
@@ -61,39 +62,30 @@ namespace RCG {
         /// target >=3 is enemy
         /// </summary>
         /// <param name="target"></param>
-        virtual public bool TriggerCardEffect(TriggerEffectData iTriggerEffectData) {
-            //Debug.LogWarning("target:" + target);
-            if(p_Player == null) {
-                Debug.LogError("p_Player == null");
-                return false;
-            }
+        virtual public void TriggerCardEffect(TriggerEffectData iTriggerEffectData, System.Action<bool> iEndAction) {
             if(m_Data == null) {
                 Debug.LogError("m_Data == null");
-                return false;
+                iEndAction.Invoke(false);
+                return;
             }
             //if(!m_Data.TargetCheck(target)) return false;
             if(!p_Player.AlterCost(-m_Data.Cost)) {
+                Debug.LogError("Cost not enough!!");
                 ///費用不足
-                return false;
+                iEndAction.Invoke(false);
+                return;
             }
             m_Used = true;
-            p_Player.IsUsingCard = true;
-            m_Data.TriggerEffect(iTriggerEffectData);
-            try
-            {
-                if (RCG_BattleField.ins != null)
-                {
-                    RCG_BattleField.ins.TriggerCardEffect(0, m_Data);
-                }
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError("Exception:" + e);
-            }
+            m_CardDisplayer.gameObject.SetActive(false);
+            //p_Player.IsUsingCard = true;
+            m_Data.TriggerEffect(iTriggerEffectData, 
+            delegate () {
+                m_CardDisplayer.gameObject.SetActive(true);
+                iEndAction.Invoke(true);
+            });
 
-
-            p_Player.IsUsingCard = false;
-            return true;
+            
+            return;
         }
         /// <summary>
         /// 更新卡牌資訊 包含判斷玩家費用是否足夠等
@@ -113,6 +105,7 @@ namespace RCG {
             {
                 UnBlockSelection(BlockingStatus.NoSkill);
             }
+            SetBlockSelection(BlockingStatus.UsingCard, p_Player.IsUsingCard);
         }
         /// <summary>
         /// Avaliable Cards
@@ -136,7 +129,7 @@ namespace RCG {
                     Debug.Log("SetSelected:" + name);
                     p_Player.SetSelectedCard(this);
                 } else {
-                    Debug.LogError("SetSelectedCard Fail Blocking:" + m_SelectionBlock.UCL_ToString());
+                    Debug.LogWarning("SetSelectedCard Fail Blocking:" + m_SelectionBlock.UCL_ToString());
                     p_Player.ClearSelectedCard();
                 }
             });
@@ -147,7 +140,7 @@ namespace RCG {
             });
             m_CardDisplayer.OnPointerExit(() => {
                 //Debug.LogWarning("m_CardDisplayer.OnPointerExit");
-                if(!m_SelectedObject.activeSelf) {
+                if(!IsSelected) {
                     m_CardDisplayer.DeSelect();
                 }
             });
@@ -157,6 +150,7 @@ namespace RCG {
         }
         virtual public void Select() {
             IsSelected = true;
+            m_CardDisplayer.Select();
             m_SelectedObject.SetActive(true);
         }
         virtual public void Deselect() {
@@ -180,6 +174,22 @@ namespace RCG {
             }
             m_Used = false;
             UpdateCardStatus();
+        }
+        /// <summary>
+        /// BlockSelection if iFlag is true.
+        /// </summary>
+        /// <param name="iBlock"></param>
+        /// <param name="iFlag"></param>
+        virtual public void SetBlockSelection(BlockingStatus iBlock, bool iFlag)
+        {
+            if (iFlag)
+            {
+                BlockSelection(iBlock);
+            }
+            else
+            {
+                UnBlockSelection(iBlock);
+            }
         }
         virtual public void BlockSelection(BlockingStatus iBlock, bool iActiveBlockSelectionObject = true) {
             //Debug.LogWarning("BlockSelection");

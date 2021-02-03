@@ -109,7 +109,7 @@ namespace RCG {
 
         }
         public RCG_CardData(string iJson) {
-            Debug.LogWarning("iJson:" + iJson);
+            //Debug.LogWarning("iJson:" + iJson);
             LoadJson(UCL.Core.JsonLib.JsonData.ParseJson(iJson));
         }
         public RCG_CardData(UCL.Core.JsonLib.JsonData iSetting) {
@@ -240,10 +240,38 @@ namespace RCG {
         virtual public bool TargetCheck(int target) {
             return true;
         }
-        virtual public void TriggerEffect(TriggerEffectData iTriggerEffectData) {
-            foreach(var aCardEffect in m_CardEffects) {
-                aCardEffect.TriggerEffect(iTriggerEffectData);
+        virtual public void TriggerEffect(TriggerEffectData iTriggerEffectData, System.Action iEndAction) {
+            if(m_CardEffects.Count == 0)
+            {
+                iEndAction.Invoke();
+                return;
             }
+            System.Action<int> aTriggerAct = null;
+            //int aTriggerAt = 0;
+            aTriggerAct = delegate (int iTriggerAt)
+            {
+                Debug.LogWarning("iTriggerAt:" + iTriggerAt);
+                var aCardEffect = m_CardEffects[iTriggerAt];
+                try
+                {
+                    aCardEffect.TriggerEffect(iTriggerEffectData, delegate() {
+                        if (iTriggerAt + 1 < m_CardEffects.Count)
+                        {
+                            aTriggerAct.Invoke(iTriggerAt + 1);
+                        }
+                        else
+                        {
+                            iEndAction.Invoke();
+                        }
+                    });
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError("aCardEffect.TriggerEffect Exception:" + e);
+                    iEndAction.Invoke();
+                }
+            };
+            aTriggerAct.Invoke(0);
         }
     }
 }

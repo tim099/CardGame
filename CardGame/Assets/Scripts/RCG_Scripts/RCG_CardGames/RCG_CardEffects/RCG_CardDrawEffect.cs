@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace RCG {
@@ -16,9 +17,10 @@ namespace RCG {
                 return UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("DrawCard_Des", m_DrawCardNum) + System.Environment.NewLine;
             }
         }
-        public override void TriggerEffect(TriggerEffectData iTriggerEffectData) {
-            base.TriggerEffect(iTriggerEffectData);
+        public override void TriggerEffect(TriggerEffectData iTriggerEffectData, Action iEndAction)
+        {
             iTriggerEffectData.p_Player.DrawCard(m_DrawCardNum);
+            iEndAction.Invoke();
         }
     }
 }

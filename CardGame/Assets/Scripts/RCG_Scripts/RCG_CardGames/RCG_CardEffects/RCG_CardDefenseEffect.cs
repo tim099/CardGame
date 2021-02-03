@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace RCG {
@@ -9,9 +10,10 @@ namespace RCG {
                 return UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Def_Des", m_Defense) + System.Environment.NewLine;
             }
         }
-        public override void TriggerEffect(TriggerEffectData iTriggerEffectData) {
-            base.TriggerEffect(iTriggerEffectData);
+        public override void TriggerEffect(TriggerEffectData iTriggerEffectData, Action iEndAction)
+        {
 
+            iEndAction.Invoke();
         }
     }
 }

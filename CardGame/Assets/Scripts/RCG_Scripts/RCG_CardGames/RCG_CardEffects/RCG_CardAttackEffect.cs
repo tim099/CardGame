@@ -1,7 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UCL.TweenLib;
 namespace RCG {
     public class RCG_CardAttackEffect : RCG_BattleEffect {
         [System.Serializable]
@@ -30,18 +31,37 @@ namespace RCG {
                 }
             }
         }
-        public override void TriggerEffect(TriggerEffectData iTriggerEffectData)
+        public override void TriggerEffect(TriggerEffectData iTriggerEffectData, Action iEndAction)
         {
-            base.TriggerEffect(iTriggerEffectData);
             var aTargets = iTriggerEffectData.m_Targets;
             if (aTargets != null)
             {
-                foreach (var aTarget in aTargets)
+                var aSeq = LibTween.Sequence();
+                for(int i = 0; i < m_AtkTimes; i++)
                 {
-                    aTarget.Hp -= m_Atk * m_AtkTimes;
+                    aSeq.Append(delegate ()
+                    {
+                        foreach (var aTarget in aTargets)
+                        {
+                            aTarget.UnitHit();
+                            aTarget.Hp -= m_Atk;
+                        }
+                    });
+                    var aTweener = LibTween.Tweener(0.3f);//aSeq.AppendInterval(0.8f);
+                    aSeq.Append(aTweener);
+                    foreach (var aTarget in aTargets)
+                    {
+                        aTweener.AddComponent(aTarget.transform.TC_LocalShake(30, 20, true));
+                    }
+                    aSeq.AppendInterval(0.5f);
                 }
+                aSeq.OnComplete(iEndAction);
+                aSeq.Start();
             }
-            
+            else//no attack targets!!
+            {
+                iEndAction.Invoke();
+            }
         }
         //override public void LoadJson(UCL.Core.JsonLib.JsonData data) {
         //    UCL.Core.JsonLib.JsonConvert.LoadDataFromJson(this, data);
