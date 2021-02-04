@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a64e5b0e436d4bed9780211ae245f7b, type: 3}
+  m_Name: ABIGAIL_Data
+  m_EditorClassIdentifier: 
+  dataName: ABIGAIL
+  dragonBonesJSON: {fileID: 4900000, guid: 2d71702c371c6e24899aed89e030afc1, type: 3}
+  textureAtlas:
+  - textureAtlasJSON: {fileID: 4900000, guid: 95b3c0c1c79e534439225a82f4d7f78d, type: 3}
+    texture: {fileID: 2800000, guid: 782dbcada22a173408fce004e5cdf164, type: 3}
+    material: {fileID: 2100000, guid: 703f4cc412be2bc4d8db3da4a765eb42, type: 2}
+    uiMaterial: {fileID: 2100000, guid: 79ae3e47d5290b344a23fc2abe2669af, type: 2}

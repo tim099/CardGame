@@ -26,17 +26,17 @@ namespace RCG
         /// </summary>
         public List<RCG_BattlePosition> m_BackPositions = new List<RCG_BattlePosition>();
 
-
+        public Transform m_SelectionRoot = null;
 
         virtual public void Init()
         {
             foreach(var aPos in m_FrontPositions)
             {
-                aPos.Init();
+                aPos.Init(this);
             }
             foreach (var aPos in m_BackPositions)
             {
-                aPos.Init();
+                aPos.Init(this);
             }
         }
         public void SelectPlayer(HashSet<RCG_Unit> iActivatedPlayer)

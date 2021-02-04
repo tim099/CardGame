@@ -16,6 +16,12 @@ MonoBehaviour:
   m_TargetDirectory: Assets/Resources/PrefabsRes/Monsters
   m_FileExtension: prefab
   m_FileInfos:
+  - m_FileName: Abigail
+    m_FolderPath: 
+    m_Extension: prefab
+  - m_FileName: Archer
+    m_FolderPath: 
+    m_Extension: prefab
   - m_FileName: Knight
     m_FolderPath: 
     m_Extension: prefab

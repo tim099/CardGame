@@ -28,10 +28,10 @@ namespace RCG {
     [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_Unit : MonoBehaviour {
         public int Hp {
-            get{return m_Hp;}
-            set{
+            get { return m_Hp; }
+            protected set
+            {
                 m_Hp = value;
-                m_unit_HUD.UpdateHUD();
             }
         }
         public int MaxHp {
@@ -45,7 +45,11 @@ namespace RCG {
         {
             get; protected set;
         }
-        public bool m_is_dead = false;
+        public bool IsDead
+        {
+            get { return m_is_dead; }
+        }
+        protected bool m_is_dead = false;
         public HashSet<UnitSkill> m_SkillSets = new HashSet<UnitSkill>();
         public List<UnitSkill> m_Skills = new List<UnitSkill>();
         public List<RCG_Status> m_status_list;
@@ -54,14 +58,13 @@ namespace RCG {
         [SerializeField] protected int m_MaxHp = 0;
         [SerializeField] protected RCG_UnitUI m_UnitUI = null;
         protected int m_Hp = 0;
-
         private Queue<RCG_UnitAction> m_action_queue;
         private RCG_UnitAction m_action = null;
         private RCG_UnitHUD m_unit_HUD;
 
         virtual public void Init(bool _IsEnemy)
         {
-            Hp = MaxHp;
+            SetHp(MaxHp);
             IsEnemy = _IsEnemy;
             if (IsEnemy)
             {
@@ -81,10 +84,11 @@ namespace RCG {
             }
         }
         /// <summary>
-        /// 被擊中後的演出
+        /// 單位被攻擊
         /// </summary>
-        virtual public void UnitHit()
+        virtual public void UnitHit(int iDamage)
         {
+            DamageHP(iDamage);
             m_UnitUI.Hit();
         }
         virtual public void SelectUnit()
@@ -95,14 +99,28 @@ namespace RCG {
         {
             m_UnitUI.m_SelectedItem.SetActive(false);
         }
+        /// <summary>
+        /// 直接設定HP(不演出HP變化)
+        /// </summary>
+        /// <param name="amount"></param>
+        public void SetHp(int amount)
+        {
+            Hp = amount;
+            m_unit_HUD.UpdateHUD();
+        }
         public int RestoreHP(int amount){
             Hp += amount;
+            if (Hp > MaxHp) Hp = MaxHp;
+            m_unit_HUD.UpdateHp();
             return 0;
         }
 
         public int DamageHP(int amount){
             Hp -= amount;
-            if(Hp <= 0){
+            if (Hp < 0) Hp = 0;
+
+            m_unit_HUD.UpdateHp();
+            if (Hp <= 0){
                 Die();
             }
             return 0;
@@ -136,8 +154,8 @@ namespace RCG {
         public void TakeAction(){
             m_action.TakeAction(this);
             if(m_action.m_type == UnitActionType.Die){
-                gameObject.GetComponent<UCL_RectTransformCollider>().enabled = false;
-                gameObject.GetComponent<Outline>().enabled = false;
+                var aOutline = gameObject.GetComponent<Outline>();
+                if(aOutline != null) aOutline.enabled = false;
             }
         }
 
@@ -158,7 +176,8 @@ namespace RCG {
             else{
                 m_action.m_duration -= Time.deltaTime;
                 if(m_action.m_type == UnitActionType.Die){
-                    gameObject.GetComponent<UCL_Image>().color = new Color(1, 1, 1, (float)m_action.m_duration/1.1F);
+                    var aImg = gameObject.GetComponent<UCL_Image>();
+                    if (aImg != null) aImg.color = new Color(1, 1, 1, (float)m_action.m_duration/1.1F);
                     foreach (Image img in gameObject.GetComponentsInChildren<Image>())
                     {
                         img.color = new Color(1, 1, 1, (float)m_action.m_duration/1.1F);

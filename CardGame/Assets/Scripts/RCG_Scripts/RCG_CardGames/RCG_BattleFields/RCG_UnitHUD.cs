@@ -24,7 +24,10 @@ namespace RCG {
                 m_hp_bar = gameObject.GetComponentInChildren<RCG_UI_HPbar>();
             }
         }
-
+        public void UpdateHp()
+        {
+            m_hp_bar.UpdateHp();
+        }
         public void UpdateHUD(){
             m_hp_bar.UpdateHUD();
         }
