@@ -102,9 +102,8 @@ namespace RCG {
             CreateMonsterAt(UnitPos.Back, 1, "Archer", true);
             CreateMonsterAt(UnitPos.Back, 2, "Knight", true);
 
-            CreateMonsterAt(UnitPos.Front, 0, "Abigail", false);
-            CreateMonsterAt(UnitPos.Front, 2, "Knight", false);
-            CreateMonsterAt(UnitPos.Back, 1, "Archer", false);
+            CreateCharacters();
+            
             //SetSelectMode(TargetType.Close);
         }
         /// <summary>
@@ -282,6 +281,24 @@ namespace RCG {
 
         public void CreateUnits() {
 
+        }
+
+        public void CreateCharacters()
+        {
+            int count_front = 0;
+            int count_back = 0;
+            foreach (var character_data in RCG_DataService.ins.m_CharacterDatas)
+            {
+                if(character_data.m_battle_position == UnitPos.Front)
+                {
+                    CreateMonsterAt(UnitPos.Front, count_front++, character_data.m_character_name, false);
+                }
+                else
+                {
+                    CreateMonsterAt(UnitPos.Back, count_back++, character_data.m_character_name, false);
+                }
+                
+            }
         }
 
 
