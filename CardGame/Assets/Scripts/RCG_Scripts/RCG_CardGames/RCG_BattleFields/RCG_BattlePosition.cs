@@ -12,8 +12,11 @@ namespace RCG
         public RCG_Unit m_Unit = null;
         public Transform m_UnitPos = null;
         public Button m_SelectButton = null;
-        virtual public void Init()
+        protected RCG_BattlePositionSetting p_BattlePositionSetting = null;
+        virtual public void Init(RCG_BattlePositionSetting iBattlePositionSetting)
         {
+            p_BattlePositionSetting = iBattlePositionSetting;
+            m_SelectButton.transform.SetParent(iBattlePositionSetting.m_SelectionRoot);
             m_SelectButton.gameObject.SetActive(false);
             m_SelectButton.onClick.AddListener(SelectAction);
         }

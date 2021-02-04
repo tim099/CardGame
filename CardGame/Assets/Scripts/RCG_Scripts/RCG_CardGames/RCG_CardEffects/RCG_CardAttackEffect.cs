@@ -14,8 +14,14 @@ namespace RCG {
             Normal = 0,
             Magic,
         }
+        public enum AttackRange
+        {
+            Front = 0,//前排
+            Back,//後排
+            All,//全體
+        }
         public int m_Atk = 0;
-        public int m_AtkRange = 0;
+        public AttackRange m_AttackRange = AttackRange.All;
         public int m_AtkTimes = 1;
         public AttackType m_AttackType = AttackType.Normal;
         //public AttackData m_AttackData;
@@ -24,10 +30,11 @@ namespace RCG {
         }
         override public string Description {
             get {
-                if(m_AtkTimes > 1) {
-                    return UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Attack_Des", m_Atk, m_AtkTimes, m_AtkRange) + "\n";
+                string aAttackRangeDes = UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("AttackRange_" + m_AttackRange.ToString());
+                if (m_AtkTimes > 1) {
+                    return UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Attack_Des", m_Atk, m_AtkTimes, aAttackRangeDes) + "\n";
                 } else {
-                    return UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Attack_DesSingle", m_Atk, m_AtkRange) + "\n";
+                    return UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Attack_DesSingle", m_Atk, aAttackRangeDes) + "\n";
                 }
             }
         }
@@ -43,17 +50,22 @@ namespace RCG {
                     {
                         foreach (var aTarget in aTargets)
                         {
-                            aTarget.UnitHit();
-                            aTarget.Hp -= m_Atk;
+                            if (!aTarget.IsDead)
+                            {
+                                aTarget.UnitHit(m_Atk);
+                            }
                         }
                     });
-                    var aTweener = LibTween.Tweener(0.3f);//aSeq.AppendInterval(0.8f);
+                    var aTweener = LibTween.Tweener(0.2f);//aSeq.AppendInterval(0.8f);
                     aSeq.Append(aTweener);
                     foreach (var aTarget in aTargets)
                     {
-                        aTweener.AddComponent(aTarget.transform.TC_LocalShake(30, 20, true));
+                        if (!aTarget.IsDead)
+                        {
+                            aTweener.AddComponent(aTarget.transform.TC_LocalShake(35, 20, true));
+                        }
                     }
-                    aSeq.AppendInterval(0.5f);
+                    aSeq.AppendInterval(0.4f);
                 }
                 aSeq.OnComplete(iEndAction);
                 aSeq.Start();

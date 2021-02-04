@@ -98,11 +98,11 @@ namespace RCG {
             ActiveUnit = null;
             m_ActivatedUnit.Clear();
 
-            CreateMonsterAt(UnitPos.Front, 1, "Knight", true);
+            CreateMonsterAt(UnitPos.Front, 1, "Abigail", true);
             CreateMonsterAt(UnitPos.Back, 1, "Archer", true);
             CreateMonsterAt(UnitPos.Back, 2, "Knight", true);
 
-            CreateMonsterAt(UnitPos.Front, 0, "Knight", false);
+            CreateMonsterAt(UnitPos.Front, 0, "Abigail", false);
             CreateMonsterAt(UnitPos.Front, 2, "Knight", false);
             CreateMonsterAt(UnitPos.Back, 1, "Archer", false);
             //SetSelectMode(TargetType.Close);

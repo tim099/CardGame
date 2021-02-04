@@ -34,6 +34,7 @@ namespace RCG {
         public List<RCG_CardBeginSet> m_BeginSets = null;
         
         public int m_DrawCardCount = 0;
+        public GameObject m_CostUpEffect = null;
         public Transform m_DrawCardPos = null;//抽牌位置
         public Transform m_TriggerCardPos = null;//出牌目標位置
         public Transform m_CardsRoot = null;
@@ -107,12 +108,14 @@ namespace RCG {
                 UpdateCardStatus();
                 m_SelectedCard.TriggerCardEffect(aData,
                 delegate (bool iTriggerSuccess) {//卡牌效果觸發完畢
-                    if (iTriggerSuccess)
+                    if (!iTriggerSuccess)
                     {
-                        m_Deck.Used(m_SelectedCard.Data);
-                        m_SelectedCard.CardUsed();
+                        Debug.LogError("!iTriggerSuccess");
                     }
+                    m_Deck.Used(m_SelectedCard.Data);
                     IsUsingCard = false;
+                    m_SelectedCard.CardUsed();
+
                     UpdateCardStatus();
                     SetState(PlayerState.Idle);
                 });
@@ -172,6 +175,7 @@ namespace RCG {
         }
         public void ClearSelectedCard()
         {
+            if (IsUsingCard) return;
             //Debug.LogError("ClearSelectedCard()");
             if (m_SelectedCard != null)
             {
@@ -190,6 +194,11 @@ namespace RCG {
         }
         public bool AlterCost(int iAlter) {
             if(m_Cost + iAlter < 0) return false;
+            if (iAlter > 0)
+            {
+                m_CostUpEffect.SetActive(false);
+                m_CostUpEffect.SetActive(true);
+            }
             SetCost(m_Cost + iAlter);
             return true;
         }

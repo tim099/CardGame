@@ -21,6 +21,9 @@ namespace RCG
         public string m_LoadMapName = "";
         protected override void Init() {
             ins = this;
+#if UNITY_EDITOR
+            RefreshGamedata();
+#endif
             base.Init();
         }
         //void OnApplicationPause(bool pauseStatus)
