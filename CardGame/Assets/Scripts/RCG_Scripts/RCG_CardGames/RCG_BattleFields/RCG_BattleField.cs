@@ -55,7 +55,7 @@ namespace RCG {
         /// <returns></returns>
         public RCG_Unit CreateMonsterAt(UnitPos iUnitPos, int iPosition, string iUnitName, bool iIsMonster)
         {
-            RCG_Unit aUnit = CreateUnit(iUnitName);
+            RCG_Unit aUnit = CreateUnit(iUnitName, iIsMonster);
             if(aUnit == null)
             {
                 return null;
@@ -73,9 +73,9 @@ namespace RCG {
 
             return aUnit;
         }
-        public RCG_Unit CreateUnit(string aUnitName)
+        public RCG_Unit CreateUnit(string aUnitName, bool iIsMonster = true)
         {
-            RCG_Unit aUnit = Resources.Load<RCG_Unit>(PathConst.MonsterResource + "/" + aUnitName);
+            RCG_Unit aUnit = Resources.Load<RCG_Unit>((iIsMonster? PathConst.MonsterResource: PathConst.CharacterResource) + "/" + aUnitName);
             if (aUnit == null)
             {
                 Debug.LogError("CreateMonster Fail:" + aUnitName + ", Not Exist!!");
@@ -287,17 +287,19 @@ namespace RCG {
         {
             int count_front = 0;
             int count_back = 0;
+            RCG_Unit unit;
             foreach (var character_data in RCG_DataService.ins.m_CharacterDatas)
             {
                 if(character_data.m_battle_position == UnitPos.Front)
                 {
-                    CreateMonsterAt(UnitPos.Front, count_front++, character_data.m_character_name, false);
+                    unit = CreateMonsterAt(UnitPos.Front, count_front++, character_data.m_character_name, false);
                 }
                 else
                 {
-                    CreateMonsterAt(UnitPos.Back, count_back++, character_data.m_character_name, false);
+                    unit = CreateMonsterAt(UnitPos.Back, count_back++, character_data.m_character_name, false);
                 }
-                
+                unit.MaxHp = character_data.m_max_hp;
+                unit.SetHp(character_data.m_hp);
             }
         }
 
