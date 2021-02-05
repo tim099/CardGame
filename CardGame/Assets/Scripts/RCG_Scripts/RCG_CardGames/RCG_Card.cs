@@ -17,6 +17,10 @@ namespace RCG {
         }
         public RCG_Player p_Player = null;
         public List<RCG_Unit> m_Targets = null;
+        /// <summary>
+        /// 使用這張卡的單位
+        /// </summary>
+        public RCG_Unit m_PlayerUnit = null;
     }
 
     /// <summary>

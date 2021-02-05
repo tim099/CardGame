@@ -1,8 +1,10 @@
 {
 	"m_CardType":"Buff",
-	"m_CardName":"DrawCard",
+	"m_TargetType":"None",
+	"m_CardName":"Fate",
 	"m_IconName":"glass.png",
 	"m_Cost":1,
+	"m_RequireSkills":null,
 	"CardEffect":
 	[
 		{

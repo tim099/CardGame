@@ -43,8 +43,36 @@ namespace RCG {
             //Init();
         }
 
-
-
+        public List<RCG_Unit> GetAllPlayerUnits()
+        {
+            return m_PlayerBattlePositionSetting.GetAllUnits();
+        }
+        public List<RCG_Unit> GetPlayerFrontUnits()
+        {
+            return m_PlayerBattlePositionSetting.GetFrontUntis();
+        }
+        public List<RCG_Unit> GetPlayerBackUnits()
+        {
+            return m_PlayerBattlePositionSetting.GetBackUntis();
+        }
+        public List<RCG_Unit> GetAllEnemyUnits()
+        {
+            return m_EnemyBattlePositionSetting.GetAllUnits();
+        }
+        public List<RCG_Unit> GetEnemyFrontUnits()
+        {
+            return m_EnemyBattlePositionSetting.GetFrontUntis();
+        }
+        public List<RCG_Unit> GetEnemyBackUnits()
+        {
+            return m_EnemyBattlePositionSetting.GetBackUntis();
+        }
+        public List<RCG_Unit> GetAllUnits()
+        {
+            var aUnits = m_PlayerBattlePositionSetting.GetAllUnits();
+            aUnits.AddRange(m_EnemyBattlePositionSetting.GetAllUnits());
+            return aUnits;
+        }
         /// <summary>
         /// 在指定位置生成單位
         /// </summary>
@@ -132,6 +160,13 @@ namespace RCG {
             }
             switch (m_TargetType)
             {
+                case TargetType.Off:
+                    {
+                        m_SelectNoneButton.gameObject.SetActive(false);
+                        m_PlayerBattlePositionSetting.SetAllSelection(false);
+                        m_EnemyBattlePositionSetting.SetAllSelection(false);
+                        break;
+                    }
                 case TargetType.None:
                     {
                         m_SelectNoneButton.gameObject.SetActive(true);
@@ -156,16 +191,14 @@ namespace RCG {
                 case TargetType.AlliedFront:
                     {
                         m_SelectNoneButton.gameObject.SetActive(false);
-                        m_PlayerBattlePositionSetting.SetFrontSelection(true);
-                        m_PlayerBattlePositionSetting.SetBackSelection(false);
+                        m_PlayerBattlePositionSetting.SelectFront();
                         m_EnemyBattlePositionSetting.SetAllSelection(false);
                         break;
                     }
                 case TargetType.AlliedBack:
                     {
                         m_SelectNoneButton.gameObject.SetActive(false);
-                        m_PlayerBattlePositionSetting.SetFrontSelection(false);
-                        m_PlayerBattlePositionSetting.SetBackSelection(true);
+                        m_PlayerBattlePositionSetting.SelectBack();
                         m_EnemyBattlePositionSetting.SetAllSelection(false);
                         break;
                     }
@@ -180,16 +213,14 @@ namespace RCG {
                     {
                         m_SelectNoneButton.gameObject.SetActive(false);
                         m_PlayerBattlePositionSetting.SetAllSelection(false);
-                        m_EnemyBattlePositionSetting.SetFrontSelection(true);
-                        m_EnemyBattlePositionSetting.SetBackSelection(false);
+                        m_EnemyBattlePositionSetting.SelectFront();
                         break;
                     }
                 case TargetType.EnemyBack:
                     {
                         m_SelectNoneButton.gameObject.SetActive(false);
                         m_PlayerBattlePositionSetting.SetAllSelection(false);
-                        m_EnemyBattlePositionSetting.SetFrontSelection(false);
-                        m_EnemyBattlePositionSetting.SetBackSelection(true);
+                        m_EnemyBattlePositionSetting.SelectBack();
                         break;
                     }
             }

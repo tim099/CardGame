@@ -17,6 +17,28 @@ namespace RCG
     /// </summary>
     public class RCG_BattlePositionSetting : MonoBehaviour
     {
+        virtual public bool IsFrontUnitAlive
+        {
+            get
+            {
+                foreach (var aPos in m_FrontPositions)
+                {
+                    if (aPos.IsAlive) return true;
+                }
+                return false;
+            }
+        }
+        virtual public bool IsBackUnitAlive
+        {
+            get
+            {
+                foreach (var aPos in m_BackPositions)
+                {
+                    if (aPos.IsAlive) return true;
+                }
+                return false;
+            }
+        }
         /// <summary>
         /// 前排站位
         /// </summary>
@@ -39,6 +61,57 @@ namespace RCG
                 aPos.Init(this);
             }
         }
+        public List<RCG_Unit> GetFrontUntis()
+        {
+            List<RCG_Unit> aUnits = new List<RCG_Unit>();
+            if (IsFrontUnitAlive)
+            {
+                foreach (var aPos in m_FrontPositions)
+                {
+                    if(aPos.m_Unit != null) aUnits.Add(aPos.m_Unit);
+                }
+            }
+            else
+            {
+                foreach (var aPos in m_BackPositions)
+                {
+                    if (aPos.m_Unit != null) aUnits.Add(aPos.m_Unit);
+                }
+            }
+            return aUnits;
+        }
+        public List<RCG_Unit> GetBackUntis()
+        {
+            List<RCG_Unit> aUnits = new List<RCG_Unit>();
+            if (IsBackUnitAlive)
+            {
+                foreach (var aPos in m_BackPositions)
+                {
+                    if (aPos.m_Unit != null) aUnits.Add(aPos.m_Unit);
+                }
+            }
+            else
+            {
+                foreach (var aPos in m_FrontPositions)
+                {
+                    if (aPos.m_Unit != null) aUnits.Add(aPos.m_Unit);
+                }
+            }
+            return aUnits;
+        }
+        public List<RCG_Unit> GetAllUnits()
+        {
+            List<RCG_Unit> aUnits = new List<RCG_Unit>();
+            foreach (var aPos in m_BackPositions)
+            {
+                if (aPos.m_Unit != null) aUnits.Add(aPos.m_Unit);
+            }
+            foreach (var aPos in m_FrontPositions)
+            {
+                if (aPos.m_Unit != null) aUnits.Add(aPos.m_Unit);
+            }
+            return aUnits;
+        }
         public void SelectPlayer(HashSet<RCG_Unit> iActivatedPlayer)
         {
             foreach (var aPos in m_FrontPositions)
@@ -59,6 +132,33 @@ namespace RCG
             foreach (var aPos in m_BackPositions)
             {
                 aPos.ShowSelection(iSelection);
+            }
+        }
+        public void SelectFront()
+        {
+            if (IsFrontUnitAlive)
+            {
+                SetFrontSelection(true);
+                SetBackSelection(false);
+            }
+            else
+            {
+                SetFrontSelection(false);
+                SetBackSelection(true);
+            }
+
+        }
+        public void SelectBack()
+        {
+            if (IsBackUnitAlive)
+            {
+                SetFrontSelection(false);
+                SetBackSelection(true);
+            }
+            else
+            {
+                SetFrontSelection(true);
+                SetBackSelection(false);
             }
         }
         public void SetFrontSelection(bool iSelection)

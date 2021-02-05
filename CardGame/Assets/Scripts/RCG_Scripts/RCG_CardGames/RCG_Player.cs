@@ -24,27 +24,25 @@ namespace RCG {
             }
         }
         public bool IsUsingCard { get; set; } = false;
-        public int Cost { get { return m_Cost; } }
+        public int Cost { get { return m_CostUI.Cost; } }
         public const int TurnInitCost = 3;//每回合初始費用
         public const int TurnInitCardNum = 5;//每回合初始手牌
-        public Text m_CostText = null;
         public RCG_Deck m_Deck = null;
         public RCG_Card m_CardTemplate = null;
         public List<RCG_Card> m_Cards = null;
         public List<RCG_CardBeginSet> m_BeginSets = null;
         
         public int m_DrawCardCount = 0;
-        public GameObject m_CostUpEffect = null;
         public Transform m_DrawCardPos = null;//抽牌位置
         public Transform m_TriggerCardPos = null;//出牌目標位置
         public Transform m_CardsRoot = null;
         public RCG_CardPosController m_CardPosController = null;
+        [SerializeField] protected RCG_CostUI m_CostUI = null;
         protected PlayerState m_PlayerState = PlayerState.Idle;
         protected RCG_Card m_SelectedCard = null;
         protected UCL_RectTransformCollider m_Target = null;
         protected bool m_Blocking = false;
         protected bool m_Inited = false;
-        protected int m_Cost = 0;
         [UCL.Core.ATTR.UCL_FunctionButton]
         public void LogDeck() {
             m_Deck.LogDatas();
@@ -74,7 +72,7 @@ namespace RCG {
             }
             m_Deck.Init(this);
             int aCardCount = RCG_CardDataService.ins.CardCount;
-            for(int i = 0; i < 16; i++) {
+            for(int i = 0; i < 22; i++) {
                 m_Deck.Add(RCG_CardDataService.ins.GetCardData(UCL.Core.MathLib.UCL_Random.Instance.Next(aCardCount)));
             }
             //var set = m_BeginSets[UCL.Core.MathLib.UCL_Random.Instance.Next(m_BeginSets.Count)];            
@@ -92,6 +90,7 @@ namespace RCG {
             if (m_Blocking) return;
             if (m_SelectedCard == null) return;
             //Debug.LogError("TriggerCard()");
+            RCG_BattleField.ins.SetSelectMode(TargetType.Off);
             SetState(PlayerState.TriggerCard);
             m_TriggerCardPos.gameObject.SetActive(true);
             m_SelectedCard.TriggerCardAnime(m_TriggerCardPos, //打出卡牌演出
@@ -104,6 +103,7 @@ namespace RCG {
                 m_SelectedCard.Deselect();
                 var aData = new TriggerEffectData(this);
                 aData.m_Targets = iSelectUnits;
+                aData.m_PlayerUnit = RCG_BattleField.ins.ActiveUnit;
                 IsUsingCard = true;
                 UpdateCardStatus();
                 m_SelectedCard.TriggerCardEffect(aData,
@@ -128,7 +128,7 @@ namespace RCG {
         /// <param name="iTargets"></param>
         public void SelectTargets(List<RCG_Unit> iTargets)
         {
-            TriggerCard(iTargets);
+            TriggerCard(iTargets.Clone());
         }
         /// <summary>
         /// 背景按鈕被按下
@@ -193,17 +193,12 @@ namespace RCG {
             if(m_DrawCardCount > space) m_DrawCardCount = space;
         }
         public bool AlterCost(int iAlter) {
-            if(m_Cost + iAlter < 0) return false;
-            if (iAlter > 0)
-            {
-                m_CostUpEffect.SetActive(false);
-                m_CostUpEffect.SetActive(true);
-            }
-            SetCost(m_Cost + iAlter);
+            if(!m_CostUI.AlterCost(iAlter))return false;
+            m_CardPosController.UpdateCardStatus();
             return true;
         }
         public void SetCost(int iCost) {
-            m_Cost = iCost;
+            m_CostUI.SetCost(iCost);
             m_CardPosController.UpdateCardStatus();
         }
         /// <summary>
@@ -291,7 +286,6 @@ namespace RCG {
         private void Update() {
             if(!m_Inited) return;
             m_Target = null;
-            m_CostText.SetText("" + Cost);
             switch(m_PlayerState) {
                 case PlayerState.Idle: {
                         if(m_DrawCardCount > 0) {

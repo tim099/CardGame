@@ -1,0 +1,27 @@
+{
+	"m_CardType":"Attack",
+	"m_TargetType":"None",
+	"m_CardName":" Archery",
+	"m_IconName":"archer.png",
+	"m_Cost":1,
+	"m_RequireSkills":
+	[
+		"Archery",
+		"Magic"
+	],
+	"CardEffect":
+	[
+		{
+			"EffectType":"AttackEffect",
+			"m_Atk":6,
+			"m_AttackRange":"BackEnemyAOE",
+			"m_AtkTimes":4,
+			"m_AttackType":"Normal",
+			"m_VFX":""
+		},
+		{
+			"EffectType":"DrawEffect",
+			"m_DrawCardNum":1
+		}
+	]
+}

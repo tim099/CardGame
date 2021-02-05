@@ -16,14 +16,30 @@ namespace RCG {
         }
         public enum AttackRange
         {
-            Front = 0,//前排
-            Back,//後排
-            All,//全體
+            Front = 0,//前排敵人
+            Back,//後排敵人
+            All,//全體敵人
+
+            FrontEnemyAOE,//前排敵人群攻
+            BackEnemyAOE,//後排敵人群攻
+            AllEnemyAOE,//全體敵人敵人群攻
+
+            FrontAllied,//前排我方
+            BackAllied,//後排我方
+            AllAllied,//我方全體
+
+            FrontAlliedAOE,//前排我方群攻
+            BackAlliedAOE,//後排我方群攻
+            AllAlliedAOE,//我方全體群攻
+
+            AllAOE,//敵我全體群攻
+            Player,//使用者
         }
         public int m_Atk = 0;
         public AttackRange m_AttackRange = AttackRange.All;
         public int m_AtkTimes = 1;
         public AttackType m_AttackType = AttackType.Normal;
+        public string m_VFX = string.Empty;
         //public AttackData m_AttackData;
         override public void OnGUI(int iID) {
             base.OnGUI(iID);
@@ -40,7 +56,55 @@ namespace RCG {
         }
         public override void TriggerEffect(TriggerEffectData iTriggerEffectData, Action iEndAction)
         {
+            if (!string.IsNullOrEmpty(m_VFX))
+            {
+                RCG_VFXManager.ins.CreateVFX(m_VFX);
+            }
             var aTargets = iTriggerEffectData.m_Targets;
+            switch (m_AttackRange)
+            {
+                case AttackRange.FrontEnemyAOE:
+                    {
+                        aTargets = RCG_BattleField.ins.GetEnemyFrontUnits();
+                        break;
+                    }
+                case AttackRange.BackEnemyAOE:
+                    {
+                        aTargets = RCG_BattleField.ins.GetEnemyBackUnits();
+                        break;
+                    }
+                case AttackRange.AllEnemyAOE:
+                    {
+                        aTargets = RCG_BattleField.ins.GetAllEnemyUnits();
+                        break;
+                    }
+                case AttackRange.FrontAlliedAOE:
+                    {
+                        aTargets = RCG_BattleField.ins.GetPlayerFrontUnits();
+                        break;
+                    }
+                case AttackRange.BackAlliedAOE:
+                    {
+                        aTargets = RCG_BattleField.ins.GetPlayerBackUnits();
+                        break;
+                    }
+                case AttackRange.AllAlliedAOE:
+                    {
+                        aTargets = RCG_BattleField.ins.GetAllPlayerUnits();
+                        break;
+                    }
+                case AttackRange.AllAOE:
+                    {
+                        aTargets = RCG_BattleField.ins.GetAllUnits();
+                        break;
+                    }
+                case AttackRange.Player:
+                    {
+                        aTargets = new List<RCG_Unit>() { iTriggerEffectData.m_PlayerUnit };
+                        break;
+                    }
+            }
+            //Debug.LogError("aTargets:" + aTargets.Count);
             if (aTargets != null)
             {
                 var aSeq = LibTween.Sequence();
