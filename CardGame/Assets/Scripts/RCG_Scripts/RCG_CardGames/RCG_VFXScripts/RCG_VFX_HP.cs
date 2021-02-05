@@ -8,6 +8,7 @@ namespace RCG
     public class RCG_VFX_HP : RCG_VFX
     {
         [SerializeField] protected Text m_AlterHPText = null;
+        [SerializeField] protected Transform m_MoveOffset = null;
         protected UCL_Tweener m_Tweener = null;
         protected Color m_Col;
         int m_AlterHP = 0;
@@ -30,7 +31,8 @@ namespace RCG
             m_AlterHPText.text = m_AlterHP.ToString();
             m_Tweener = LibTween.Tweener(0.6f);
             m_Tweener.SetEase(EaseType.OutSin);
-            m_Tweener.AddComponent(transform.TC_Jump(iPos + new Vector3(IsEnemy ? 100 : -100, 0, 0), 1, Vector3.up, 100, 1f));
+            float aOffset = m_MoveOffset.position.x - transform.position.x;
+            m_Tweener.AddComponent(transform.TC_Jump(iPos + new Vector3(IsEnemy ? aOffset : -aOffset, 0, 0), 1, Vector3.up, 100, 1f));
             m_Tweener.AddComponent(transform.TC_Scale(1.5f,1.5f,1f));
             m_Tweener.OnUpdate((y) =>
             {
