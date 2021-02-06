@@ -12,6 +12,7 @@ namespace RCG
     {
 
     }
+    
     /// <summary>
     /// 用來管理遊戲開始後的所有資料
     /// </summary>
@@ -19,9 +20,14 @@ namespace RCG
     {
         static public RCG_DataService ins = null;
         public RCG_DeckData m_DeckData = new RCG_DeckData();
+        public List<RCG_CharacterData> m_CharacterDatas;
         public override void Init() {
             base.Init();
             ins = this;
+
+            //placeholder QWQ
+            m_CharacterDatas.Add(new RCG_CharacterData("Knight"));
+            m_CharacterDatas.Add(new RCG_CharacterData("Archer"));
         }
     }
 }
