@@ -258,7 +258,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.1222159, y: 3.8797839}
+  m_AnchoredPosition: {x: -0.5661896, y: 4.093914}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6070551706161409560
@@ -495,7 +495,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7060529165177037728}
-  m_LocalRotation: {x: 0, y: 0, z: 0.8339722, w: 0.5518064}
+  m_LocalRotation: {x: 0, y: 0, z: 0.748552, w: 0.6630761}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -530,7 +530,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7975762172272083878}
-  m_LocalRotation: {x: 0, y: 0, z: -0.18800627, w: 0.98216784}
+  m_LocalRotation: {x: 0, y: 0, z: -0.06283754, w: 0.99802375}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -539,7 +539,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.72524214, y: 2.2110944}
+  m_AnchoredPosition: {x: -0.2165558, y: 2.4146674}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &8065210629565775675
@@ -630,7 +630,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8087307503510960455}
-  m_LocalRotation: {x: 0, y: 0, z: 0.16176932, w: 0.9868286}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -640,7 +640,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.8325786, y: 4.143473}
+  m_AnchoredPosition: {x: -0.26921287, y: 4.3493085}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &9156623245683729542
@@ -870,6 +870,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 18.7
       objectReference: {fileID: 0}
+    - target: {fileID: 4812096794522457436, guid: ec73941152bc08c40868adfc1963f298,
+        type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: e1a5e5ad741c1f74ca6f149ebae3e53c, type: 3}
     - target: {fileID: 5072815645746660379, guid: ec73941152bc08c40868adfc1963f298,
         type: 3}
       propertyPath: m_LocalPosition.x

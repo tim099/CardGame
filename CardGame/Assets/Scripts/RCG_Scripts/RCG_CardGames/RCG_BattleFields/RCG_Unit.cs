@@ -88,6 +88,8 @@ namespace RCG {
         /// </summary>
         virtual public void UnitHit(int iDamage)
         {
+            var aHPVFX = RCG_VFXManager.ins.CreateVFX<RCG_VFX_HP>();
+            aHPVFX.SetAlterHP(-iDamage, m_UnitDisplay.position, IsEnemy);
             DamageHP(iDamage);
             m_UnitUI.Hit();
         }

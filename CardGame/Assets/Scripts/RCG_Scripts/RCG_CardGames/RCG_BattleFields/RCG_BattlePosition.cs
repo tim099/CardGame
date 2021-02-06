@@ -9,6 +9,14 @@ namespace RCG
     /// </summary>
     public class RCG_BattlePosition : MonoBehaviour
     {
+        virtual public bool IsAlive
+        {
+            get
+            {
+                if (m_Unit == null) return false;
+                return !m_Unit.IsDead;
+            }
+        }
         public RCG_Unit m_Unit = null;
         public Transform m_UnitPos = null;
         public Button m_SelectButton = null;
@@ -20,6 +28,7 @@ namespace RCG
             m_SelectButton.gameObject.SetActive(false);
             m_SelectButton.onClick.AddListener(SelectAction);
         }
+
         virtual public void ShowSelection(bool iShow)
         {
             if (m_Unit == null)

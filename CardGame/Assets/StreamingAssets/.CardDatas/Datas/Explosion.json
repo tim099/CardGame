@@ -1,0 +1,30 @@
+{
+	"m_CardType":"Attack",
+	"m_TargetType":"None",
+	"m_CardName":"Explosion",
+	"m_IconName":"explosion.jpg",
+	"m_Cost":3,
+	"m_RequireSkills":
+	[
+		"Magic"
+	],
+	"CardEffect":
+	[
+		{
+			"EffectType":"AttackEffect",
+			"m_Atk":18,
+			"m_AttackRange":"AllEnemyAOE",
+			"m_AtkTimes":1,
+			"m_AttackType":"Magic",
+			"m_VFX":"VFX_Explosion"
+		},
+		{
+			"EffectType":"AttackEffect",
+			"m_Atk":4,
+			"m_AttackRange":"AllAOE",
+			"m_AtkTimes":3,
+			"m_AttackType":"Magic",
+			"m_VFX":""
+		}
+	]
+}

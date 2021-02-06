@@ -54,6 +54,10 @@ namespace RCG {
         /// 關閉選擇狀態 開放切換玩家腳色
         /// </summary>
         Close,
+        /// <summary>
+        /// 關閉選擇狀態 執行卡牌行動階段
+        /// </summary>
+        Off,
     }
     [System.Serializable]
     public class RCG_CardData {
@@ -78,7 +82,11 @@ namespace RCG {
         }
         public Sprite Icon { get { return m_Icon; } }
         public Sprite m_Icon = null;
-        virtual public string CardName { get { return m_Data.m_CardName; } set { m_Data.m_CardName = value; } }
+        virtual public string CardName { 
+            get { 
+                return UCL.Core.LocalizeLib.UCL_LocalizeManager.Get(m_Data.m_CardName);
+            }
+            set { m_Data.m_CardName = value; } }
         virtual public int Cost { get { return m_Data.m_Cost; } set { m_Data.m_Cost = value; } }
         virtual public string IconName { get { return m_Data.m_IconName; } set { m_Data.m_IconName = value; } }
         virtual public string Description {
