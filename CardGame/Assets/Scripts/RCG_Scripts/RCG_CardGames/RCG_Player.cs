@@ -71,14 +71,19 @@ namespace RCG {
                 return;
             }
             m_Deck.Init(this);
-            int aCardCount = RCG_CardDataService.ins.CardCount;
-            for(int i = 0; i < 22; i++) {
-                m_Deck.Add(RCG_CardDataService.ins.GetCardData(UCL.Core.MathLib.UCL_Random.Instance.Next(aCardCount)));
+            var aDeckData = RCG_DataService.ins.m_DeckData;
+            Debug.LogWarning("aDeckData:" + aDeckData.UCL_ToString());
+            var aCards = aDeckData.GetCardDatas();
+            Debug.LogWarning("aCards:" + aCards.UCL_ToString());
+            foreach (var aCard in aCards)
+            {
+                m_Deck.Add(aCard);
             }
-            //var set = m_BeginSets[UCL.Core.MathLib.UCL_Random.Instance.Next(m_BeginSets.Count)];            
-            //for(int i = 0, len = set.m_Settings.Count; i < len; i++) {
-            //    m_Deck.Add(set.m_Settings[i].CreateCard());
+            //int aCardCount = RCG_CardDataService.ins.CardCount;
+            //for(int i = 0; i < 22; i++) {
+            //    m_Deck.Add(RCG_CardDataService.ins.GetCardData(UCL.Core.MathLib.UCL_Random.Instance.Next(aCardCount)));
             //}
+
             m_Deck.Shuffle();
         }
         /// <summary>
