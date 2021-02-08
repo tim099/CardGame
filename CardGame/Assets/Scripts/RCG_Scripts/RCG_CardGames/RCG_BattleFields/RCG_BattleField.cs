@@ -20,7 +20,8 @@ namespace RCG {
         public Button m_SelectNoneButton = null;
         public UCL.Core.FileLib.UCL_FileInspector m_MonsterFiles = null;
         public List<RCG_Unit> m_SelectedUnits = new List<RCG_Unit>();
-        public List<RCG_Unit> m_Units = new List<RCG_Unit>();
+        public List<RCG_Unit> m_Characters = new List<RCG_Unit>();
+        public List<RCG_Unit> m_Monsters = new List<RCG_Unit>();
         /// <summary>
         /// 已經啟動過的玩家腳色
         /// </summary>
@@ -83,8 +84,17 @@ namespace RCG {
         /// <returns></returns>
         public RCG_Unit CreateMonsterAt(UnitPos iUnitPos, int iPosition, string iUnitName, bool iIsMonster)
         {
-            RCG_Unit aUnit = CreateUnit(iUnitName);
-            if(aUnit == null)
+            RCG_Unit aUnit = CreateUnit(iUnitName, iIsMonster);
+            aUnit.m_UnitPos = iUnitPos;
+            aUnit.m_UnitPosId = iPosition;
+            if (iIsMonster) { 
+                m_Monsters.Add(aUnit);
+                Debug.Log("QWQ : " + m_Monsters.Count);
+            }
+            else { 
+                m_Characters.Add(aUnit);
+            }
+            if (aUnit == null)
             {
                 return null;
             }
@@ -101,16 +111,15 @@ namespace RCG {
 
             return aUnit;
         }
-        public RCG_Unit CreateUnit(string aUnitName)
+        public RCG_Unit CreateUnit(string aUnitName, bool iIsMonster = true)
         {
-            RCG_Unit aUnit = Resources.Load<RCG_Unit>(PathConst.MonsterResource + "/" + aUnitName);
+            RCG_Unit aUnit = Resources.Load<RCG_Unit>((iIsMonster? PathConst.MonsterResource: PathConst.CharacterResource) + "/" + aUnitName);
             if (aUnit == null)
             {
                 Debug.LogError("CreateMonster Fail:" + aUnitName + ", Not Exist!!");
                 return null;
             }
             var aNewUnit = Instantiate(aUnit, transform);
-            m_Units.Add(aNewUnit);
             return aNewUnit;
         }
         /// <summary>
@@ -130,9 +139,8 @@ namespace RCG {
             CreateMonsterAt(UnitPos.Back, 1, "Archer", true);
             CreateMonsterAt(UnitPos.Back, 2, "Knight", true);
 
-            CreateMonsterAt(UnitPos.Front, 0, "Abigail", false);
-            CreateMonsterAt(UnitPos.Front, 2, "Knight", false);
-            CreateMonsterAt(UnitPos.Back, 1, "Archer", false);
+            CreateCharacters();
+            
             //SetSelectMode(TargetType.Close);
         }
         /// <summary>
@@ -241,6 +249,22 @@ namespace RCG {
         public void TurnStart()
         {
             TurnEnd();
+            Debug.Log("Monster QWQ : " + m_Monsters.Count);
+            foreach (RCG_Unit u in m_Monsters)
+            {
+                Debug.Log("Monster QWQ " + u.name);
+                if (u == null)
+                {
+                    continue;
+                }
+                var m = u.gameObject.GetComponent<RCG_Monster>();
+                if (m)
+                {
+                    m.Act();
+                    Debug.Log("Monster action QWQ");
+                }
+                u.EndTurn();
+            }
         }
         /// <summary>
         /// 敵方戰鬥行動結束
@@ -248,7 +272,7 @@ namespace RCG {
         public void TurnEnd()
         {
             Debug.LogError("RCG_BattleField TurnEnd()");
-            foreach (RCG_Unit u in m_Units)
+            foreach (RCG_Unit u in m_Characters)
             {
                 if (u == null)
                 {
@@ -313,6 +337,26 @@ namespace RCG {
 
         public void CreateUnits() {
 
+        }
+
+        public void CreateCharacters()
+        {
+            int count_front = 0;
+            int count_back = 0;
+            RCG_Unit unit;
+            foreach (var character_data in RCG_DataService.ins.m_CharacterDatas)
+            {
+                if(character_data.m_battle_position == UnitPos.Front)
+                {
+                    unit = CreateMonsterAt(UnitPos.Front, count_front++, character_data.m_character_name, false);
+                }
+                else
+                {
+                    unit = CreateMonsterAt(UnitPos.Back, count_back++, character_data.m_character_name, false);
+                }
+                unit.MaxHp = character_data.m_max_hp;
+                unit.SetHp(character_data.m_hp);
+            }
         }
 
 

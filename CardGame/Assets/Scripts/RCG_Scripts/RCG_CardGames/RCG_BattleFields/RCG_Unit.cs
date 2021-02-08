@@ -54,6 +54,8 @@ namespace RCG {
         public List<UnitSkill> m_Skills = new List<UnitSkill>();
         public List<RCG_Status> m_status_list;
         public Transform m_UnitDisplay = null;
+        public UnitPos m_UnitPos = UnitPos.Front;
+        public int m_UnitPosId = 0;
 
         [SerializeField] protected int m_MaxHp = 0;
         [SerializeField] protected RCG_UnitUI m_UnitUI = null;

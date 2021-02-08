@@ -20,6 +20,7 @@ namespace RCG {
         public const string MapResource = PrefabResource + "/" + "Maps";
 
         public const string MonsterResource = PrefabResource + "/" + "Monsters";
+        public const string CharacterResource = PrefabResource + "/" + "Characters";
     }
 }
 
