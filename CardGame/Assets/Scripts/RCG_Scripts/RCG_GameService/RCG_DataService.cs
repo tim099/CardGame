@@ -240,7 +240,7 @@ namespace RCG
         {
             //Init Deck
             m_DeckData = RCG_DeckData.LoadDeckData();
-            Debug.LogWarning("m_DeckData:" + m_DeckData.UCL_ToString());
+            //Debug.LogWarning("m_DeckData:" + m_DeckData.UCL_ToString());
             string aPath = Path.Combine(dir, InfoSaveName);
             if (!File.Exists(aPath))
             {

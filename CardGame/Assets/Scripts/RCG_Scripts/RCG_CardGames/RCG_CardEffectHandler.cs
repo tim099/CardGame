@@ -17,10 +17,6 @@ namespace RCG {
                     }
                 }
             }
-            if(card_data.Defense > 0){
-
-            }
-
         }
 
         public static void TriggerCardEffectOnUnits(List<RCG_Unit> all_units, int target, RCG_CardData card_data){

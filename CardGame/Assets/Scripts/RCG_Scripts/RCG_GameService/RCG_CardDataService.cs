@@ -92,7 +92,7 @@ namespace RCG {
                 string aFileName = UCL.Core.FileLib.Lib.GetFileName(aFile);
                 m_CardDataDic.Add(UCL.Core.FileLib.Lib.RemoveFileExtension(aFileName), aCardData);
             }
-            Debug.LogError("m_CardDataDic:" + m_CardDataDic.UCL_ToString());
+            //Debug.LogError("m_CardDataDic:" + m_CardDataDic.UCL_ToString());
         }
     }
 }

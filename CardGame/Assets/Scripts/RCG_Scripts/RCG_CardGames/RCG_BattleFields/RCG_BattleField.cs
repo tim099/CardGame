@@ -157,7 +157,7 @@ namespace RCG {
         public void SetSelectMode(TargetType iTargetType)
         {
             m_TargetType = iTargetType;
-            Debug.LogWarning("m_TargetType:" + m_TargetType.ToString());
+            //Debug.LogWarning("m_TargetType:" + m_TargetType.ToString());
             m_SelectedUnits.Clear();
             if (m_TargetType == TargetType.Close)
             {
