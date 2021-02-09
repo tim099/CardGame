@@ -203,7 +203,7 @@ namespace RCG {
                     string card_path = UCL.Core.FileLib.Lib.RemoveFileExtension(m_CardDataPaths[i]);
                     GUILayout.BeginHorizontal();
                     GUILayout.FlexibleSpace();
-                    GUILayout.Box(card_path);
+                    GUILayout.Label(card_path);
                     if (UCL.Core.UI.UCL_GUILayout.ButtonAutoSize(">", 18))
                     {
                         aAddCardName = card_path;
@@ -238,8 +238,7 @@ namespace RCG {
                     {
                         aRemoveCardName = card_path;
                     }
-                    GUILayout.Box(card_path+" ");
-                    GUILayout.Box("("+aCard.m_CardCount.ToString()+")");
+                    GUILayout.Label(card_path+ " ("+aCard.m_CardCount.ToString()+")");
                     GUILayout.FlexibleSpace();
                     if (UCL.Core.UI.UCL_GUILayout.ButtonAutoSize(" X ", 18, Color.white, Color.red))
                     {

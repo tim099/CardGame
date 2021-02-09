@@ -50,7 +50,7 @@ namespace RCG
             get
             {
                 int aCount = 0;
-                foreach(var aCard in m_Cards)
+                foreach (var aCard in m_Cards)
                 {
                     aCount += aCard.m_CardCount;
                 }
@@ -84,7 +84,7 @@ namespace RCG
         public List<RCG_CardData> GetCardDatas()
         {
             List<RCG_CardData> aCardDatas = new List<RCG_CardData>();
-            for(int i = 0; i < m_Cards.Count; i++)
+            for (int i = 0; i < m_Cards.Count; i++)
             {
                 var aCard = m_Cards[i];
                 var aCardData = RCG_CardDataService.ins.GetCardData(aCard.m_CardName);
@@ -135,9 +135,9 @@ namespace RCG
         /// <param name="iCardName"></param>
         public void AddCard(string iCardName)
         {
-            foreach(var aCard in m_Cards)
+            foreach (var aCard in m_Cards)
             {
-                if(aCard.m_CardName == iCardName)
+                if (aCard.m_CardName == iCardName)
                 {
                     ++aCard.m_CardCount;
                     return;
@@ -151,14 +151,21 @@ namespace RCG
         public List<CardData> m_Cards = new List<CardData>();
     }
     #endregion
-
+    [System.Serializable]
+    public class RCG_ItemData// : IJsonSerializable
+    { 
+    
+    }
     /// <summary>
     /// 用來管理遊戲開始後的所有資料
     /// </summary>
     public class RCG_DataService : UCL.Core.Game.UCL_GameService
     {
-        const string SaveName = "DataService.txt";
-
+        const string DeckSaveName = "Deck.txt";
+        const string InfoSaveName = "DataService.txt";
+        protected string GameSavePath { get{
+                return Path.Combine(RCG_GameManager.ins.GetGameFolderPath(),"Saves");
+            } }
         static public RCG_DataService ins = null;
         public RCG_DeckData m_DeckData = new RCG_DeckData();
         public List<RCG_CharacterData> m_CharacterDatas;
@@ -180,16 +187,39 @@ namespace RCG
         /// <summary>
         /// 存檔
         /// </summary>
-        public void SaveGame()
+        public void SaveGame(string iSavePath = "Save01")
         {
-
+            var aDir = Path.Combine(GameSavePath, iSavePath);
+            if (!Directory.Exists(aDir))
+            {
+                Directory.CreateDirectory(aDir);
+            }
+            {//Deck
+                string aPath = Path.Combine(aDir, DeckSaveName);
+                m_DeckData.SaveData(aPath);
+                //JsonData aData = UCL.Core.JsonLib.JsonConvert.ObjectToJson(m_DeckData);
+                //File.WriteAllText(aPath, aData.ToJson());
+            }
         }
         /// <summary>
         /// 讀檔
         /// </summary>
-        public void LoadGame()
+        public void LoadGame(string iLoadPath = "Save01")
         {
-
+            var aDir = Path.Combine(GameSavePath, iLoadPath);
+            if (!Directory.Exists(aDir))
+            {
+                Debug.LogError("LoadGame Fail!!!Directory.Exists(" + aDir + ")");
+                return;
+            }
+            {//Deck
+                string aPath = Path.Combine(aDir, DeckSaveName);
+                //string aJson = File.ReadAllText(aPath);
+                //JsonData aData = JsonData.ParseJson(aJson);
+                m_DeckData.LoadData(aPath);
+                //m_DeckData = UCL.Core.JsonLib.JsonConvert.JsonToObject<RCG_DeckData>(aData);
+                
+            }
         }
         /// <summary>
         /// 儲存全局資料(非單局遊戲資料 解鎖 成就等...)
@@ -197,7 +227,7 @@ namespace RCG
         /// <param name="dir"></param>
         public override void Save(string dir)
         {
-            string aPath = Path.Combine(dir, SaveName);
+            string aPath = Path.Combine(dir, InfoSaveName);
             JsonData aData = new JsonData();
             //aData["RCG_DeckData"] = UCL.Core.JsonLib.JsonConvert.ObjectToJson(m_DeckData);
             File.WriteAllText(aPath, aData.ToJson());
@@ -211,7 +241,7 @@ namespace RCG
             //Init Deck
             m_DeckData = RCG_DeckData.LoadDeckData();
             Debug.LogWarning("m_DeckData:" + m_DeckData.UCL_ToString());
-            string aPath = Path.Combine(dir, SaveName);
+            string aPath = Path.Combine(dir, InfoSaveName);
             if (!File.Exists(aPath))
             {
                 return;

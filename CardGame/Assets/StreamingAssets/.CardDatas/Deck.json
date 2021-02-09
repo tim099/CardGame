@@ -3,15 +3,15 @@
 	[
 		{
 			"m_CardName":"Attack02",
-			"m_CardCount":2
+			"m_CardCount":1
 		},
 		{
 			"m_CardName":"DrawCard",
-			"m_CardCount":6
+			"m_CardCount":4
 		},
 		{
 			"m_CardName":"Attack01",
-			"m_CardCount":5
+			"m_CardCount":2
 		},
 		{
 			"m_CardName":"Archery",
@@ -23,7 +23,7 @@
 		},
 		{
 			"m_CardName":"Explosion",
-			"m_CardCount":6
+			"m_CardCount":2
 		}
 	]
 }
