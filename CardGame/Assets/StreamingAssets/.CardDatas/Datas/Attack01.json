@@ -1,6 +1,7 @@
 {
 	"m_CardType":"Attack",
 	"m_TargetType":"EnemyBack",
+	"m_UsedType":"Banish",
 	"m_CardName":"Attack01",
 	"m_IconName":"01.png",
 	"m_Cost":0,
@@ -15,7 +16,8 @@
 			"m_Atk":5,
 			"m_AttackRange":"Back",
 			"m_AtkTimes":2,
-			"m_AttackType":"Magic"
+			"m_AttackType":"Magic",
+			"m_VFX":""
 		}
 	]
 }

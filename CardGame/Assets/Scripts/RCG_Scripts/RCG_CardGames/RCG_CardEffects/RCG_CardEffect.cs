@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-namespace RCG {
+namespace RCG
+{
     public class RCG_CardEffect : UCL.Core.JsonLib.IJsonSerializable {
         virtual public void Init(int iID) {
 
@@ -40,8 +39,20 @@ namespace RCG {
                     if(data == null) {
 
                     } else if(data.IsNumber()) {
-                        var result = UCL.Core.UI.UCL_GUILayout.NumField(dp_name, data);
-                        field.SetValue(obj, result);
+                        string aKey = iID.ToString() + "_" + dp_name;
+                        if (!RCG_CardEditor.IsCardEditTmpDataContainsKey(aKey))
+                        {
+                            RCG_CardEditor.SetCardEditTmpData(aKey, data.ToString());
+                        }
+                        string aNum = RCG_CardEditor.GetCardEditTmpData(aKey, string.Empty);
+                        var aResult = UCL.Core.UI.UCL_GUILayout.TextField(dp_name, (string)aNum);
+                        RCG_CardEditor.SetCardEditTmpData(aKey, aResult);
+                        object res_val;
+                        if (UCL.Core.MathLib.Num.TryParse(aResult, data.GetType(), out res_val)) {
+                            field.SetValue(obj, res_val);
+                        }
+                        //var result = UCL.Core.UI.UCL_GUILayout.NumField(dp_name, data);
+                        //field.SetValue(obj, result);
                     } else if(field.FieldType == typeof(string)) {
                         var result = UCL.Core.UI.UCL_GUILayout.TextField(dp_name, (string)data);
                         field.SetValue(obj, result);

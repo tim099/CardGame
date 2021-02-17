@@ -157,7 +157,7 @@ namespace RCG {
         public void SetSelectMode(TargetType iTargetType)
         {
             m_TargetType = iTargetType;
-            Debug.LogWarning("m_TargetType:" + m_TargetType.ToString());
+            //Debug.LogWarning("m_TargetType:" + m_TargetType.ToString());
             m_SelectedUnits.Clear();
             if (m_TargetType == TargetType.Close)
             {
@@ -271,7 +271,7 @@ namespace RCG {
         /// </summary>
         public void TurnEnd()
         {
-            Debug.LogError("RCG_BattleField TurnEnd()");
+            Debug.LogWarning("RCG_BattleField TurnEnd()");
             foreach (RCG_Unit u in m_Characters)
             {
                 if (u == null)

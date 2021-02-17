@@ -10,19 +10,20 @@ namespace RCG {
         public static RCG_Player ins = null;
         public enum PlayerState {
             Idle = 0,
-            DrawCard,//開始抽牌
-            DrawingCard,//抽牌中
             TriggerCard,//出牌中
+            PlayerActionStart,//玩家行動開始
+            PlayerAction,//玩家行動(受卡牌效果觸發 包含抽牌等)
         }
         /// <summary>
         /// 手牌剩餘空間
         /// </summary>
         public int CardSpace {
             get {
-                if(IsUsingCard) return m_CardPosController.m_MaxCardCount - m_Deck.HandCardCount + 1;
-                return m_CardPosController.m_MaxCardCount - m_Deck.HandCardCount;
+                //if(IsUsingCard) return m_CardPosController.m_MaxCardCount - HandCardCount + 1;
+                return m_CardPosController.m_MaxCardCount - HandCardCount;
             }
         }
+        public int HandCardCount { get { return m_HandCardCount; } }
         public bool IsUsingCard { get; set; } = false;
         public int Cost { get { return m_CostUI.Cost; } }
         public const int TurnInitCost = 3;//每回合初始費用
@@ -37,10 +38,13 @@ namespace RCG {
         public Transform m_TriggerCardPos = null;//出牌目標位置
         public Transform m_CardsRoot = null;
         public RCG_CardPosController m_CardPosController = null;
+
         [SerializeField] protected RCG_CostUI m_CostUI = null;
+        protected List<RCG_PlayerAction> m_PlayerActions = new List<RCG_PlayerAction>();
         protected PlayerState m_PlayerState = PlayerState.Idle;
         protected RCG_Card m_SelectedCard = null;
         protected UCL_RectTransformCollider m_Target = null;
+        protected int m_HandCardCount = 0;
         protected bool m_Blocking = false;
         protected bool m_Inited = false;
         [UCL.Core.ATTR.UCL_FunctionButton]
@@ -71,14 +75,15 @@ namespace RCG {
                 return;
             }
             m_Deck.Init(this);
-            int aCardCount = RCG_CardDataService.ins.CardCount;
-            for(int i = 0; i < 22; i++) {
-                m_Deck.Add(RCG_CardDataService.ins.GetCardData(UCL.Core.MathLib.UCL_Random.Instance.Next(aCardCount)));
+            var aDeckData = RCG_DataService.ins.m_DeckData;
+            //Debug.LogWarning("aDeckData:" + aDeckData.UCL_ToString());
+            var aCards = aDeckData.GetCardDatas();
+            //Debug.LogWarning("aCards:" + aCards.UCL_ToString());
+            foreach (var aCard in aCards)
+            {
+                m_Deck.Add(new RCG_CardBattleData(aCard));
             }
-            //var set = m_BeginSets[UCL.Core.MathLib.UCL_Random.Instance.Next(m_BeginSets.Count)];            
-            //for(int i = 0, len = set.m_Settings.Count; i < len; i++) {
-            //    m_Deck.Add(set.m_Settings[i].CreateCard());
-            //}
+
             m_Deck.Shuffle();
         }
         /// <summary>
@@ -93,6 +98,8 @@ namespace RCG {
             RCG_BattleField.ins.SetSelectMode(TargetType.Off);
             SetState(PlayerState.TriggerCard);
             m_TriggerCardPos.gameObject.SetActive(true);
+            m_SelectedCard.m_Using = true;
+            m_CardPosController.UpdateActiveCardList();
             m_SelectedCard.TriggerCardAnime(m_TriggerCardPos, //打出卡牌演出
             delegate () {
                 if (m_SelectedCard == null)
@@ -105,23 +112,69 @@ namespace RCG {
                 aData.m_Targets = iSelectUnits;
                 aData.m_PlayerUnit = RCG_BattleField.ins.ActiveUnit;
                 IsUsingCard = true;
+                --m_HandCardCount;//卡牌已觸發 手牌-1
                 UpdateCardStatus();
                 m_SelectedCard.TriggerCardEffect(aData,
                 delegate (bool iTriggerSuccess) {//卡牌效果觸發完畢
                     if (!iTriggerSuccess)
                     {
-                        Debug.LogError("!iTriggerSuccess");
+                        Debug.LogError("Trigger Fail!!");
                     }
-                    m_Deck.Used(m_SelectedCard.Data);
-                    IsUsingCard = false;
                     m_SelectedCard.CardUsed();
-
-                    UpdateCardStatus();
-                    SetState(PlayerState.Idle);
+                    m_CardPosController.UpdateActiveCardList();
+                    SetState(PlayerState.PlayerActionStart);
                 });
             });
         }
+        protected void TriggerPlayerActions(System.Action iEndAction)
+        {
+            SetState(PlayerState.PlayerAction);
+            if(m_PlayerActions.Count == 0)
+            {
+                iEndAction.Invoke();
+                return;
+            }
 
+            System.Action<int> aTriggerAct = null;
+            aTriggerAct = delegate (int iTriggerAt)
+            {
+                Debug.LogWarning("iTriggerAt:" + iTriggerAt+",Total:" + m_PlayerActions.Count);
+                var aPlayerAct = m_PlayerActions[iTriggerAt];
+                try
+                {
+                    aPlayerAct.Trigger(delegate () {
+                        if (iTriggerAt + 1 < m_PlayerActions.Count)
+                        {
+                            aTriggerAct.Invoke(iTriggerAt + 1);
+                        }
+                        else
+                        {
+                            m_PlayerActions.Clear();
+                            iEndAction.Invoke();
+                        }
+                    });
+                }
+                catch (System.Exception e)
+                {
+                    m_PlayerActions.Clear();
+                    Debug.LogError("TriggerPlayerActions Exception:" + e);
+                    iEndAction.Invoke();
+                }
+            };
+            aTriggerAct.Invoke(0);
+        }
+        /// <summary>
+        /// 將卡牌置入棄牌堆
+        /// </summary>
+        /// <param name="iCardData"></param>
+        public void AddToDiscardPile(RCG_CardData iCardData)
+        {
+            m_Deck.AddToDiscardPile(iCardData);
+        }
+        public void AddToDeckTop(RCG_CardData iCardData)
+        {
+            m_Deck.AddToDeckTop(iCardData);
+        }
         /// <summary>
         /// 選中的卡牌觸發目標
         /// </summary>
@@ -187,10 +240,30 @@ namespace RCG {
         public void SetState(PlayerState iPlayerState) {
             m_PlayerState = iPlayerState;
         }
-        public void DrawCard(int count) {
-            m_DrawCardCount += count;
-            int space = CardSpace;
-            if(m_DrawCardCount > space) m_DrawCardCount = space;
+        /// <summary>
+        /// 抽牌(不包含演出)
+        /// </summary>
+        /// <param name="iCount">抽牌張數</param>
+        public void DrawCard(int iCount) {
+            int aSpace = CardSpace;
+            for (int i = 0; i < iCount; i++)
+            {
+                if (m_DrawCardCount >= CardSpace)
+                {
+                    break;
+                }
+                AddPlayerAction(new RCG_DrawCardAction());
+                m_DrawCardCount++;
+            }
+        }
+        public void AddPlayerAction(RCG_PlayerAction iPlayerAct)
+        {
+            m_PlayerActions.Add(iPlayerAct);
+        }
+        public RCG_CardData DrawCardFromDeck()
+        {
+            ++m_HandCardCount;
+            return m_Deck.Draw();
         }
         public bool AlterCost(int iAlter) {
             if(!m_CostUI.AlterCost(iAlter))return false;
@@ -207,10 +280,11 @@ namespace RCG {
         public void ClearAllHandCard() {
             foreach(var aCard in m_Cards) {
                 if(!aCard.m_Used && aCard.Data != null) {
-                    m_Deck.Used(aCard.Data);
+                    AddToDiscardPile(aCard.Data);
                     aCard.SetCardData(null);
                 }
             }
+            m_HandCardCount = 0;
         }
         /// <summary>
         /// 玩家行動結束
@@ -218,18 +292,21 @@ namespace RCG {
         public void TurnEnd()
         {
             ClearSelectedCard();
+            ClearAllHandCard();
             RCG_BattleManager.ins.PlayerTurnEnd();
         }
+        /// <summary>
+        /// 回合初始化
+        /// </summary>
         public void TurnInit() {
             if(m_Blocking) return;
             ClearSelectedCard();
             m_DrawCardCount = 0;
-            ClearAllHandCard();
 
-            for(int i = 0; i < m_Cards.Count; i++) {
+            for (int i = 0; i < m_Cards.Count; i++) {
                 var card = m_Cards[i];
                 RCG_CardData data = null;
-                if(i < TurnInitCardNum) data = m_Deck.Draw();
+                if(i < TurnInitCardNum) data = DrawCardFromDeck();
                 card.TurnInit(data);
                 if(data != null) card.DrawCardAnime(m_DrawCardPos.position, null);
             }
@@ -262,47 +339,54 @@ namespace RCG {
                 aCard.UnBlockSelection(RCG_Card.BlockingStatus.Player);
             }
         }
-        private void DrawCardUpdate() {
-            if(m_DrawCardCount > 0) {
-                var card = m_CardPosController.GetAvaliableCard();
-                if(card != null && card.IsEmpty) {
-                    StartBlocking();
-                    SetState(PlayerState.DrawingCard);
-                    card.SetCardData(m_Deck.Draw());
-                    --m_DrawCardCount;
-                    card.DrawCardAnime(m_DrawCardPos.position, delegate () {
-                        if(m_DrawCardCount == 0) {
-                            SetState(PlayerState.Idle);
-                            EndBlocking();
-                        } else {
-                            SetState(PlayerState.DrawCard);
-                        }
-                    });
-                }
-            } else {
-                SetState(PlayerState.Idle);
+        /// <summary>
+        /// 實際抽牌演出
+        /// </summary>
+        /// <param name="iEndAct"></param>
+        public void DrawCardAnim(System.Action iEndAct)
+        {
+            var aCard = m_CardPosController.GetAvaliableCard();
+            if (aCard == null)
+            {
+                Debug.LogError("DrawCard Fail!!aCard == null");
+                iEndAct.Invoke();
+                return;
             }
+            if (!aCard.IsEmpty)
+            {
+                Debug.LogError("DrawCard Fail!! !aCard.IsEmpty");
+                iEndAct.Invoke();
+                return;
+            }
+            //m_CardPosController.UpdateActiveCardList();
+            //aCard.BlockSelection(RCG_Card.BlockingStatus.Player);
+            aCard.SetCardData(DrawCardFromDeck());
+            --m_DrawCardCount;
+            aCard.DrawCardAnime(m_DrawCardPos.position, delegate ()
+            {
+                iEndAct();
+                m_CardPosController.UpdateActiveCardList();
+            });
         }
         private void Update() {
             if(!m_Inited) return;
             m_Target = null;
             switch(m_PlayerState) {
                 case PlayerState.Idle: {
-                        if(m_DrawCardCount > 0) {
-                            SetState(PlayerState.DrawCard);
-                        }
                         break;
                     }
-                case PlayerState.DrawCard: {
-                        DrawCardUpdate();
-                        break;
-                    }
-                case PlayerState.DrawingCard: {
+                case PlayerState.PlayerActionStart:
+                    {
+                        TriggerPlayerActions(delegate ()
+                        {
+                            IsUsingCard = false;
+                            UpdateCardStatus();
+                            SetState(PlayerState.Idle);
+                        });
                         break;
                     }
             }
             m_Deck.PlayerUpdate();
-
         }
     }
 }

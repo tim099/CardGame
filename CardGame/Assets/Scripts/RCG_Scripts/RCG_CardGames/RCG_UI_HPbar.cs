@@ -41,7 +41,7 @@ namespace RCG {
                 if (m_DisplayHP != m_unit.Hp)
                 {
                     int aDel = m_unit.Hp - m_DisplayHP;
-                    Debug.LogWarning("aDel:" + aDel);
+                    //Debug.LogWarning("aDel:" + aDel);
                     int aMove = Mathf.RoundToInt(0.1f * aDel);
                     if (aMove == 0)
                     {

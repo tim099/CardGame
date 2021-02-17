@@ -74,7 +74,11 @@ namespace RCG {
             return m_CardDatas[iID];
         }
         public RCG_CardData GetCardData(string iCardName) {
-            if(!m_CardDataDic.ContainsKey(iCardName)) return null;
+            if (!m_CardDataDic.ContainsKey(iCardName))
+            {
+                Debug.LogError("!m_CardDataDic.ContainsKey:" + iCardName);
+                return null;
+            }
             return m_CardDataDic[iCardName];
         }
         public void LoadCardData() {
@@ -85,8 +89,10 @@ namespace RCG {
                 string aData = System.IO.File.ReadAllText(aFile);
                 RCG_CardData aCardData = new RCG_CardData(aData);
                 m_CardDatas.Add(aCardData);
-                m_CardDataDic.Add(UCL.Core.FileLib.Lib.RemoveFileExtension(aFile), aCardData);
+                string aFileName = UCL.Core.FileLib.Lib.GetFileName(aFile);
+                m_CardDataDic.Add(UCL.Core.FileLib.Lib.RemoveFileExtension(aFileName), aCardData);
             }
+            //Debug.LogError("m_CardDataDic:" + m_CardDataDic.UCL_ToString());
         }
     }
 }
