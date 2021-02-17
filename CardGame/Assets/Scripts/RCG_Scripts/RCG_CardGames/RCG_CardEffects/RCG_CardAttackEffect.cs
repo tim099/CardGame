@@ -60,7 +60,7 @@ namespace RCG {
             {
                 RCG_VFXManager.ins.CreateVFX(m_VFX);
             }
-            var aTargets = iTriggerEffectData.m_Targets;
+            var aTargets = iTriggerEffectData.m_Targets.Clone();
             switch (m_AttackRange)
             {
                 case AttackRange.FrontEnemyAOE:
@@ -105,40 +105,18 @@ namespace RCG {
                     }
             }
             //Debug.LogError("aTargets:" + aTargets.Count);
-            if (aTargets != null)
+            if(aTargets != null && aTargets.Count > 0)
             {
-                var aSeq = LibTween.Sequence();
-                for(int i = 0; i < m_AtkTimes; i++)
+                for (int i = 0; i < m_AtkTimes; i++)
                 {
-                    aSeq.Append(delegate ()
-                    {
-                        foreach (var aTarget in aTargets)
-                        {
-                            if (!aTarget.IsDead)
-                            {
-                                aTarget.UnitHit(m_Atk);
-                            }
-                        }
-                    });
-                    var aTweener = LibTween.Tweener(0.2f);//aSeq.AppendInterval(0.8f);
-                    aSeq.Append(aTweener);
-                    foreach (var aTarget in aTargets)
-                    {
-                        if (!aTarget.IsDead)
-                        {
-                            aTweener.AddComponent(aTarget.transform.TC_LocalShake(35, 20, true));
-                        }
-                    }
-                    aSeq.AppendInterval(0.4f);
+                    iTriggerEffectData.p_Player.AddPlayerAction(new RCG_PlayerAttackAction(aTargets, m_Atk));
                 }
-                aSeq.OnComplete(iEndAction);
-                aSeq.Start();
             }
-            else//no attack targets!!
-            {
-                iEndAction.Invoke();
-            }
+
+            iEndAction.Invoke();
         }
+
+
         //override public void LoadJson(UCL.Core.JsonLib.JsonData data) {
         //    UCL.Core.JsonLib.JsonConvert.LoadDataFromJson(this, data);
         //}

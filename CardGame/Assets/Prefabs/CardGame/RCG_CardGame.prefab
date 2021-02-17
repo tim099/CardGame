@@ -182,8 +182,8 @@ MonoBehaviour:
   m_PressedTime: 0
   m_Image: {fileID: 6076240055827653764}
   m_Text: {fileID: 5155363758592794611}
-  m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  m_PressedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_NormalColor: {r: 1, g: 0.8352941, b: 0, a: 1}
+  m_PressedColor: {r: 0.6603774, g: 0.55160934, b: 0, a: 1}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []

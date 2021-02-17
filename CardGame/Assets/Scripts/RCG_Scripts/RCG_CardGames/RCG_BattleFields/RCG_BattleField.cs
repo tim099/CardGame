@@ -271,7 +271,7 @@ namespace RCG {
         /// </summary>
         public void TurnEnd()
         {
-            Debug.LogError("RCG_BattleField TurnEnd()");
+            Debug.LogWarning("RCG_BattleField TurnEnd()");
             foreach (RCG_Unit u in m_Characters)
             {
                 if (u == null)

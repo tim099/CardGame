@@ -36,25 +36,69 @@ namespace RCG {
             foreach(var aCardPos in m_CardPosList) {
                 aCardPos.m_Card.UpdateCardStatus();
             }
+            UpdateActiveCardList();
         }
         virtual public RCG_Card GetAvaliableCard() {
-            if(m_InActiveCardPosList.Count == 0) return null;
-            return m_InActiveCardPosList[0].m_Card;
+            UpdateActiveCardList();
+            if (m_InActiveCardPosList.Count == 0)
+            {
+                Debug.LogError("GetAvaliableCard() Fail!!m_InActiveCardPosList.Count == 0");
+                return null;
+            }
+            for(int i = 0; i < m_InActiveCardPosList.Count; i++)
+            {
+                if(m_InActiveCardPosList[i].IsCardAvaliable) return m_InActiveCardPosList[i].m_Card;
+            }
+
+            Debug.LogError("GetAvaliableCard() Fail!!m_InActiveCardPosList[i].IsCardAvaliable can't find avaliable card!!");
+            return null;
         }
-        private void Update() {
+        public void UpdateActiveCardList()
+        {
+            RCG_CardPos aUsingCardPos = null;
             m_ActiveCardPosList.Clear();
             m_InActiveCardPosList.Clear();
-            List<RCG_CardPos> aSelectedCardPos = new List<RCG_CardPos>();
-            int aSelectedCardNum = 0;
-            for(int i = 0; i < m_CardPosList.Count; i++) {
+
+            for (int i = 0; i < m_CardPosList.Count; i++)
+            {
                 var aCardPos = m_CardPosList[i];
-                if(aCardPos.IsCardActive) {
-                    m_ActiveCardPosList.Add(aCardPos);
-                } else {
+                if (aCardPos.IsCardActive)
+                {
+                    if (!aCardPos.IsUsing)
+                    {
+                        m_ActiveCardPosList.Add(aCardPos);
+                    }
+                    else
+                    {
+                        aUsingCardPos = aCardPos;
+                    }
+                }
+                else
+                {
                     m_InActiveCardPosList.Add(aCardPos);
                 }
             }
-            for(int i = 0; i < m_ActiveCardPosList.Count - 1; i++) {
+            m_CardPosList.Clear();
+            for (int i = 0; i < m_ActiveCardPosList.Count; i++)
+            {
+                var aCardPos = m_ActiveCardPosList[i];
+                m_CardPosList.Add(aCardPos);
+            }
+            if (aUsingCardPos != null)
+            {
+                m_CardPosList.Add(aUsingCardPos);
+            }
+            for (int i = 0; i < m_InActiveCardPosList.Count; i++)
+            {
+                var aCardPos = m_InActiveCardPosList[i];
+                m_CardPosList.Add(aCardPos);
+            }
+        }
+        private void Update() {
+            //UpdateActiveCardList();
+            List<RCG_CardPos> aSelectedCardPos = new List<RCG_CardPos>();
+            int aSelectedCardNum = 0;
+            for (int i = 0; i < m_ActiveCardPosList.Count - 1; i++) {
                 var aCardPos = m_ActiveCardPosList[i];
                 if(aCardPos.m_Card.IsCardDisplayerSelected) {
                     aSelectedCardNum++;
@@ -64,7 +108,7 @@ namespace RCG {
                 //    aSelectedCardPos.Add(aCardPos);
                 //}
             }
-            m_CardPosList.Clear();
+            //m_CardPosList.Clear();
             int aDiv = m_ActiveCardPosList.Count - 1 - aSelectedCardNum;
             if(aDiv <= 0) aDiv = 1;
 
@@ -80,7 +124,7 @@ namespace RCG {
             }
             for(int i = 0; i < m_ActiveCardPosList.Count; i++) {
                 var aCardPos = m_ActiveCardPosList[i];
-                m_CardPosList.Add(aCardPos);
+                //m_CardPosList.Add(aCardPos);
                 aCardPos.transform.SetAsLastSibling();
                 aCardPos.SetTargetAngle(aAngleAt);
                 if(aCardPos.m_Card.IsCardDisplayerSelected) {
@@ -91,7 +135,7 @@ namespace RCG {
             }
             for(int i = 0; i < m_InActiveCardPosList.Count; i++) {
                 var aCardPos = m_InActiveCardPosList[i];
-                m_CardPosList.Add(aCardPos);
+                //m_CardPosList.Add(aCardPos);
                 aCardPos.SetAngle(aAngleAt);
                 //aCardPos.transform.SetAsLastSibling();
             }

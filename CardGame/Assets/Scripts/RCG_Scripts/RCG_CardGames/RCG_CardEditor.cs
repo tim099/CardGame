@@ -285,6 +285,11 @@ namespace RCG {
         //    if(!ins.m_CardEditTmpDatas.ContainsKey(iKey)) ins.m_CardEditTmpDatas.Add(iKey, iDefaultValue);
         //    return ins.m_CardEditTmpDatas[iKey];
         //}
+        static public bool IsCardEditTmpDataContainsKey(string iKey)
+        {
+            if (m_CardEditTmpDatas == null) return false;
+            return m_CardEditTmpDatas.ContainsKey(iKey);
+        }
         static public T GetCardEditTmpData<T>(string iKey, T iDefaultValue) {
             if(m_CardEditTmpDatas == null) return iDefaultValue;
             if(!m_CardEditTmpDatas.ContainsKey(iKey)) m_CardEditTmpDatas.Add(iKey, iDefaultValue);
@@ -328,31 +333,8 @@ namespace RCG {
 
             GUILayout.BeginHorizontal();
             using(var scope = new GUILayout.VerticalScope("box", GUILayout.Width(300))) {
+                card_data.OnGUICardDatas();
 
-                card_data.CardName = UCL.Core.UI.UCL_GUILayout.TextField("CardName", card_data.CardName);
-                //card_data.IconName = UCL.Core.UI.UCL_GUILayout.TextField("IconName", card_data.IconName);
-
-                {
-                    string aFieldName = "CardType";
-                    GUILayout.BeginHorizontal();
-                    UCL.Core.UI.UCL_GUILayout.LabelAutoSize(aFieldName);
-                    bool flag = GetCardEditTmpData(aFieldName, false);
-                    card_data.CardType = UCL.Core.UI.UCL_GUILayout.Popup(card_data.CardType, ref flag);
-                    SetCardEditTmpData(aFieldName, flag);
-                    GUILayout.EndHorizontal();
-                }
-                {
-                    string aFieldName = "TargetType";
-                    GUILayout.BeginHorizontal();
-                    UCL.Core.UI.UCL_GUILayout.LabelAutoSize(aFieldName);
-                    bool flag = GetCardEditTmpData(aFieldName, false);
-                    card_data.TargetType = UCL.Core.UI.UCL_GUILayout.Popup(card_data.TargetType, ref flag);
-                    SetCardEditTmpData(aFieldName, flag);
-                    GUILayout.EndHorizontal();
-                }
-                {
-                    card_data.DrawRequireSkills();
-                }
                 {//Draw Icon
                     bool flag = GetCardEditTmpData("CardIconPath", false);
                     int index = m_CardIconPaths.FindIndex(a => a == card_data.IconName);
@@ -379,7 +361,7 @@ namespace RCG {
                     card_data.AddCardEffect(RCG_CardEffectCreator.Create(m_CreateEffectID));
                 }
                 GUILayout.EndHorizontal();
-                card_data.DrawCardEffects();
+                card_data.OnGUICardEffects();
 
             }
             GUILayout.EndHorizontal();

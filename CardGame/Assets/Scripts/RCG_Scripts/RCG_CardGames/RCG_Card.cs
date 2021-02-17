@@ -51,6 +51,7 @@ namespace RCG {
         public UCL.TweenLib.UCL_TB_Tweener m_TB_Tweener;
         public RCG_CardDisplayer m_CardDisplayer;
         public bool m_Used = false;
+        public bool m_Using = false;
         protected RCG_CardData m_Data;
         protected RCG_Player p_Player;
         public RCG_CardPos p_CardPos;
@@ -61,6 +62,29 @@ namespace RCG {
         }
         virtual public bool IsCardDisplayerSelected {
             get { return m_CardDisplayer.IsSelected; }
+        }
+        /// <summary>
+        /// 設定顯示卡牌資料
+        /// </summary>
+        /// <param name="_Data"></param>
+        virtual public void SetCardData(RCG_CardData _Data)
+        {
+            Debug.LogWarning("SetCardData!!");
+            m_Data = _Data;
+            m_CardDisplayer.Init(m_Data);
+            m_TB_Tweener.Kill();
+            m_CardPanel.transform.position = transform.position;
+            if (m_Data != null)
+            {
+                m_CardPanel.SetActive(true);
+            }
+            else
+            {
+                m_CardPanel.SetActive(false);
+            }
+            m_Used = false;
+            m_Using = false;
+            UpdateCardStatus();
         }
         /// <summary>
         /// target >=3 is enemy
@@ -162,23 +186,7 @@ namespace RCG {
             m_SelectedObject.SetActive(false);
             m_CardDisplayer.DeSelect();
         }
-        /// <summary>
-        /// 設定顯示卡牌資料
-        /// </summary>
-        /// <param name="_Data"></param>
-        virtual public void SetCardData(RCG_CardData _Data) {
-            m_Data = _Data;
-            m_CardDisplayer.Init(m_Data);
-            m_TB_Tweener.Kill();
-            m_CardPanel.transform.position = transform.position;
-            if (m_Data != null) {
-                m_CardPanel.SetActive(true);
-            } else {
-                m_CardPanel.SetActive(false);
-            }
-            m_Used = false;
-            UpdateCardStatus();
-        }
+
         /// <summary>
         /// BlockSelection if iFlag is true.
         /// </summary>
@@ -217,6 +225,7 @@ namespace RCG {
             m_CardPanel.SetActive(true);
             m_CardDisplayer.BlockSelection();
             BlockSelection(BlockingStatus.DrawCardAnime);
+            
             m_TB_Tweener.StartTween(()=> {
                 transform.position = transform.parent.position;
                 m_CardPanel.transform.position = transform.parent.position;
@@ -233,8 +242,6 @@ namespace RCG {
         /// <param name="iTargetPos"></param>
         /// <param name="iEndAct"></param>
         virtual public void TriggerCardAnime(Transform iTargetPos, System.Action iEndAct) {
-            //Vector3 aPosO = transform.position;
-            //Quaternion aRotO = transform.rotation;
             transform.position = iTargetPos.position;
             transform.rotation = iTargetPos.rotation;
 
@@ -253,6 +260,7 @@ namespace RCG {
             });
         }
         virtual public void CardUsed() {
+            m_Data.CardUsed(p_Player);
             SetCardData(null);
             p_Player.ClearSelectedCard();
         }
