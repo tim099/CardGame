@@ -9,6 +9,7 @@ namespace RCG
     {
         public GameObject m_SelectedItem = null;
         public GameObject m_HitEffect = null;
+        public RCG_StatusEffectUI m_StatusEffectUI = null;
         virtual public void Init()
         {
             m_SelectedItem.SetActive(false);

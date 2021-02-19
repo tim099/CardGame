@@ -45,6 +45,10 @@ namespace RCG {
         {
             get; protected set;
         }
+        public UnitPos Pos
+        {
+            get; protected set;
+        }
         public bool IsDead
         {
             get { return m_is_dead; }
@@ -64,10 +68,11 @@ namespace RCG {
         private RCG_UnitAction m_action = null;
         private RCG_UnitHUD m_unit_HUD;
 
-        virtual public void Init(bool _IsEnemy)
+        virtual public void Init(bool _IsEnemy, UnitPos _Pos)
         {
             SetHp(MaxHp);
             IsEnemy = _IsEnemy;
+            Pos = _Pos;
             if (IsEnemy)
             {
                 m_UnitDisplay.rotation = Quaternion.Euler(0, 180, 0);

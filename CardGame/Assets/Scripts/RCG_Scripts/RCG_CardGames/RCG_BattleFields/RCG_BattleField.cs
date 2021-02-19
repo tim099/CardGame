@@ -56,9 +56,31 @@ namespace RCG {
         {
             return m_PlayerBattlePositionSetting.GetBackUntis();
         }
+        public List<RCG_Unit> GetRowUnits(UnitPos iPos, bool iIsEnemy)
+        {
+            if (iIsEnemy) return GetEnemyUnits(iPos);
+            return GetPlayerUnits(iPos);
+        }
+        public List<RCG_Unit> GetPlayerUnits(UnitPos iPos)
+        {
+            switch (iPos)
+            {
+                case UnitPos.Front: return m_PlayerBattlePositionSetting.GetFrontUntis();
+                case UnitPos.Back: return m_PlayerBattlePositionSetting.GetBackUntis();
+            }
+            return m_PlayerBattlePositionSetting.GetFrontUntis();
+        }
         public List<RCG_Unit> GetAllEnemyUnits()
         {
             return m_EnemyBattlePositionSetting.GetAllUnits();
+        }
+        public List<RCG_Unit> GetEnemyUnits(UnitPos iPos)
+        {
+            switch (iPos) {
+                case UnitPos.Front:return m_EnemyBattlePositionSetting.GetFrontUntis();
+                case UnitPos.Back:return m_EnemyBattlePositionSetting.GetBackUntis();
+            }
+            return m_EnemyBattlePositionSetting.GetFrontUntis();
         }
         public List<RCG_Unit> GetEnemyFrontUnits()
         {
@@ -98,7 +120,7 @@ namespace RCG {
             {
                 return null;
             }
-            aUnit.Init(iIsMonster);
+            aUnit.Init(iIsMonster, iUnitPos);
             if (iIsMonster)
             {
                 m_EnemyBattlePositionSetting.SetUnit(iUnitPos, iPosition, aUnit);

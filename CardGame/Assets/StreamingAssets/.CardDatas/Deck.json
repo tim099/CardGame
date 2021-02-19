@@ -24,6 +24,14 @@
 		{
 			"m_CardName":"Explosion",
 			"m_CardCount":2
+		},
+		{
+			"m_CardName":"Strength",
+			"m_CardCount":3
+		},
+		{
+			"m_CardName":"Defense01",
+			"m_CardCount":1
 		}
 	]
 }

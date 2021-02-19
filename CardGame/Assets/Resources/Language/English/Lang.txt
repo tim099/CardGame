@@ -6,7 +6,7 @@
 "Def_Des":"增加{0}點護甲"
 "AddCost_Des":"回復{0}點能量"
 "DrawCard_Des":"抽{0}張卡"
-
+"AppliedStatus_Des":"附加{0}層{1}"
 
 
 "City_Constantinople":"Constantinople"
