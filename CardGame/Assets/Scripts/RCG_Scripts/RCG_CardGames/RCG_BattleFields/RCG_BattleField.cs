@@ -89,7 +89,6 @@ namespace RCG {
             aUnit.m_UnitPosId = iPosition;
             if (iIsMonster) { 
                 m_Monsters.Add(aUnit);
-                Debug.Log("QWQ : " + m_Monsters.Count);
             }
             else { 
                 m_Characters.Add(aUnit);
@@ -241,6 +240,7 @@ namespace RCG {
             Debug.LogWarning("Battle TurnInit()!!");
             ClearSelectedUnits();
             ClearActivatedUnits();
+            UpdateMonsterActions();
             SetSelectMode(TargetType.Close);
         }
         /// <summary>
@@ -249,10 +249,8 @@ namespace RCG {
         public void TurnStart()
         {
             TurnEnd();
-            Debug.Log("Monster QWQ : " + m_Monsters.Count);
             foreach (RCG_Unit u in m_Monsters)
             {
-                Debug.Log("Monster QWQ " + u.name);
                 if (u == null)
                 {
                     continue;
@@ -261,7 +259,6 @@ namespace RCG {
                 if (m)
                 {
                     m.Act();
-                    Debug.Log("Monster action QWQ");
                 }
                 u.EndTurn();
             }
@@ -271,7 +268,6 @@ namespace RCG {
         /// </summary>
         public void TurnEnd()
         {
-            Debug.LogError("RCG_BattleField TurnEnd()");
             foreach (RCG_Unit u in m_Characters)
             {
                 if (u == null)
@@ -363,6 +359,25 @@ namespace RCG {
         public void TriggerCardEffect(int target, RCG_CardData card_data){
             Debug.Log("TriggerCardEffect");
             //RCG_CardEffectHandler.TriggerCardEffectOnUnits(m_units ,target, card_data);
+        }
+
+        /// <summary>
+        /// 更新敵人的動作
+        /// </summary>
+        public void UpdateMonsterActions()
+        {
+            foreach (RCG_Unit u in m_Monsters)
+            {
+                if (u == null)
+                {
+                    continue;
+                }
+                var m = u.gameObject.GetComponent<RCG_Monster>();
+                if (m)
+                {
+                    m.PrepareToAct();
+                }
+            }
         }
     }
 }

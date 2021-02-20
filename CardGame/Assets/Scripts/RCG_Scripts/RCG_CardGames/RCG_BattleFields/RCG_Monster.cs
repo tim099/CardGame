@@ -7,7 +7,9 @@ namespace RCG {
     public class RCG_Monster: MonoBehaviour
     {
         public List<string> m_ActionsNames;
+        public RCG_MonsterActionIndicator m_Indicator;
         protected List<RCG_MonsterAction> m_Actions = new List<RCG_MonsterAction>();
+        RCG_MonsterAction m_CurrentAction;
 
         public void Init()
         {
@@ -20,9 +22,15 @@ namespace RCG {
 
         public void Act()
         {
-            if(m_Actions.Count == 0)
+            
+            m_CurrentAction.TriggerAction(delegate () { });
+        }
+
+        public void PrepareToAct()
+        {
+            if (m_Actions.Count == 0)
             {
-                if(m_ActionsNames.Count != 0)
+                if (m_ActionsNames.Count != 0)
                 {
                     Init();
                 }
@@ -32,15 +40,29 @@ namespace RCG {
                 }
             }
             List<RCG_MonsterAction> aAvailableActions = new List<RCG_MonsterAction>();
-            foreach(var action in m_Actions)
+            foreach (var action in m_Actions)
             {
                 if (action.ActionAvailable())
                 {
                     aAvailableActions.Add(action);
                 }
             }
-            var target_action = aAvailableActions[UCL.Core.MathLib.UCL_Random.Instance.Next(aAvailableActions.Count)];
-            target_action.TriggerAction(delegate () { });
+            m_CurrentAction = aAvailableActions[UCL.Core.MathLib.UCL_Random.Instance.Next(aAvailableActions.Count)];
+            UpdateIndicator();
+        }
+
+        public void UpdateIndicator()
+        {
+            Debug.Log("update indicator");
+            var iIndicator = gameObject.GetComponentInChildren<RCG_MonsterActionIndicator>();
+            if (iIndicator)
+            {
+
+            }
+            else
+            {
+                iIndicator = Instantiate<RCG_MonsterActionIndicator>(m_Indicator, transform);
+            }
         }
     }
 }
