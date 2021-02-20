@@ -27,6 +27,19 @@ namespace RCG
             base.Init();
         }
         //void OnApplicationPause(bool pauseStatus)
+
+        public RCG_DataService GetDataService()
+        {
+            for(int i= m_GameServices.Count-1; i>=0; i--)
+            {
+                Debug.Log(m_GameServices[i].GetType().Name);
+                if(m_GameServices[i].GetType().Name == "RCG_DataService")
+                {
+                    return (RCG_DataService)m_GameServices[i] ;
+                }
+            }
+            return new RCG_DataService();
+        }
     }
 }
 
