@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace RCG { 
     public class RCG_MapCharacterUI : MonoBehaviour
     {
-        private List<RCG_CharacterData> m_all_character_data;
+        private List<RCG_CharacterData> m_CharacterDatas;
         public Transform m_character_panel;
         private List<Transform> m_panels;
         // Start is called before the first frame update
@@ -36,8 +36,8 @@ namespace RCG {
             Debug.Log("LoadCharacterData");
             ClearCharacterData();
 
-            m_all_character_data = RCG_GameManager.ins.GetDataService().m_all_character_data;
-            foreach (var character_data in m_all_character_data)
+            m_CharacterDatas = RCG_GameManager.ins.GetDataService().m_CharacterDatas;
+            foreach (var character_data in m_CharacterDatas)
             {
                 var new_panel = Instantiate(m_character_panel, transform);
                 new_panel.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprite/" + character_data.m_character_name);
