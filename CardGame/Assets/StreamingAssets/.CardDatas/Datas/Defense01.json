@@ -1,0 +1,18 @@
+{
+	"m_CardType":"Buff",
+	"m_TargetType":"Allied",
+	"m_CardName":"Defense01",
+	"m_IconName":"brick.png",
+	"m_Cost":0,
+	"CardEffect":
+	[
+		{
+			"EffectType":"DefenseEffect",
+			"m_Defense":5
+		},
+		{
+			"EffectType":"DrawEffect",
+			"m_DrawCardNum":1
+		}
+	]
+}

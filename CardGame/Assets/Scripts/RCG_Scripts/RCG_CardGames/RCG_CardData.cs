@@ -1,60 +1,141 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 namespace RCG {
+    public enum TargetType : int
+    {
+        /// <summary>
+        /// 不需要指定目標 如抽牌
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// 使用腳色
+        /// </summary>
+        Player,
+        /// <summary>
+        /// 除了使用腳色外的我方
+        /// </summary>
+        Friend,
+        /// <summary>
+        /// 我方全體
+        /// </summary>
+        Allied,
+        /// <summary>
+        /// 我方前排
+        /// </summary>
+        AlliedFront,
+        /// <summary>
+        /// 我方後排
+        /// </summary>
+        AlliedBack,
 
+        /// <summary>
+        /// 敵方全體
+        /// </summary>
+        Enemy,
+
+        /// <summary>
+        /// 敵方前排
+        /// </summary>
+        EnemyFront,
+
+        /// <summary>
+        /// 敵方後排
+        /// </summary>
+        EnemyBack,
+
+        /// <summary>
+        /// 全體目標皆為對象
+        /// </summary>
+        All,
+
+        /// <summary>
+        /// 關閉選擇狀態 開放切換玩家腳色
+        /// </summary>
+        Close,
+    }
+    [System.Serializable]
     public class RCG_CardData {
-        public struct CardData {
-            public string m_CardName;
-            public string m_IconName;
-            public int m_Cost;
+        public static string CardDataPath {
+            get {
+                return Application.streamingAssetsPath + "/.CardDatas/Datas";
+            }
         }
-        public Sprite Icon { get { return m_Setting.m_Icon; } }
+        public static string CardIconPath {
+            get {
+                return Path.Combine(UCL.Core.FileLib.Lib.RemoveFolderPath(CardDataPath, 1), "Icons");
+            }
+        }
+        [System.Serializable]
+        public class CardData {
+            public CardType m_CardType = CardType.Unknow;
+            public TargetType m_TargetType = TargetType.None;
+            public string m_CardName = string.Empty;
+            public string m_IconName = string.Empty;
+            public int m_Cost = 0;
+            public List<UnitSkill> m_RequireSkills = new List<UnitSkill>();
+        }
+        public Sprite Icon { get { return m_Icon; } }
+        public Sprite m_Icon = null;
         virtual public string CardName { get { return m_Data.m_CardName; } set { m_Data.m_CardName = value; } }
         virtual public int Cost { get { return m_Data.m_Cost; } set { m_Data.m_Cost = value; } }
         virtual public string IconName { get { return m_Data.m_IconName; } set { m_Data.m_IconName = value; } }
         virtual public string Description {
             get {
-                string des = "";
-                if(Atk > 0) {
-                    if(AtkTimes > 1) {
-                        des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Attack_Des", Atk, AtkTimes, AtkRange) + "\n";
-                    } else {
-                        des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Attack_DesSingle", Atk, AtkRange) + "\n";
+                string des = string.Empty;
+                foreach(var aEffect in m_CardEffects) {
+                    string aDes = aEffect.Description;
+                    if(!string.IsNullOrEmpty(aDes)) {
+                        des += aDes;
                     }
                 }
-                if(Defense > 0) {
-                    des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Def_Des", Defense) + "\n";
-                }
-                if(Cost < 0) {
-                    des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("AddCost_Des", -Cost) + "\n";
-                }
-                if(m_Setting.m_DrawCard > 0) {
-                    des += UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("DrawCard_Des", m_Setting.m_DrawCard) + "\n";
-                }
-                des += m_Setting.m_Description;
                 return des;
             }
         }
-        virtual public int Atk { get { return m_Setting.m_Atk; } }
-        virtual public int AtkTimes { get { return m_Setting.m_AtkTimes; } }
-        virtual public int AtkRange { get { return m_Setting.m_AtkRange; } }
-        virtual public int Defense { get { return m_Setting.m_Defense; } }
-        virtual public TargetType Target { get { return m_Setting.m_Target; } }
-        protected CardData m_Data;
-        public List<RCG_CardEffect> m_CardEffects = null;
-        public RCG_CardData(UCL.Core.JsonLib.JsonData setting) {
-            LoadJson(setting);
+        virtual public int Atk { get; protected set; }
+        virtual public int AtkTimes { get; protected set; }
+        virtual public int AtkRange { get; protected set; }
+        virtual public int Defense { get; protected set; }
+        virtual public TargetType Target { get; protected set; }
+
+        public List<UnitSkill> RequireSkills { get { return m_Data.m_RequireSkills; } }
+        public List<RCG_CardEffect> m_CardEffects = new List<RCG_CardEffect>();
+        public CardType CardType { get { return m_Data.m_CardType; } set { m_Data.m_CardType = value; } }
+        public TargetType TargetType { get { return m_Data.m_TargetType; } set { m_Data.m_TargetType = value; } }
+        [SerializeField] protected CardData m_Data;
+        //protected HashSet<UnitSkill> m_RequireSkillSets = new HashSet<UnitSkill>();
+        public RCG_CardData() {
+
         }
-        public void LoadJson(UCL.Core.JsonLib.JsonData setting) {
-            m_Data = UCL.Core.JsonLib.JsonConvert.LoadDataFromJson<CardData>(setting);
+        public RCG_CardData(string iJson) {
+            //Debug.LogWarning("iJson:" + iJson);
+            LoadJson(UCL.Core.JsonLib.JsonData.ParseJson(iJson));
+        }
+        public RCG_CardData(UCL.Core.JsonLib.JsonData iSetting) {
+            LoadJson(iSetting);
+        }
+        public void LoadJson(UCL.Core.JsonLib.JsonData iSetting) {
+            m_Data = UCL.Core.JsonLib.JsonConvert.LoadDataFromJson<CardData>(iSetting);
             //var test = UCL.Core.JsonLib.JsonConvert.LoadListFromJson<float>(setting["Test"]);
             //Debug.LogWarning("test:" + test.UCL_ToString());
-            Debug.LogWarning("m_Data:" + m_Data.UCL_ToString());
-            m_CardEffects = new List<RCG_CardEffect>();
-            if(setting.Contains("CardEffect")) {
-                LoadCardEffect(setting["CardEffect"]);
+            //Debug.LogWarning("m_Data:" + m_Data.UCL_ToString());
+            m_CardEffects.Clear();
+            if(iSetting.Contains("CardEffect")) {
+                LoadCardEffect(iSetting["CardEffect"]);
             }
+            if(RCG_CardDataService.ins != null) {
+                m_Icon = RCG_CardDataService.ins.GetCardIcon(m_Data.m_IconName);
+            }
+
+        }
+        public bool CheckRequireSkill(HashSet<UnitSkill> iSkills)
+        {
+            foreach (var aSkill in m_Data.m_RequireSkills)
+            {
+                if (!iSkills.Contains(aSkill)) return false;
+            }
+            return true;
         }
         public UCL.Core.JsonLib.JsonData ToJson() {
             UCL.Core.JsonLib.JsonData data = new UCL.Core.JsonLib.JsonData();
@@ -73,7 +154,7 @@ namespace RCG {
             //Debug.LogWarning("CardEffect:" + card_effect.ToJson());
             for(int i = 0; i < card_effect.Count; i++) {
                 var effect_data = card_effect[i];
-                Debug.LogWarning("effect_data:" + effect_data.ToJson());
+                //Debug.LogWarning("effect_data:" + effect_data.ToJson());
                 if(effect_data.Contains("EffectType")) {
                     var effect = RCG_CardEffectCreator.Create(effect_data["EffectType"].GetString());
                     if(effect != null) {
@@ -82,6 +163,7 @@ namespace RCG {
                     } else {
                         Debug.LogError("effect == null!!");
                     }
+                    effect.Init(i);
                 }
 
             }
@@ -93,6 +175,7 @@ namespace RCG {
         public void DrawCardDatas() {
 
         }
+        #region Edit
         public void DrawCardEffects() {
             int delete_at = -1;
             for(int i = 0; i < m_CardEffects.Count; i++) {
@@ -105,57 +188,90 @@ namespace RCG {
                         delete_at = i;
                     }
                     GUILayout.EndHorizontal();
-                    effect.OnGUI();
+                    effect.OnGUI(i);
                 }
             }
             if(delete_at >= 0) {
                 m_CardEffects.RemoveAt(delete_at);
             }
         }
-
-        public RCG_CardData(RCG_CardSettings setting) {
-            m_Setting = setting;
-            CardName = m_Setting.m_CardName;
-            m_Cost = m_Setting.m_Cost;
-            m_CardType = m_Setting.m_CardType;
-        }
-        public void LogSetting() {
-            Debug.LogWarning("m_Setting:" + m_Setting.UCL_ToString());
-        }
-        virtual public bool TargetCheck(int target) {
-            switch(m_Setting.m_Target) {
-                case TargetType.None: {
-                        return false;
-                    }
-                case TargetType.Player: {
-                        return target == 0;
-                    }
-                case TargetType.Friend: {
-                        return target == 1;
-                    }
-                case TargetType.Allied: {
-                        return target <= 1;
-                    }
-                case TargetType.Enemy: {
-                        if(target <= 1) return false;
-                        return target < m_Setting.m_AtkRange + 2;
-                    }
-                case TargetType.All: {
-                        return true;
-                    }
+        public void DrawRequireSkills()
+        {
+            {
+                GUILayout.BeginHorizontal();
+                UCL.Core.UI.UCL_GUILayout.LabelAutoSize("Skill");
+                string aKey = "AddSkill";
+                UnitSkill aSkill = RCG_CardEditor.GetCardEditTmpData(aKey, UnitSkill.Melee);
+                bool flag = RCG_CardEditor.GetCardEditTmpData(aKey + "_Flag", false);
+                aSkill = UCL.Core.UI.UCL_GUILayout.Popup(aSkill, ref flag);
+                RCG_CardEditor.SetCardEditTmpData(aKey, aSkill);
+                RCG_CardEditor.SetCardEditTmpData(aKey + "_Flag", flag);
+                if (UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Add",16))
+                {
+                    m_Data.m_RequireSkills.Add(aSkill);
+                }
+                GUILayout.EndHorizontal();
             }
+
+
+            int delete_at = -1;
+            for (int i = 0; i < m_Data.m_RequireSkills.Count; i++)
+            {
+                var aSkill = m_Data.m_RequireSkills[i];
+
+                using (var scope = new GUILayout.VerticalScope("box"))
+                {
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label(aSkill.ToString());
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("Delete"))
+                    {
+                        delete_at = i;
+                    }
+                    GUILayout.EndHorizontal();
+                }
+            }
+            if (delete_at >= 0)
+            {
+                m_Data.m_RequireSkills.RemoveAt(delete_at);
+            }
+        }
+        #endregion
+        virtual public bool TargetCheck(int target) {
             return true;
         }
-        virtual public void TriggerEffect(RCG_Player player) {
-            if(m_Setting.m_DrawCard > 0) {
-                player.DrawCard(m_Setting.m_DrawCard);
+        virtual public void TriggerEffect(TriggerEffectData iTriggerEffectData, System.Action iEndAction) {
+            if(m_CardEffects.Count == 0)
+            {
+                iEndAction.Invoke();
+                return;
             }
+            System.Action<int> aTriggerAct = null;
+            //int aTriggerAt = 0;
+            aTriggerAct = delegate (int iTriggerAt)
+            {
+                Debug.LogWarning("iTriggerAt:" + iTriggerAt);
+                var aCardEffect = m_CardEffects[iTriggerAt];
+                try
+                {
+                    aCardEffect.TriggerEffect(iTriggerEffectData, delegate() {
+                        if (iTriggerAt + 1 < m_CardEffects.Count)
+                        {
+                            aTriggerAct.Invoke(iTriggerAt + 1);
+                        }
+                        else
+                        {
+                            iEndAction.Invoke();
+                        }
+                    });
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError("aCardEffect.TriggerEffect Exception:" + e);
+                    iEndAction.Invoke();
+                }
+            };
+            aTriggerAct.Invoke(0);
         }
-
-
-        protected RCG_CardSettings m_Setting;
-        public int m_Cost = 1;
-        public CardType m_CardType = CardType.Attack;
-
     }
 }

@@ -13,13 +13,15 @@ namespace RCG
         public UCL.Core.UCL_Event m_OnSelected;
         public bool IsSelected { get { return m_Selected; } }
 
-        public UCL_TB_Tweener m_ScaleUpTB;
-        public UCL_TB_Tweener m_ScaleBackTB;
-        public Image m_Image;
-        public Text m_NameText;
-        public GameObject m_Description;
-        public Text m_DescriptionText;
-        public Text m_CostText;
+        public UCL_TB_Tweener m_ScaleUpTB = null;
+        public UCL_TB_Tweener m_ScaleBackTB = null;
+        public Image m_Image = null;
+        public Text m_NameText = null;
+        public GameObject m_Description = null;
+        public Text m_DescriptionText = null;
+        public Text m_CostText = null;
+        public UCL_OnPointerEvent m_OnPointerEvent = null;
+        public List<Image> m_RequireSkillImages = new List<Image>();
         protected RCG_CardData m_Data;
         protected bool m_Selected = false;
         protected bool m_BlockSelection = false;
@@ -33,10 +35,31 @@ namespace RCG
                 int cost = m_Data.Cost;
                 if(cost < 0) cost = 0;
                 m_CostText.SetText(cost);
-                HideDescription();
+                var aRequireSkill = m_Data.RequireSkills;
+                for (int i = 0; i < m_RequireSkillImages.Count; i++)
+                {
+                    var aImg = m_RequireSkillImages[i];
+                    if (i < aRequireSkill.Count)
+                    {
+                        aImg.gameObject.SetActive(true);
+                        aImg.sprite = RCG_CardDataService.ins.GetUnitSkillSprite(aRequireSkill[i]);
+                    }
+                    else
+                    {
+                        aImg.gameObject.SetActive(false);
+                    }
+                }
+                //HideDescription();
+                ShowDescription();
             } else {
                 gameObject.SetActive(false);
             }
+        }
+        virtual public void OnPointerEnter(System.Action iAction) {
+            m_OnPointerEvent.m_OnPointerEnter.AddListener(delegate() { iAction.Invoke(); });
+        }
+        virtual public void OnPointerExit(System.Action iAction) {
+            m_OnPointerEvent.m_OnPointerExit.AddListener(delegate () { iAction.Invoke(); });
         }
         virtual public void BlockSelection() {
             DeSelect();
@@ -49,7 +72,7 @@ namespace RCG
         virtual public void Select() {
             if(m_BlockSelection) return;
             m_Selected = true;
-            ShowDescription();
+            //ShowDescription();
             m_ScaleBackTB.Kill();
             m_ScaleUpTB.StartTween();
             m_OnSelected.UCL_Invoke();
@@ -58,7 +81,7 @@ namespace RCG
         virtual public void DeSelect() {
             if(m_BlockSelection) return;
             m_Selected = false;
-            HideDescription();
+            //HideDescription();
             m_ScaleUpTB.Kill();
             m_ScaleBackTB.StartTween();
         }

@@ -12,13 +12,13 @@ namespace RCG {
             return window;
         }
         Rect m_GridRegion = new Rect();
-        RCG_CardEditor m_CardEditor;
+        public RCG_CardEditor m_CardEditor;
         public void Init(RCG_CardEditor _CardEditor) {
-            m_CardEditor = _CardEditor;
-            m_CardEditor.Init();
+            m_CardEditor = _CardEditor; 
         }
         private void OnGUI() {
             if(m_CardEditor == null) return;
+            m_CardEditor.Init();
             m_CardEditor.EditWindow(0);
             if(Event.current.type == EventType.Repaint) {
                 var newRgn = GUILayoutUtility.GetLastRect();

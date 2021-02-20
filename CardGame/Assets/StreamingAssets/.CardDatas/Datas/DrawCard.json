@@ -1,0 +1,13 @@
+{
+	"m_CardType":"Buff",
+	"m_CardName":"DrawCard",
+	"m_IconName":"glass.png",
+	"m_Cost":1,
+	"CardEffect":
+	[
+		{
+			"EffectType":"DrawEffect",
+			"m_DrawCardNum":3
+		}
+	]
+}

@@ -5,17 +5,19 @@ using UnityEngine.UI;
 using TMPro;
 
 namespace RCG {
-    [RequireComponent(typeof(Slider))]
+    //[RequireComponent(typeof(Slider))]
     public class RCG_UI_HPbar : MonoBehaviour
     {
 
         public TextMeshProUGUI m_hp_text;
-        private Slider m_hp_slider;
+        [SerializeField] private Slider m_HpMoveSlider = null;
+        [SerializeField] private Slider m_HPslider;
         private RCG_Unit m_unit;
-
+        private int m_Timer = 0;
+        private int m_DisplayHP = 0;
         private void Awake() {
-            if(!m_hp_slider){
-                m_hp_slider = gameObject.GetComponent<Slider>();
+            if(!m_HPslider){
+                m_HPslider = gameObject.GetComponent<Slider>();
             }
             if(!m_unit){
                 m_unit = gameObject.GetComponentInParent<RCG_Unit>();
@@ -33,13 +35,35 @@ namespace RCG {
         // Update is called once per frame
         void Update()
         {
-            
-        }
+            if (++m_Timer > 2)
+            {
+                m_Timer = 0;
+                if (m_DisplayHP != m_unit.Hp)
+                {
+                    int aDel = m_unit.Hp - m_DisplayHP;
+                    Debug.LogWarning("aDel:" + aDel);
+                    int aMove = Mathf.RoundToInt(0.1f * aDel);
+                    if (aMove == 0)
+                    {
+                        aMove = aDel > 0 ? 1 : -1;
+                    }
+                    m_DisplayHP += aMove;
+                    m_HpMoveSlider.value = m_DisplayHP;
+                }
+            }
 
+        }
+        public void UpdateHp()
+        {
+            m_HPslider.value = m_unit.Hp;
+            m_HpMoveSlider.maxValue = m_HPslider.maxValue = m_unit.MaxHp;
+            m_hp_text.text = m_unit.Hp + "/" + m_unit.MaxHp;
+        }
         public void UpdateHUD(){
-            m_hp_slider.value = m_unit.m_Hp;
-            m_hp_slider.maxValue = m_unit.m_MaxHp;
-            m_hp_text.text = m_unit.m_Hp + "/" + m_unit.m_MaxHp;
+            m_DisplayHP = m_unit.Hp;
+            m_HpMoveSlider.value = m_HPslider.value = m_unit.Hp;
+            m_HpMoveSlider.maxValue = m_HPslider.maxValue = m_unit.MaxHp;
+            m_hp_text.text = m_unit.Hp + "/" + m_unit.MaxHp;
         }
     }
 }

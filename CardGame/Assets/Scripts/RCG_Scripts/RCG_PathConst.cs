@@ -18,7 +18,9 @@ namespace RCG {
         /// 地圖Prefab路徑
         /// </summary>
         public const string MapResource = PrefabResource + "/" + "Maps";
-        
+
+        public const string MonsterResource = PrefabResource + "/" + "Monsters";
+        public const string CharacterResource = PrefabResource + "/" + "Characters";
     }
 }
 

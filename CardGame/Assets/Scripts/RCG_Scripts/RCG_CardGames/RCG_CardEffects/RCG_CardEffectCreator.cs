@@ -14,6 +14,8 @@ namespace RCG {
             m_EffectNameList = new List<string>();
             AddEffect<RCG_CardAttackEffect>();
             AddEffect<RCG_CardDrawEffect>();
+            AddEffect<RCG_CardCostEffect>();
+            AddEffect<RCG_CardDefenseEffect>();
         }
         static void AddEffect<T>() where T : RCG_CardEffect, new() {
             string key = typeof(T).Name.ToString().Replace("RCG_Card", "");//.Replace("Effect", "");
@@ -26,7 +28,10 @@ namespace RCG {
         }
         public static RCG_CardEffect Create(string type) {
             if(m_CreateDic == null) Init();
-            if(m_CreateDic.ContainsKey(type)) return m_CreateDic[type].Invoke();
+            if(m_CreateDic.ContainsKey(type)) {
+                var aEffect = m_CreateDic[type].Invoke();
+                return aEffect;
+            }
             Debug.LogError("RCG_CardEffectCreator Create:" + type + ",Fail!!");
             return null;
         }

@@ -5,13 +5,20 @@ using UnityEngine;
 namespace RCG {
     public class RCG_CardGame : MonoBehaviour {
         static public RCG_CardGame ins = null; 
-        public RCG_Player m_Player;
-        public RCG_BattleField m_battlefield;
+        public RCG_Player m_Player = null;
         bool m_Entered = false;
         public void Init() {
             ins = this;
-            //m_Player.Init();
+
+            m_Player.Init();
             Debug.LogWarning("Application.systemLanguage:" + Application.systemLanguage.ToString());
+        }
+        /// <summary>
+        /// 回合開始初始化
+        /// </summary>
+        public void TurnInit()
+        {
+            m_Player.TurnInit();
         }
         virtual public void EnterBattle() {
             if(m_Entered) {
@@ -29,11 +36,15 @@ namespace RCG {
             m_Entered = false;
             gameObject.SetActive(false);
         }
+        /// <summary>
+        /// 背景按鈕被按下
+        /// </summary>
+        virtual public void BackgroundClick()
+        {
+            m_Player.BackgroundClick();
+        }
         public void EnemyEndTurn() {
 
-        }
-        public void PlayerEndTurn() {
-            m_Player.EndTurn();
         }
         private void Update() {
             //Debug.LogWarning("Update()");
