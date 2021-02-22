@@ -77,7 +77,7 @@ namespace RCG {
             {
                 m_UnitDisplay.rotation = Quaternion.Euler(0, 180, 0);
             }
-            m_UnitUI.Init();
+            m_UnitUI.Init(this);
             foreach(var aSkill in m_Skills)
             {
                 m_SkillSets.Add(aSkill);
@@ -99,6 +99,10 @@ namespace RCG {
             aHPVFX.SetAlterHP(-iDamage, m_UnitDisplay.position, IsEnemy);
             DamageHP(iDamage);
             m_UnitUI.Hit();
+        }
+        virtual public void AddStatusEffect(StatusType iStatusType, int iAmount)
+        {
+            m_UnitUI.m_StatusEffectUI.AddStatusEffect(iStatusType, iAmount);
         }
         virtual public void SelectUnit()
         {
@@ -141,14 +145,16 @@ namespace RCG {
         }
 
         public void EndTurn(){
-            for(int i = 0; i < m_status_list.Count; i++) {
-                if(m_status_list[i] != null){
-                    m_status_list[i].StatusTurnEnd();
-                }
-                else{
-                    m_status_list.RemoveAt(i);
-                }
-            }
+            m_UnitUI.TurnEnd();
+            //for(int i = 0; i < m_status_list.Count; i++) {
+            //    if(m_status_list[i] != null){
+            //        m_status_list[i].StatusTurnEnd();
+            //    }
+            //    else{
+            //        //會造成下個status被跳過
+            //        m_status_list.RemoveAt(i);
+            //    }
+            //}
         }
 
         [UCL.Core.ATTR.UCL_FunctionButton]

@@ -271,6 +271,7 @@ namespace RCG {
         public void TurnStart()
         {
             TurnEnd();
+
             Debug.Log("Monster QWQ : " + m_Monsters.Count);
             foreach (RCG_Unit u in m_Monsters)
             {
@@ -282,11 +283,19 @@ namespace RCG {
                 var m = u.gameObject.GetComponent<RCG_Monster>();
                 if (m)
                 {
-                    m.Act();
+                    try//目前有Exception導致流程失效
+                    {
+                        m.Act();
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogError(e);
+                    }
                     Debug.Log("Monster action QWQ");
                 }
                 u.EndTurn();
             }
+
         }
         /// <summary>
         /// 敵方戰鬥行動結束

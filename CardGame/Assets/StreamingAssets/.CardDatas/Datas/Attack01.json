@@ -18,6 +18,13 @@
 			"m_AtkTimes":2,
 			"m_AttackType":"Magic",
 			"m_VFX":""
+		},
+		{
+			"EffectType":"StatusEffect",
+			"m_StatusType":"Bleed",
+			"m_BuffRange":"BackEnemy",
+			"m_ShowBuffRangeDes":"False",
+			"m_Amount":5
 		}
 	]
 }

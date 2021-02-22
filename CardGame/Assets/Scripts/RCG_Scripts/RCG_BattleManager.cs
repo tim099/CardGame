@@ -16,6 +16,7 @@ namespace RCG {
         public RCG_BattleField m_BattleField = null;
         public RCG_CardGame m_CardGame = null;
         public RCG_VFXManager m_VFXManager = null;
+        public RCG_StatusManager m_StatusManager = null;
         public Button m_BackgroundButton;
         bool m_Entered = false;
         BattleState m_State = BattleState.None;
@@ -24,6 +25,7 @@ namespace RCG {
             m_BattleField.Init();
             m_CardGame.Init();
             m_VFXManager.Init();
+            m_StatusManager.Init();
             m_BackgroundButton.onClick.AddListener(BackgroundClick);
             gameObject.SetActive(false);
         }

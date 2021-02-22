@@ -317,8 +317,8 @@ namespace RCG {
                 var path = Path.Combine(m_FolderPath, m_EditingData.m_FilePath);
                 var data = card_data.ToJson();
                 string save_data = data.ToJsonBeautify();
-                Debug.LogWarning("path:" + path);
-                Debug.LogWarning("save_data:" + save_data);
+                //Debug.LogWarning("path:" + path);
+                //Debug.LogWarning("save_data:" + save_data);
                 File.WriteAllText(path, save_data);
                 RefreshCardDataPaths();
             }
