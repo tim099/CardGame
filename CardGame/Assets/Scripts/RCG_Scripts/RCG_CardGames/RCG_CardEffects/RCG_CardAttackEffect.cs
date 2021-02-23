@@ -103,7 +103,18 @@ namespace RCG {
             Normal = 0,
             Magic,
         }
+        public int Atk
+        {
+            get
+            {
+                if (RCG_BattleField.ins != null && RCG_BattleField.ins.ActiveUnit != null)
+                {
 
+                    return RCG_BattleField.ins.ActiveUnit.GetAtk(m_Atk);
+                }
+                return m_Atk;
+            }
+        }
         public int m_Atk = 0;
         public AttackRange m_AttackRange = AttackRange.AllEnemy;
         public int m_AtkTimes = 1;
@@ -116,10 +127,20 @@ namespace RCG {
         override public string Description {
             get {
                 string aAttackRangeDes = GetAttackRangeDes(m_AttackRange);
+                string aAtkStr = m_Atk.ToString();
+                int aAtk = Atk;
+                if (aAtk > m_Atk)//Buff
+                {
+                    aAtkStr = aAtk.ToString().RichTextColor("00FF00");
+                }
+                else if (aAtk < m_Atk)//Debuff
+                {
+                    aAtkStr = aAtk.ToString().RichTextColor("FF0000");
+                }
                 if (m_AtkTimes > 1) {
-                    return UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Attack_Des", m_Atk, m_AtkTimes, aAttackRangeDes) + "\n";
+                    return UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Attack_Des", aAtkStr, m_AtkTimes, aAttackRangeDes) + "\n";
                 } else {
-                    return UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Attack_DesSingle", m_Atk, aAttackRangeDes) + "\n";
+                    return UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Attack_DesSingle", aAtkStr, aAttackRangeDes) + "\n";
                 }
             }
         }
@@ -135,7 +156,7 @@ namespace RCG {
             {
                 for (int i = 0; i < m_AtkTimes; i++)
                 {
-                    iTriggerEffectData.p_Player.AddPlayerAction(new RCG_PlayerAttackAction(aTargets, m_Atk));
+                    iTriggerEffectData.p_Player.AddPlayerAction(new RCG_PlayerAttackAction(iTriggerEffectData.m_PlayerUnit, aTargets, Atk));
                 }
             }
 

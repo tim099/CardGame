@@ -31,7 +31,7 @@ namespace RCG
 
         virtual public void ShowSelection(bool iShow)
         {
-            if (m_Unit == null)
+            if (m_Unit == null || m_Unit.IsDead)
             {
                 m_SelectButton.gameObject.SetActive(false);
                 return;

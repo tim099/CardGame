@@ -270,8 +270,7 @@ namespace RCG {
         /// </summary>
         public void TurnStart()
         {
-            TurnEnd();
-
+            SetActiveUnit(null);
             Debug.Log("Monster QWQ : " + m_Monsters.Count);
             foreach (RCG_Unit u in m_Monsters)
             {
@@ -295,7 +294,7 @@ namespace RCG {
                 }
                 u.EndTurn();
             }
-
+            TurnEnd();
         }
         /// <summary>
         /// 敵方戰鬥行動結束
@@ -355,6 +354,29 @@ namespace RCG {
                 ActiveUnit.SelectUnit();
             }
             RCG_Player.ins.UpdateCardStatus();
+            RCG_Player.ins.UpdateCardDiscription();
+        }
+        /// <summary>
+        /// 單位死亡時觸發
+        /// </summary>
+        /// <param name="iUnit"></param>
+        public void OnUnitDead(RCG_Unit iUnit)
+        {
+            Debug.LogWarning("OnUnitDead:" + iUnit.name+ ",m_TargetType:"+ m_TargetType.ToString());
+            if (!iUnit.IsEnemy)
+            {
+                ///腳色死亡 清除ActiveUnit狀態
+                if(iUnit == ActiveUnit)
+                {
+                    SetActiveUnit(null);
+                }
+                ///腳色死亡 更新選擇腳色狀態
+                if(m_TargetType == TargetType.Close)
+                {
+                    SetSelectMode(TargetType.Close);
+                }
+            }
+            RCG_Player.ins.OnUnitDead(iUnit);
         }
         /// <summary>
         /// 選擇無目標按鈕

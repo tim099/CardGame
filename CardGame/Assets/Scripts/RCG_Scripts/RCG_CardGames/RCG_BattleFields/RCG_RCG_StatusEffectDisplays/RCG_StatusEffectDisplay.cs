@@ -24,10 +24,12 @@ namespace RCG
         /// </summary>
         Half,
     }
+    [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_StatusEffectDisplay : MonoBehaviour
     {
         public RCG_Unit p_Unit = null;
-        public StatusType m_StatusType = StatusType.None;
+        virtual public StatusType StatusType { get{ return m_StatusType; } }
+        [SerializeField] public StatusType m_StatusType = StatusType.None;
         /// <summary>
         /// 效果類型
         /// </summary>
@@ -38,6 +40,13 @@ namespace RCG
         public StatusDecreaseType m_StatusDecreaseType = StatusDecreaseType.Normal;
         public Image m_StatusImg = null;
         public Text m_StatusLayerText = null;
+        public bool End
+        {
+            get
+            {
+                return StatusLayer <= 0;
+            }
+        }
         public int StatusLayer
         {
             get
@@ -60,40 +69,57 @@ namespace RCG
             gameObject.SetActive(true);
             StatusLayer = 0;
         }
+        virtual public float GetAtkBuff()
+        {
+            return 0f;
+        }
         virtual public void AlterLayer(int iAmount)
         {
             int aVal = m_StatusLayer + iAmount;
             if (aVal < 0) aVal = 0;
             StatusLayer = aVal;
         }
-        virtual public void TurnEnd()
+        virtual public void TurnEndDecreaseLayer()
         {
-            switch (m_StatusType)
-            {
-                case StatusType.Bleed:
-                    {
-                        p_Unit.UnitHit(m_StatusLayer);
-                        break;
-                    }
-            }
             switch (m_StatusDecreaseType)
             {
                 case StatusDecreaseType.Normal:
                     {
-                        AlterLayer(-1);
+                        RCG_Player.ins.AddPlayerAction(CreateAction.StatusAction(p_Unit, m_StatusType, -1));
+                        //AlterLayer(-1);
                         break;
                     }
                 case StatusDecreaseType.Clear:
                     {
-                        StatusLayer = 0;
+                        RCG_Player.ins.AddPlayerAction(CreateAction.StatusAction(p_Unit, m_StatusType, -StatusLayer));
+                        //StatusLayer = 0;
                         break;
                     }
                 case StatusDecreaseType.Half:
                     {
-                        StatusLayer =  m_StatusLayer / 2;
+                        int aDel = m_StatusLayer - m_StatusLayer / 2;
+                        RCG_Player.ins.AddPlayerAction(CreateAction.StatusAction(p_Unit, m_StatusType, -aDel));
+
                         break;
                     }
             }
+
+        }
+        /// <summary>
+        /// 回合結束時結算行為(etc. Bleed每回合扣血)
+        /// </summary>
+        virtual public void TurnEndAction() { }
+        virtual public void TurnEnd()
+        {
+            TurnEndAction();
+            TurnEndDecreaseLayer();
+        }
+
+        [UCL.Core.ATTR.UCL_FunctionButton]
+        virtual public void AutoLinkData()
+        {
+            m_StatusLayerText = UCL.Core.GameObjectLib.SearchChild<Text>(transform, "StatusLayerText");
+            m_StatusImg = UCL.Core.GameObjectLib.SearchChild<Image>(transform, "StatusImg");
         }
     }
 }

@@ -34,6 +34,17 @@ namespace RCG {
                 m_Hp = value;
             }
         }
+        public int Armor
+        {
+            get {
+                return m_Armor;
+            } 
+            protected set
+            {
+                m_Armor = value;
+                m_unit_HUD.HPbar.UpdateArmor(m_Armor);
+            }
+        }
         public int MaxHp {
             get{return m_MaxHp;}
             set{
@@ -49,9 +60,31 @@ namespace RCG {
         {
             get; protected set;
         }
+        public RCG_StatusEffectUI StatusEffectUI
+        {
+            get { return m_UnitUI.m_StatusEffectUI; }
+        }
+        public float AtkBuff
+        {
+            get
+            {
+                return m_AtkBuff;
+            }
+        }
+        public bool IsAlive
+        {
+            get { return !m_is_dead; }
+        }
         public bool IsDead
         {
             get { return m_is_dead; }
+        }
+        public bool Selected
+        {
+            get
+            {
+                return m_UnitUI.m_SelectedItem.activeSelf;
+            }
         }
         protected bool m_is_dead = false;
         public HashSet<UnitSkill> m_SkillSets = new HashSet<UnitSkill>();
@@ -60,10 +93,11 @@ namespace RCG {
         public Transform m_UnitDisplay = null;
         public UnitPos m_UnitPos = UnitPos.Front;
         public int m_UnitPosId = 0;
-
+        [SerializeField] float m_AtkBuff = 1f;//[SerializeField]for Debug
         [SerializeField] protected int m_MaxHp = 0;
         [SerializeField] protected RCG_UnitUI m_UnitUI = null;
         protected int m_Hp = 0;
+        protected int m_Armor = 0;
         private Queue<RCG_UnitAction> m_action_queue;
         private RCG_UnitAction m_action = null;
         private RCG_UnitHUD m_unit_HUD;
@@ -71,6 +105,7 @@ namespace RCG {
         virtual public void Init(bool _IsEnemy, UnitPos _Pos)
         {
             SetHp(MaxHp);
+            SetArmor(0);
             IsEnemy = _IsEnemy;
             Pos = _Pos;
             if (IsEnemy)
@@ -95,10 +130,42 @@ namespace RCG {
         /// </summary>
         virtual public void UnitHit(int iDamage)
         {
+
+            if (Armor > 0)
+            {
+                var aArmorVFX = RCG_VFXManager.ins.CreateVFX<RCG_VFX_HP>("VFX_Armor");
+                
+                if (iDamage <= Armor)
+                {
+                    aArmorVFX.SetAlterHP(-iDamage, m_UnitDisplay.position, IsEnemy);
+                    AlterArmor(-iDamage);
+                    return;
+                }
+                else
+                {
+                    aArmorVFX.SetAlterHP(-Armor, m_UnitDisplay.position, IsEnemy);
+                    iDamage -= Armor;
+                    AlterArmor(-Armor);
+                }
+            }
             var aHPVFX = RCG_VFXManager.ins.CreateVFX<RCG_VFX_HP>();
             aHPVFX.SetAlterHP(-iDamage, m_UnitDisplay.position, IsEnemy);
             DamageHP(iDamage);
             m_UnitUI.Hit();
+        }
+        virtual public int GetAtk(int iOriginAtk)
+        {
+            iOriginAtk = Mathf.RoundToInt(AtkBuff * iOriginAtk);
+            return iOriginAtk;
+        }
+        virtual public void UpdateAtkBuff()
+        {
+            m_AtkBuff = 1f;
+            m_AtkBuff += StatusEffectUI.GetAtkBuff();
+            if (Selected)//是目前的行動單位 更新手牌顯示資訊
+            {
+                RCG_Player.ins.UpdateCardDiscription();
+            }
         }
         virtual public void AddStatusEffect(StatusType iStatusType, int iAmount)
         {
@@ -121,6 +188,14 @@ namespace RCG {
             Hp = amount;
             m_unit_HUD.UpdateHUD();
         }
+        public void SetArmor(int iAmount)
+        {
+            Armor = iAmount;
+        }
+        public void AlterArmor(int iAmount)
+        {
+            Armor = m_Armor + iAmount;
+        }
         public int RestoreHP(int amount){
             Hp += amount;
             if (Hp > MaxHp) Hp = MaxHp;
@@ -140,6 +215,9 @@ namespace RCG {
         }
 
         public void Die(){
+            //避免重複死亡
+            if (m_is_dead) return;
+            RCG_BattleField.ins.OnUnitDead(this);
             m_is_dead = true;
             m_action_queue.Enqueue(new RCG_UnitAction(UnitActionType.Die, 0, null, 1.1));
         }
@@ -201,7 +279,9 @@ namespace RCG {
                 }
                 if(m_action.m_duration < 0){
                     if(m_action.m_type == UnitActionType.Die){
-                        Destroy(gameObject);
+                        //Destroy(gameObject);
+                        ///避免其他流程出錯 & 支援復活功能
+                        gameObject.SetActive(false);
                         Debug.Log("Destroy");
                     }
                     m_action = null;

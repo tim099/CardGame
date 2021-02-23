@@ -16,13 +16,13 @@ namespace RCG
             {
                 var aStatus = m_StatusTemplates[i];
                 aStatus.gameObject.SetActive(false);
-                if (m_StatusDic.ContainsKey(aStatus.m_StatusType))
+                if (m_StatusDic.ContainsKey(aStatus.StatusType))
                 {
-                    Debug.LogError("m_StatusDic.ContainsKey:" + aStatus.m_StatusType.ToString());
+                    Debug.LogError("m_StatusDic.ContainsKey:" + aStatus.StatusType.ToString());
                 }
                 else
                 {
-                    m_StatusDic.Add(aStatus.m_StatusType, aStatus);
+                    m_StatusDic.Add(aStatus.StatusType, aStatus);
                 }
             }
         }

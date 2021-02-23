@@ -1,8 +1,8 @@
 "NewGame":"新遊戲"
 "Options":"選項"
 
-"AttackRange_FrontEnemy":"前排"
-"AttackRange_BackEnemy":"後排"
+"AttackRange_FrontEnemy":"前排敵人"
+"AttackRange_BackEnemy":"後排敵人"
 "AttackRange_AllEnemy":"敵人"
 "AttackRange_FrontEnemyAOE":"前排全體"
 "AttackRange_BackEnemyAOE":"後排全體"
@@ -18,7 +18,7 @@
 "AttackRange_Player":"自己"
 "AttackRange_Target":"目標"
 
-
+"Status_Weak":"虛弱"
 "Status_Strength":"力量"
 "Status_Bleed":"出血"
 

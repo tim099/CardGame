@@ -25,12 +25,11 @@
 			"m_DrawCardNum":1
 		},
 		{
-			"EffectType":"AttackEffect",
-			"m_Atk":6,
-			"m_AttackRange":"RowAOE",
-			"m_AtkTimes":2,
-			"m_AttackType":"Normal",
-			"m_VFX":""
+			"EffectType":"StatusEffect",
+			"m_StatusType":"Bleed",
+			"m_BuffRange":"RowAOE",
+			"m_ShowBuffRangeDes":"False",
+			"m_Amount":3
 		}
 	]
 }

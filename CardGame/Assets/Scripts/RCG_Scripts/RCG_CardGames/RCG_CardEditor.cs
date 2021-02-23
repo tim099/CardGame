@@ -399,7 +399,7 @@ namespace RCG {
             var card_data = m_EditingData.m_CardData;
             if(string.IsNullOrEmpty(card_data.IconName)) return;
             string icon_path = Path.Combine(IconPath, card_data.IconName);
-            Debug.LogWarning("icon_path:" + icon_path);
+            //Debug.LogWarning("icon_path:" + icon_path);
             if(File.Exists(icon_path)) {
                 var fileData = File.ReadAllBytes(icon_path);
                 var tex = new Texture2D(2, 2);

@@ -12,6 +12,15 @@ namespace RCG
         {
             p_Unit = iUnit;
         }
+        virtual public float GetAtkBuff()
+        {
+            float aBuff = 0;
+            foreach(var aStatus in m_StatusEffects.Values)
+            {
+                aBuff += aStatus.GetAtkBuff();
+            }
+            return aBuff;
+        }
         virtual public void AddStatusEffect(StatusType iStatusType, int iAmount)
         {
             if (!m_StatusEffects.ContainsKey(iStatusType))
@@ -20,7 +29,18 @@ namespace RCG
                 aStatus.Init(p_Unit);
                 m_StatusEffects.Add(iStatusType, aStatus);
             }
-            m_StatusEffects[iStatusType].AlterLayer(iAmount);
+            {
+                var aStatus = m_StatusEffects[iStatusType];
+                aStatus.AlterLayer(iAmount);
+                if (aStatus.End)
+                {
+                    Destroy(aStatus.gameObject);
+                    m_StatusEffects.Remove(iStatusType);
+                }
+            }
+            
+
+
         }
         virtual public void TurnEnd()
         {
@@ -29,15 +49,15 @@ namespace RCG
             {
                 var aEffect = m_StatusEffects[aEffectKey];
                 aEffect.TurnEnd();
-                if (aEffect.StatusLayer <= 0)
+                if (aEffect.End)
                 {
                     aEndEffect.Add(aEffectKey);
                 }
             }
-            foreach(var aKey in aEndEffect)
+            foreach(var aStatusType in aEndEffect)
             {
-                Destroy(m_StatusEffects[aKey].gameObject);
-                m_StatusEffects.Remove(aKey);
+                Destroy(m_StatusEffects[aStatusType].gameObject);
+                m_StatusEffects.Remove(aStatusType);
             }
         }
     }

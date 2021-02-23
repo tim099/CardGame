@@ -76,7 +76,8 @@ namespace RCG {
         public void TurnEnd()
         {
             SetState(BattleState.TurnEnd);
-            TurnInit();
+            RCG_Player.ins.TurnEndPlayerAction(TurnInit);
+            //TurnInit();
         }
         private void OnGUI() {
             if(m_Entered) {

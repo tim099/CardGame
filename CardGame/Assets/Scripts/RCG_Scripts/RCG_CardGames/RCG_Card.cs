@@ -69,7 +69,7 @@ namespace RCG {
         /// <param name="_Data"></param>
         virtual public void SetCardData(RCG_CardData _Data)
         {
-            Debug.LogWarning("SetCardData!!");
+            //Debug.LogWarning("SetCardData!!");
             m_Data = _Data;
             m_CardDisplayer.Init(m_Data);
             m_TB_Tweener.Kill();
@@ -114,6 +114,13 @@ namespace RCG {
 
             
             return;
+        }
+        /// <summary>
+        /// 更新卡牌描述(當攻擊力Buff等導致數值變化時
+        /// </summary>
+        virtual public void UpdateCardDiscription()
+        {
+            m_CardDisplayer.UpdateCardDiscription();
         }
         /// <summary>
         /// 更新卡牌資訊 包含判斷玩家費用是否足夠等
