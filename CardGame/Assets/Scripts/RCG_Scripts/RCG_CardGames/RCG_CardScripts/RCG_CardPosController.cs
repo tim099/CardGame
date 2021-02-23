@@ -38,6 +38,16 @@ namespace RCG {
             }
             UpdateActiveCardList();
         }
+        /// <summary>
+        /// 更新卡牌描述(當攻擊力Buff等導致數值變化時
+        /// </summary>
+        virtual public void UpdateCardDiscription()
+        {
+            foreach (var aCardPos in m_CardPosList)
+            {
+                aCardPos.m_Card.UpdateCardDiscription();
+            }
+        }
         virtual public RCG_Card GetAvaliableCard() {
             UpdateActiveCardList();
             if (m_InActiveCardPosList.Count == 0)

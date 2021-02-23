@@ -146,10 +146,9 @@ namespace RCG {
                 return;
             }
             System.Action<int> aTriggerAct = null;
-            //int aTriggerAt = 0;
             aTriggerAct = delegate (int iTriggerAt)
             {
-                Debug.LogWarning("iTriggerAt:" + iTriggerAt);
+                //Debug.LogWarning("iTriggerAt:" + iTriggerAt);
                 var aCardEffect = m_CardEffects[iTriggerAt];
                 try
                 {

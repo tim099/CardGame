@@ -8,7 +8,7 @@ namespace RCG {
     //[RequireComponent(typeof(Slider))]
     public class RCG_UI_HPbar : MonoBehaviour
     {
-
+        public Text m_ArmorText = null;
         public TextMeshProUGUI m_hp_text;
         [SerializeField] private Slider m_HpMoveSlider = null;
         [SerializeField] private Slider m_HPslider;
@@ -52,6 +52,10 @@ namespace RCG {
                 }
             }
 
+        }
+        public void UpdateArmor(int iValue)
+        {
+            m_ArmorText.text = iValue.ToString();
         }
         public void UpdateHp()
         {

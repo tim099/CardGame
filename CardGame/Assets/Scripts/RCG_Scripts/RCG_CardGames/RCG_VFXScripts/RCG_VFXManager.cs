@@ -38,6 +38,11 @@ namespace RCG
         {
             return CreateVFX(typeof(T).Name.Replace("RCG_",string.Empty)) as T;
         }
+
+        public T CreateVFX<T>(string iName) where T : RCG_VFX
+        {
+            return CreateVFX(iName) as T;
+        }
         /// <summary>
         /// 照名稱生成VFX
         /// </summary>

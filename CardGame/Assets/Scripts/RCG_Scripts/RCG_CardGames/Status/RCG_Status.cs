@@ -7,7 +7,7 @@ using TMPro;
 namespace RCG{
 
     public enum StatusType{
-        None,
+        None = 0,
         Bleed,
         Poisoned,
         Dazed,
@@ -19,6 +19,10 @@ namespace RCG{
     
     public class RCG_Status : MonoBehaviour
     {
+        public static string GetStatusDes(StatusType iStatusType)
+        {
+            return UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Status_" + iStatusType.ToString());
+        }
         public RCG_Unit m_target;
         protected int m_amount = 0;
         public int _m_round  = 1;

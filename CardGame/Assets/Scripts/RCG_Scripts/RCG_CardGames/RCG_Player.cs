@@ -42,7 +42,7 @@ namespace RCG {
         [SerializeField] protected RCG_CostUI m_CostUI = null;
         protected List<RCG_PlayerAction> m_PlayerActions = new List<RCG_PlayerAction>();
         protected PlayerState m_PlayerState = PlayerState.Idle;
-        protected RCG_Card m_SelectedCard = null;
+        [SerializeField] protected RCG_Card m_SelectedCard = null;
         protected UCL_RectTransformCollider m_Target = null;
         protected int m_HandCardCount = 0;
         protected bool m_Blocking = false;
@@ -87,6 +87,14 @@ namespace RCG {
             m_Deck.Shuffle();
         }
         /// <summary>
+        /// 單位死亡時觸發
+        /// </summary>
+        /// <param name="iUnit"></param>
+        public void OnUnitDead(RCG_Unit iUnit)
+        {
+
+        }
+        /// <summary>
         /// 使用手牌
         /// </summary>
         /// <param name="iSelectUnits"></param>
@@ -128,17 +136,19 @@ namespace RCG {
         }
         protected void TriggerPlayerActions(System.Action iEndAction)
         {
-            SetState(PlayerState.PlayerAction);
-            if(m_PlayerActions.Count == 0)
+            if (m_PlayerActions.Count == 0)
             {
                 iEndAction.Invoke();
                 return;
             }
+            var aPrevState = m_PlayerState;
+            SetState(PlayerState.PlayerAction);
+
 
             System.Action<int> aTriggerAct = null;
             aTriggerAct = delegate (int iTriggerAt)
             {
-                Debug.LogWarning("iTriggerAt:" + iTriggerAt+",Total:" + m_PlayerActions.Count);
+                //Debug.LogWarning("iTriggerAt:" + iTriggerAt+",Total:" + m_PlayerActions.Count);
                 var aPlayerAct = m_PlayerActions[iTriggerAt];
                 try
                 {
@@ -150,6 +160,7 @@ namespace RCG {
                         else
                         {
                             m_PlayerActions.Clear();
+                            SetState(aPrevState);
                             iEndAction.Invoke();
                         }
                     });
@@ -158,6 +169,7 @@ namespace RCG {
                 {
                     m_PlayerActions.Clear();
                     Debug.LogError("TriggerPlayerActions Exception:" + e);
+                    SetState(aPrevState);
                     iEndAction.Invoke();
                 }
             };
@@ -195,8 +207,13 @@ namespace RCG {
         /// </summary>
         /// <param name="iCard"></param>
         public void SetSelectedCard(RCG_Card iCard) {
-            if(m_Blocking || m_PlayerState != PlayerState.Idle) {
+            if(m_Blocking) {
                 Debug.LogWarning("SetSelectedCard Fail, Blocking!!");
+                return;
+            }
+            if(m_PlayerState != PlayerState.Idle)
+            {
+                Debug.LogWarning("SetSelectedCard Fail, m_PlayerState:"+ m_PlayerState.ToString());
                 return;
             }
             if(m_SelectedCard == iCard) {
@@ -295,6 +312,10 @@ namespace RCG {
             ClearAllHandCard();
             RCG_BattleManager.ins.PlayerTurnEnd();
         }
+        public void TurnEndPlayerAction(System.Action iEndAct)
+        {
+            TriggerPlayerActions(iEndAct);
+        }
         /// <summary>
         /// 回合初始化
         /// </summary>
@@ -318,6 +339,13 @@ namespace RCG {
         virtual public void UpdateCardStatus()
         {
             m_CardPosController.UpdateCardStatus();
+        }
+        /// <summary>
+        /// 更新卡牌描述(當攻擊力Buff等導致數值變化時
+        /// </summary>
+        virtual public void UpdateCardDiscription()
+        {
+            m_CardPosController.UpdateCardDiscription();
         }
         public void StartBlocking() {
             if(m_Blocking) {
@@ -381,6 +409,7 @@ namespace RCG {
                         {
                             IsUsingCard = false;
                             UpdateCardStatus();
+                            ClearSelectedCard();
                             SetState(PlayerState.Idle);
                         });
                         break;

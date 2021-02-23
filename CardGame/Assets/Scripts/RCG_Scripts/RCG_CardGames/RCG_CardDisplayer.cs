@@ -31,7 +31,7 @@ namespace RCG
                 gameObject.SetActive(true);
                 m_Image.SetSprite(m_Data.Icon);
                 m_NameText.SetText(m_Data.CardName);
-                m_DescriptionText.SetText(m_Data.Description);
+                UpdateCardDiscription();
                 int cost = m_Data.Cost;
                 if(cost < 0) cost = 0;
                 m_CostText.SetText(cost);
@@ -84,6 +84,14 @@ namespace RCG
             //HideDescription();
             m_ScaleUpTB.Kill();
             m_ScaleBackTB.StartTween();
+        }
+        virtual public void UpdateCardDiscription()
+        {
+            if (m_Data == null) return;
+            if (m_DescriptionText != null)
+            {
+                m_DescriptionText.SetText(m_Data.Description);
+            }
         }
         virtual public void ShowDescription() {
             m_Description.SetActive(true);

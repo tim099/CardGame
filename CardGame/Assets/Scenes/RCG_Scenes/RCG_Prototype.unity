@@ -14371,7 +14371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -43921,11 +43921,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1994476214}
     m_Modifications:
-    - target: {fileID: 753266514883532823, guid: fbb2882cfdbb7d74a937fc43498626e9,
-        type: 3}
-      propertyPath: m_AnimEase
-      value: 21
-      objectReference: {fileID: 0}
     - target: {fileID: 820961799216540621, guid: fbb2882cfdbb7d74a937fc43498626e9,
         type: 3}
       propertyPath: m_Name
@@ -44035,11 +44030,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4486638388500470299, guid: fbb2882cfdbb7d74a937fc43498626e9,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fbb2882cfdbb7d74a937fc43498626e9, type: 3}

@@ -317,8 +317,8 @@ namespace RCG {
                 var path = Path.Combine(m_FolderPath, m_EditingData.m_FilePath);
                 var data = card_data.ToJson();
                 string save_data = data.ToJsonBeautify();
-                Debug.LogWarning("path:" + path);
-                Debug.LogWarning("save_data:" + save_data);
+                //Debug.LogWarning("path:" + path);
+                //Debug.LogWarning("save_data:" + save_data);
                 File.WriteAllText(path, save_data);
                 RefreshCardDataPaths();
             }
@@ -399,7 +399,7 @@ namespace RCG {
             var card_data = m_EditingData.m_CardData;
             if(string.IsNullOrEmpty(card_data.IconName)) return;
             string icon_path = Path.Combine(IconPath, card_data.IconName);
-            Debug.LogWarning("icon_path:" + icon_path);
+            //Debug.LogWarning("icon_path:" + icon_path);
             if(File.Exists(icon_path)) {
                 var fileData = File.ReadAllBytes(icon_path);
                 var tex = new Texture2D(2, 2);

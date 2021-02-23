@@ -6,6 +6,10 @@ namespace RCG {
     [RequireComponent(typeof(RCG_Unit))]
     public class RCG_UnitHUD : MonoBehaviour
     {
+        public RCG_UI_HPbar HPbar
+        {
+            get { return m_hp_bar; }
+        }
         private RCG_UI_HPbar m_hp_bar;
         // Start is called before the first frame update
         void Start()

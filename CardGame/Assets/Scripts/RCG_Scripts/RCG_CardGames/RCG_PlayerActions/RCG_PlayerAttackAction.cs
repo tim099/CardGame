@@ -9,9 +9,11 @@ namespace RCG
     public class RCG_PlayerAttackAction : RCG_PlayerAction
     {
         List<RCG_Unit> m_Targets = null;
+        RCG_Unit m_Attaker = null;
         int m_Atk = 0;
-        public RCG_PlayerAttackAction(List<RCG_Unit> iTargets, int iAtk)
+        public RCG_PlayerAttackAction(RCG_Unit iAttaker,List<RCG_Unit> iTargets, int iAtk)
         {
+            m_Attaker = iAttaker;
             m_Targets = iTargets;
             m_Atk = iAtk;
         }
