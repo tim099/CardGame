@@ -27,15 +27,14 @@ namespace RCG
         private void Awake()
         {
             ins = this;
-            InitUI();
         }
 
-        public void InitUI()
+        public void InitUI(RCG_CharacterUI ui)
         {
             m_CharacterDatas = RCG_DataService.ins.m_CharacterDatas;
             foreach (var character_data in m_CharacterDatas)
             {
-                var panel = Instantiate(m_CharacterPanel, m_CharacterUI.transform);
+                var panel = Instantiate(m_CharacterPanel, ui.transform);
                 panel.GetComponent<RCG_CharacterPanel>().Init(character_data);
             }
         }

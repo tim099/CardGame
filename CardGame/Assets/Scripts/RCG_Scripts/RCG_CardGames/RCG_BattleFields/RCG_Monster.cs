@@ -1,22 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace RCG {
+    public enum RCG_MonsterActionEnum
+    {
+        IdleAction,
+        SimpleAttackAction
+    }
+ 
     [RequireComponent(typeof(RCG_Unit))]
     public class RCG_Monster: MonoBehaviour
     {
-        public List<string> m_ActionsNames;
-        public RCG_MonsterActionIndicator m_Indicator;
+        public List<RCG_MonsterActionEnum> m_ActionsNames;
+        RCG_MonsterActionIndicator m_Indicator;
         protected List<RCG_MonsterAction> m_Actions = new List<RCG_MonsterAction>();
         RCG_MonsterAction m_CurrentAction;
 
         public void Init()
         {
-            foreach(var s in m_ActionsNames)
+            if (true)
             {
-                var action = RCG_MonsterActionCreator.Create(s);
+                m_Indicator = Resources.Load<RCG_MonsterActionIndicator>("PrefabsRes/UI/MonsterActionIndicator");
+            }
+            foreach (var s in m_ActionsNames)
+            {
+                Debug.Log(Enum.GetName(typeof(RCG_MonsterActionEnum), s));
+                var action = RCG_MonsterActionCreator.Create(Enum.GetName(typeof(RCG_MonsterActionEnum), s));
                 m_Actions.Add(action);
+                Debug.Log(m_Actions.Count);
+                Debug.Log(m_ActionsNames.Count);
             }
         }
 
@@ -30,11 +44,8 @@ namespace RCG {
         {
             if (m_Actions.Count == 0)
             {
-                if (m_ActionsNames.Count != 0)
-                {
-                    Init();
-                }
-                else
+                Init();
+                if (m_ActionsNames.Count == 0) //no action assigned
                 {
                     m_Actions.Add(RCG_MonsterActionCreator.Create("SimpleAttackAction"));
                 }
@@ -63,6 +74,7 @@ namespace RCG {
             {
                 iIndicator = Instantiate<RCG_MonsterActionIndicator>(m_Indicator, transform);
             }
+            iIndicator.Init(m_CurrentAction);
         }
     }
 }

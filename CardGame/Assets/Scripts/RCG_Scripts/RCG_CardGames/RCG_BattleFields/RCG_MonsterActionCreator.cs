@@ -15,6 +15,7 @@ namespace RCG
             m_CreateDic = new Dictionary<string, System.Func<RCG_MonsterAction>>();
             m_ActionNameList = new List<string>();
             AddAction<RCG_MonsterSimpleAttackAction>();
+            //AddAction<RCG_MonsterIdleAction>();
         }
         static void AddAction<T>() where T : RCG_MonsterAction, new()
         {
@@ -25,6 +26,7 @@ namespace RCG
         public static RCG_MonsterAction CreateBasicAction(string type)
         {
             if (m_CreateDic == null) Init();
+            Debug.Log("Create Basic Action : " + type);
             if (m_CreateDic.ContainsKey(type))
             {
                 var aAction = m_CreateDic[type].Invoke();
@@ -40,8 +42,8 @@ namespace RCG
             RCG_MonsterAction iAction = new RCG_MonsterAction();
             foreach (var aFile in aFiles)
             {
-                //Debug.LogWarning("LoadData");
                 var aData = UCL.Core.JsonLib.JsonData.ParseJson(System.IO.File.ReadAllText(aFile));
+                if (aData["m_ActionName"] != typeVarientName) continue;
                 iAction = CreateBasicAction(aData["m_ActionName"]);
                 iAction.DeserializeFromJson(aData);
                 break; 

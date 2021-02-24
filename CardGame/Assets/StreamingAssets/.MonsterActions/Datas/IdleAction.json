@@ -1,0 +1,7 @@
+{
+	"m_ActionName":"IdleAction",
+	"m_Icon":"night-sleep",
+	"m_Description":"This unit is idle $m_Something",
+	"m_DescriptionShort":"Idle",
+	"m_Something": "Something"
+}
