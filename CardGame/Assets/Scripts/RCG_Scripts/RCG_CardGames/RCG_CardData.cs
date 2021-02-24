@@ -138,6 +138,16 @@ namespace RCG {
             }
             return true;
         }
+        /// <summary>
+        /// 觸發卡牌效果前執行 用來選擇棄牌或其他行動
+        /// </summary>
+        virtual public void PostTriggerAction()
+        {
+            for(int i = 0; i < m_CardEffects.Count; i++)
+            {
+                m_CardEffects[i].PostTriggerAction();
+            }
+        }
         virtual public void TriggerEffect(TriggerEffectData iTriggerEffectData, System.Action iEndAction)
         {
             if (m_CardEffects.Count == 0)

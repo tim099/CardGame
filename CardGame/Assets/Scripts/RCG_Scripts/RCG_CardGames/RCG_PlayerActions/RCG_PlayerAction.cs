@@ -14,6 +14,10 @@ namespace RCG
         {
             return new RCG_PlayerActionTrigger(iAct);
         }
+        public static RCG_PlayerActionTrigger ActionTrigger(System.Action<System.Action> iAct)
+        {
+            return new RCG_PlayerActionTrigger(iAct);
+        }
     }
     public class RCG_PlayerAction
     {

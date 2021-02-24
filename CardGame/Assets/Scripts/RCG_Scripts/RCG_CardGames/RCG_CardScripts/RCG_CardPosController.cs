@@ -104,55 +104,62 @@ namespace RCG {
                 m_CardPosList.Add(aCardPos);
             }
         }
-        private void Update() {
+        public void UpdateCardPos()
+        {
             //UpdateActiveCardList();
             List<RCG_CardPos> aSelectedCardPos = new List<RCG_CardPos>();
             int aSelectedCardNum = 0;
-            for (int i = 0; i < m_ActiveCardPosList.Count - 1; i++) {
+            for (int i = 0; i < m_ActiveCardPosList.Count - 1; i++)
+            {
                 var aCardPos = m_ActiveCardPosList[i];
-                if(aCardPos.m_Card.IsCardDisplayerSelected) {
+                if (aCardPos.m_Card.IsCardDisplayerSelected)
+                {
                     aSelectedCardNum++;
                     aSelectedCardPos.Add(aCardPos);
                 }
-                //if(aCardPos.m_Card.IsSelected) {
-                //    aSelectedCardPos.Add(aCardPos);
-                //}
             }
             //m_CardPosList.Clear();
             int aDiv = m_ActiveCardPosList.Count - 1 - aSelectedCardNum;
-            if(aDiv <= 0) aDiv = 1;
+            if (aDiv <= 0) aDiv = 1;
 
             float aMaxSpace = m_SelectedCardAngle * aSelectedCardNum + m_CardAngle * (m_ActiveCardPosList.Count - 1 - aSelectedCardNum);
 
             float aSpaceAngle = ((2 * m_MaxAngle - m_SelectedCardAngle * aSelectedCardNum) / (float)aDiv);
             //Debug.LogWarning("aSelectedCardNum:" + aSelectedCardNum+ ",aSpaceAngle:"+ aSpaceAngle+".aDiv:" + aDiv);
             float aAngleAt = m_MaxAngle;
-            if(aMaxSpace <= 2 * m_MaxAngle) {
+            if (aMaxSpace <= 2 * m_MaxAngle)
+            {
                 aSpaceAngle = m_CardAngle;
                 aAngleAt = 0.5f * aMaxSpace;
                 //Debug.LogWarning("aMaxSpace:" + aMaxSpace + ",aAngleAt:" + aAngleAt);
             }
-            for(int i = 0; i < m_ActiveCardPosList.Count; i++) {
+            for (int i = 0; i < m_ActiveCardPosList.Count; i++)
+            {
                 var aCardPos = m_ActiveCardPosList[i];
-                //m_CardPosList.Add(aCardPos);
                 aCardPos.transform.SetAsLastSibling();
                 aCardPos.SetTargetAngle(aAngleAt);
-                if(aCardPos.m_Card.IsCardDisplayerSelected) {
+                if (aCardPos.m_Card.IsCardDisplayerSelected)
+                {
                     aAngleAt -= m_SelectedCardAngle;
-                } else {
+                }
+                else
+                {
                     aAngleAt -= aSpaceAngle;
                 }
             }
-            for(int i = 0; i < m_InActiveCardPosList.Count; i++) {
+            for (int i = 0; i < m_InActiveCardPosList.Count; i++)
+            {
                 var aCardPos = m_InActiveCardPosList[i];
-                //m_CardPosList.Add(aCardPos);
                 aCardPos.SetAngle(aAngleAt);
-                //aCardPos.transform.SetAsLastSibling();
             }
 
-            foreach(var fSelectedCardPos in aSelectedCardPos) {
+            foreach (var fSelectedCardPos in aSelectedCardPos)
+            {
                 fSelectedCardPos.transform.SetAsLastSibling();
             }
+        }
+        private void Update() {
+            UpdateCardPos();
         }
     }
 }

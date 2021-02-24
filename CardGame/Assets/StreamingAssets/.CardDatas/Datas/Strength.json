@@ -9,11 +9,15 @@
 	"CardEffect":
 	[
 		{
+			"EffectType":"DiscardEffect",
+			"m_DiscardCardNum":1
+		},
+		{
 			"EffectType":"StatusEffect",
 			"m_StatusType":"Strength",
 			"m_BuffRange":"Target",
 			"m_ShowBuffRangeDes":"True",
-			"m_Amount":3
+			"m_Amount":2
 		},
 		{
 			"EffectType":"DrawEffect",

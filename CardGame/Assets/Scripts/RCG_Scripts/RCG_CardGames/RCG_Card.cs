@@ -86,6 +86,19 @@ namespace RCG {
             m_Using = false;
             UpdateCardStatus();
         }
+
+        /// <summary>
+        /// 觸發卡牌效果前執行 用來選擇棄牌或其他行動
+        /// </summary>
+        virtual public void PostTriggerAction()
+        {
+            if (m_Data == null)
+            {
+                Debug.LogError("m_Data == null");
+                return;
+            }
+            m_Data.PostTriggerAction();
+        }
         /// <summary>
         /// target >=3 is enemy
         /// </summary>

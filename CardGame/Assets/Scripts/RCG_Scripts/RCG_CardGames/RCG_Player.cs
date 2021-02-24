@@ -8,6 +8,24 @@ namespace RCG {
     [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_Player : MonoBehaviour {
         public static RCG_Player ins = null;
+        /// <summary>
+        /// 選牌模式
+        /// </summary>
+        public enum SelectCardMode
+        {
+            /// <summary>
+            /// 鎖定出牌狀態 不能選擇卡牌
+            /// </summary>
+            Block = 0,
+            /// <summary>
+            /// 玩家行動中 會檢查選定腳色技能 Cost
+            /// </summary>
+            Normal,
+            /// <summary>
+            /// 不檢查技能 Cost, 例如棄牌時
+            /// </summary>
+            DontCheck,
+        }
         public enum PlayerState {
             Idle = 0,
             TriggerCard,//出牌中
@@ -31,7 +49,6 @@ namespace RCG {
         public RCG_Deck m_Deck = null;
         public RCG_Card m_CardTemplate = null;
         public List<RCG_Card> m_Cards = null;
-        public List<RCG_CardBeginSet> m_BeginSets = null;
         
         public int m_DrawCardCount = 0;
         public Transform m_DrawCardPos = null;//抽牌位置
@@ -40,9 +57,18 @@ namespace RCG {
         public RCG_CardPosController m_CardPosController = null;
 
         [SerializeField] protected RCG_CostUI m_CostUI = null;
+        [SerializeField] protected RCG_Card m_SelectedCard = null;
+
         protected List<RCG_PlayerAction> m_PlayerActions = new List<RCG_PlayerAction>();
         protected PlayerState m_PlayerState = PlayerState.Idle;
-        [SerializeField] protected RCG_Card m_SelectedCard = null;
+        /// <summary>
+        /// 正在使用的牌 包含被選中要棄掉的牌
+        /// </summary>
+        protected List<RCG_Card> m_UsingCards = new List<RCG_Card>();
+        /// <summary>
+        /// 演出用卡牌
+        /// </summary>
+        protected Queue<RCG_Card> m_AnimCards = new Queue<RCG_Card>();
         protected UCL_RectTransformCollider m_Target = null;
         protected int m_HandCardCount = 0;
         protected bool m_Blocking = false;
@@ -59,20 +85,12 @@ namespace RCG {
             ins = this;
             m_TriggerCardPos.gameObject.SetActive(false);
             m_CardPosController.Init();
-            if(m_Cards == null) {
-                m_Cards = new List<RCG_Card>();
-            }
+            m_Cards = new List<RCG_Card>();
             //UCL.Core.GameObjectLib.SearchChildNotIncludeParent(m_CardsRoot, m_CardPositions);
-            for(int i = 0; i < m_CardPosController.m_MaxCardCount; i++) {
-                var aCard = Instantiate(m_CardTemplate, m_CardsRoot);
-                aCard.name = m_CardTemplate.name + "_" + i;
-                aCard.Init(this);
+            for (int i = 0; i < m_CardPosController.m_MaxCardCount; i++) {
+                var aCard = CreateCard(m_CardTemplate.name + "_" + i);
                 m_CardPosController.AddCard(aCard);
                 m_Cards.Add(aCard);
-            }
-            
-            if(m_BeginSets.Count == 0) {
-                return;
             }
             m_Deck.Init(this);
             var aDeckData = RCG_DataService.ins.m_DeckData;
@@ -94,6 +112,76 @@ namespace RCG {
         {
 
         }
+        protected RCG_Card CreateCard(string iName)
+        {
+            var aCard = Instantiate(m_CardTemplate, m_CardsRoot);
+            aCard.name = iName;
+            aCard.Init(this);
+            return aCard;
+        }
+        /// <summary>
+        /// 把卡片設定為使用中
+        /// </summary>
+        /// <param name="iCard"></param>
+        public void AddUsingCard(RCG_Card iCard)
+        {
+            iCard.m_Using = true;
+            m_UsingCards.Add(iCard);
+            m_CardPosController.UpdateActiveCardList();
+        }
+        /// <summary>
+        /// 清除使用中的手牌
+        /// </summary>
+        public void ClearUsingCards()
+        {
+            for(int i = 0; i < m_UsingCards.Count; i++)
+            {
+                m_UsingCards[i].m_Using = false;
+            }
+            m_UsingCards.Clear();
+        }
+        /// <summary>
+        /// 取消使用卡牌 歸還至手牌
+        /// </summary>
+        public void ReturnUsingCards()
+        {
+            for (int i = 0; i < m_UsingCards.Count; i++)
+            {
+                m_UsingCards[i].m_Using = false;
+            }
+            m_UsingCards.Clear();
+            m_CardPosController.UpdateActiveCardList();
+        }
+        /// <summary>
+        /// 生成演出專用卡牌
+        /// </summary>
+        /// <param name="iTargetCard"></param>
+        /// <returns></returns>
+        protected RCG_Card GetAnimCard(RCG_Card iTargetCard)
+        {
+            RCG_Card aAnimCard = null;
+            if (m_AnimCards.Count > 0)
+            {
+                aAnimCard = m_AnimCards.Dequeue();
+            }
+            if(aAnimCard == null)
+            {
+                aAnimCard = CreateCard("AnimCard");
+            }
+            aAnimCard.transform.SetPositionAndRotation(iTargetCard.transform);
+            aAnimCard.gameObject.SetActive(true);
+            aAnimCard.SetCardData(iTargetCard.Data);
+            return aAnimCard;
+        }
+        /// <summary>
+        /// 歸還演出專用卡牌
+        /// </summary>
+        /// <param name="iAnimCard"></param>
+        protected void ReturnAnimCard(RCG_Card iAnimCard)
+        {
+            iAnimCard.gameObject.SetActive(false);
+            m_AnimCards.Enqueue(iAnimCard);
+        }
         /// <summary>
         /// 使用手牌
         /// </summary>
@@ -102,35 +190,40 @@ namespace RCG {
         {
             if (m_Blocking) return;
             if (m_SelectedCard == null) return;
+            var aTriggerCard = m_SelectedCard;
             //Debug.LogError("TriggerCard()");
             RCG_BattleField.ins.SetSelectMode(TargetType.Off);
             SetState(PlayerState.TriggerCard);
-            m_TriggerCardPos.gameObject.SetActive(true);
-            m_SelectedCard.m_Using = true;
-            m_CardPosController.UpdateActiveCardList();
-            m_SelectedCard.TriggerCardAnime(m_TriggerCardPos, //打出卡牌演出
+
+            m_TriggerCardPos.gameObject.SetActive(true);//打牌特效
+            AddUsingCard(aTriggerCard);
+            aTriggerCard.gameObject.SetActive(false);//暫時隱藏
+
+            var aAnimCard = GetAnimCard(aTriggerCard);
+            aAnimCard.TriggerCardAnime(m_TriggerCardPos, //打出卡牌 往上飛演出
             delegate () {
-                if (m_SelectedCard == null)
-                {
-                    Debug.LogError("TriggerCard()m_SelectedCard == null");
-                    return;
-                }
-                m_SelectedCard.Deselect();
-                var aData = new TriggerEffectData(this);
-                aData.m_Targets = iSelectUnits;
-                aData.m_PlayerUnit = RCG_BattleField.ins.ActiveUnit;
-                IsUsingCard = true;
-                --m_HandCardCount;//卡牌已觸發 手牌-1
-                UpdateCardStatus();
-                m_SelectedCard.TriggerCardEffect(aData,
-                delegate (bool iTriggerSuccess) {//卡牌效果觸發完畢
-                    if (!iTriggerSuccess)
-                    {
-                        Debug.LogError("Trigger Fail!!");
-                    }
-                    m_SelectedCard.CardUsed();
-                    m_CardPosController.UpdateActiveCardList();
-                    SetState(PlayerState.PlayerActionStart);
+                ReturnAnimCard(aAnimCard);
+                aTriggerCard.PostTriggerAction();
+                TriggerPlayerActions(delegate () {
+                    aTriggerCard.gameObject.SetActive(true);
+                    aTriggerCard.Deselect();
+                    var aData = new TriggerEffectData(this);
+                    aData.m_Targets = iSelectUnits;
+                    aData.m_PlayerUnit = RCG_BattleField.ins.ActiveUnit;
+                    IsUsingCard = true;
+                    --m_HandCardCount;//卡牌已觸發 手牌-1
+                    UpdateCardStatus();
+                    aTriggerCard.TriggerCardEffect(aData,
+                    delegate (bool iTriggerSuccess) {//卡牌效果觸發完畢
+                        if (!iTriggerSuccess)
+                        {
+                            Debug.LogError("Trigger Fail!!");
+                        }
+                        aTriggerCard.CardUsed();
+                        m_CardPosController.UpdateActiveCardList();
+                        ClearUsingCards();
+                        SetState(PlayerState.PlayerActionStart);
+                    });
                 });
             });
         }
@@ -386,14 +479,16 @@ namespace RCG {
                 iEndAct.Invoke();
                 return;
             }
+            m_CardPosController.UpdateCardPos();
             //m_CardPosController.UpdateActiveCardList();
             //aCard.BlockSelection(RCG_Card.BlockingStatus.Player);
             aCard.SetCardData(DrawCardFromDeck());
             --m_DrawCardCount;
+            m_CardPosController.UpdateActiveCardList();
+            
             aCard.DrawCardAnime(m_DrawCardPos.position, delegate ()
             {
                 iEndAct();
-                m_CardPosController.UpdateActiveCardList();
             });
         }
         private void Update() {

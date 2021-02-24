@@ -151,11 +151,7 @@ namespace RCG
         public List<CardData> m_Cards = new List<CardData>();
     }
     #endregion
-    [System.Serializable]
-    public class RCG_ItemData// : IJsonSerializable
-    { 
     
-    }
     /// <summary>
     /// 用來管理遊戲開始後的所有資料
     /// </summary>

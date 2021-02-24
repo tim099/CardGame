@@ -17,6 +17,7 @@ namespace RCG {
             AddEffect<RCG_CardCostEffect>();
             AddEffect<RCG_CardDefenseEffect>();
             AddEffect<RCG_CardStatusEffect>();
+            AddEffect<RCG_CardDiscardEffect>();
         }
         static void AddEffect<T>() where T : RCG_CardEffect, new() {
             string key = typeof(T).Name.ToString().Replace("RCG_Card", "");//.Replace("Effect", "");
