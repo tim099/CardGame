@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UCL.Core.DebugLib;
+using UCL.SceneLib;
 using UnityEngine;
 
 namespace RCG
@@ -19,12 +21,25 @@ namespace RCG
 #endif
         public static RCG_GameManager ins = null;
         public string m_LoadMapName = "";
+        public UCL_SceneLoader m_SceneLoader = null;
+        public UCL_DebugLog m_DebugLog = null;
         protected override void Init() {
             ins = this;
+            m_DebugLog.Init();
+            Debug.LogWarning("RCG_GameManager Init!!");
+            try
+            {
+                BetterStreamingAssets.Initialize();
+            }catch(System.Exception e)
+            {
+                Debug.LogError("BetterStreamingAssets.Initialize():" + e);
+            }
+
 #if UNITY_EDITOR
             RefreshGamedata();
 #endif
             base.Init();
+            if(m_SceneLoader != null) m_SceneLoader.Load();
         }
         //void OnApplicationPause(bool pauseStatus)
     }

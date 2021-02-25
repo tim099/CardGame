@@ -70,9 +70,23 @@ namespace RCG {
     }
     [System.Serializable]
     public class RCG_CardData {
+        public static string CardDataRelativePath
+        {
+            get
+            {
+                return "CardDatas/Datas";
+            }
+        }
         public static string CardDataPath {
             get {
-                return Application.streamingAssetsPath + "/.CardDatas/Datas";
+                return Application.streamingAssetsPath + "/" + CardDataRelativePath;
+            }
+        }
+        public static string CardIconRelativePath
+        {
+            get
+            {
+                return Path.Combine(UCL.Core.FileLib.Lib.RemoveFolderPath(CardDataRelativePath, 1), "Icons");
             }
         }
         public static string CardIconPath {
