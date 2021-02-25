@@ -17,6 +17,7 @@ namespace RCG {
         RCG_MonsterActionIndicator m_Indicator;
         protected List<RCG_MonsterAction> m_Actions = new List<RCG_MonsterAction>();
         RCG_MonsterAction m_CurrentAction;
+        public bool m_acted;
 
         public void Init()
         {
@@ -34,14 +35,20 @@ namespace RCG {
             }
         }
 
-        public void Act()
+        public void Act(Action iEndAction)
         {
-            
-            m_CurrentAction.TriggerAction(delegate () { });
+            gameObject.GetComponent<RCG_Unit>().SelectUnit();
+            m_CurrentAction.TriggerAction(delegate () {
+                m_acted = true;
+                gameObject.GetComponent<RCG_Unit>().EndTurn();
+                gameObject.GetComponent<RCG_Unit>().DeselectUnit();
+                iEndAction.Invoke();
+            });
         }
 
         public void PrepareToAct()
         {
+            m_acted = false;
             if (m_Actions.Count == 0)
             {
                 Init();

@@ -271,7 +271,13 @@ namespace RCG {
         public void TurnStart()
         {
             SetActiveUnit(null);
-            Debug.Log("Monster QWQ : " + m_Monsters.Count);
+            MonsterAction();
+        }
+        /// <summary>
+        /// 敵人行動
+        /// </summary>
+        public void MonsterAction()
+        {
             foreach (RCG_Unit u in m_Monsters)
             {
                 if (u == null)
@@ -279,19 +285,20 @@ namespace RCG {
                     continue;
                 }
                 var m = u.gameObject.GetComponent<RCG_Monster>();
-                if (m)
+                if (!m.m_acted)
                 {
                     try//目前有Exception導致流程失效
                     {
-                        m.Act();
+                        m.Act(delegate () {
+                            MonsterAction();
+                        });
                     }
                     catch (System.Exception e)
                     {
                         Debug.LogError(e);
                     }
-                    Debug.Log("Monster action QWQ");
+                    return;
                 }
-                u.EndTurn();
             }
             TurnEnd();
         }
