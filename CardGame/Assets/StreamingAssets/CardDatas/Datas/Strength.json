@@ -1,0 +1,27 @@
+{
+	"m_CardType":"Buff",
+	"m_TargetType":"Allied",
+	"m_UsedType":"ToDiscardPile",
+	"m_CardName":"Strength",
+	"m_IconName":"archer.png",
+	"m_Cost":1,
+	"m_RequireSkills":null,
+	"CardEffect":
+	[
+		{
+			"EffectType":"DiscardEffect",
+			"m_DiscardCardNum":1
+		},
+		{
+			"EffectType":"StatusEffect",
+			"m_StatusType":"Strength",
+			"m_BuffRange":"Target",
+			"m_ShowBuffRangeDes":"True",
+			"m_Amount":2
+		},
+		{
+			"EffectType":"DrawEffect",
+			"m_DrawCardNum":1
+		}
+	]
+}

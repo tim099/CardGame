@@ -21,6 +21,17 @@ namespace RCG
             UCL.Core.JsonLib.JsonConvert.SaveDataToJson(this, data);
             return data;
         }
+        /// <summary>
+        /// 觸發卡牌效果前執行 用來選擇棄牌或其他行動
+        /// </summary>
+        virtual public void PostTriggerAction()
+        {
+        }
+        /// <summary>
+        /// 觸發卡牌效果
+        /// </summary>
+        /// <param name="iTriggerEffectData"></param>
+        /// <param name="iEndAction"></param>
         virtual public void TriggerEffect(TriggerEffectData iTriggerEffectData, Action iEndAction)
         {
             iEndAction.Invoke();

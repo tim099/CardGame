@@ -30,6 +30,10 @@ namespace RCG
             m_CardData = iData;
             m_Data = iData.Data;
         }
+        public override void PostTriggerAction()
+        {
+            m_CardData.PostTriggerAction();
+        }
         override public void TriggerEffect(TriggerEffectData iTriggerEffectData, Action iEndAction)
         {
             m_CardData.TriggerEffect(iTriggerEffectData, iEndAction);

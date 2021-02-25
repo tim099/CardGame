@@ -70,9 +70,23 @@ namespace RCG {
     }
     [System.Serializable]
     public class RCG_CardData {
+        public static string CardDataRelativePath
+        {
+            get
+            {
+                return "CardDatas/Datas";
+            }
+        }
         public static string CardDataPath {
             get {
-                return Application.streamingAssetsPath + "/.CardDatas/Datas";
+                return Application.streamingAssetsPath + "/" + CardDataRelativePath;
+            }
+        }
+        public static string CardIconRelativePath
+        {
+            get
+            {
+                return Path.Combine(UCL.Core.FileLib.Lib.RemoveFolderPath(CardDataRelativePath, 1), "Icons");
             }
         }
         public static string CardIconPath {
@@ -137,6 +151,16 @@ namespace RCG {
                 if (!iSkills.Contains(aSkill)) return false;
             }
             return true;
+        }
+        /// <summary>
+        /// 觸發卡牌效果前執行 用來選擇棄牌或其他行動
+        /// </summary>
+        virtual public void PostTriggerAction()
+        {
+            for(int i = 0; i < m_CardEffects.Count; i++)
+            {
+                m_CardEffects[i].PostTriggerAction();
+            }
         }
         virtual public void TriggerEffect(TriggerEffectData iTriggerEffectData, System.Action iEndAction)
         {

@@ -16,14 +16,23 @@ namespace RCG
         {
             get
             {
-                return Application.streamingAssetsPath + "/.CardDatas/Deck.json";
+                return Application.streamingAssetsPath + "/" + DeckDataRelativePath;
+            }
+        }
+        public static string DeckDataRelativePath
+        {
+            get
+            {
+                return "CardDatas/Deck.json";
             }
         }
         public static RCG_DeckData LoadDeckData()
         {
             var aDeckData = new RCG_DeckData();
             //var aDeckPath = DeckDataPath;
-            aDeckData.LoadData(DeckDataPath);
+            var aJson = BetterStreamingAssets.ReadAllText(DeckDataRelativePath);
+            aDeckData.LoadFromJson(aJson);
+            //aDeckData.LoadData(DeckDataPath);
             //if (File.Exists(aDeckPath))
             //{
             //    var aJson = File.ReadAllText(aDeckPath);
@@ -36,13 +45,17 @@ namespace RCG
         {
             File.WriteAllText(iDeckPath, SerializeToJson().ToJsonBeautify());
         }
+        public void LoadFromJson(string iJson)
+        {
+            JsonData aData = JsonData.ParseJson(iJson);
+            DeserializeFromJson(aData);
+        }
         public void LoadData(string iDeckPath)
         {
             if (File.Exists(iDeckPath))
             {
                 var aJson = File.ReadAllText(iDeckPath);
-                JsonData aData = JsonData.ParseJson(aJson);
-                DeserializeFromJson(aData);
+                LoadFromJson(aJson);
             }
         }
         public int CardCount
@@ -151,11 +164,7 @@ namespace RCG
         public List<CardData> m_Cards = new List<CardData>();
     }
     #endregion
-    [System.Serializable]
-    public class RCG_ItemData// : IJsonSerializable
-    { 
     
-    }
     /// <summary>
     /// 用來管理遊戲開始後的所有資料
     /// </summary>
@@ -172,10 +181,17 @@ namespace RCG
         public override void Init() {
             base.Init();
             ins = this;
+            try
+            {
+                //placeholder QWQ
+                m_CharacterDatas.Add(new RCG_CharacterData("Knight"));
+                m_CharacterDatas.Add(new RCG_CharacterData("Archer"));
+            }
+            catch(System.Exception e)
+            {
+                Debug.LogError("Exception:" + e);
+            }
 
-            //placeholder QWQ
-            m_CharacterDatas.Add(new RCG_CharacterData("Knight"));
-            m_CharacterDatas.Add(new RCG_CharacterData("Archer"));
         }
         /// <summary>
         /// 新的一局遊戲 重置資料

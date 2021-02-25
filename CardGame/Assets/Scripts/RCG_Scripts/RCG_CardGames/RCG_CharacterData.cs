@@ -21,14 +21,21 @@ namespace RCG
         {
             get
             {
-                return Application.streamingAssetsPath + "/.CharacterDatas/Datas";
+                return Application.streamingAssetsPath + "/" + CardDataRelativePath;
             }
         }
-
+        public static string CardDataRelativePath
+        {
+            get
+            {
+                return "CharacterDatas/Datas";
+            }
+        }
         public static UCL.Core.JsonLib.JsonData GetCharacterJsonData(string character_name)
         {
             string character_file_name = character_name + ".json";
-            string data = File.ReadAllText(Path.Combine(CardDataPath, character_file_name));
+            string data = BetterStreamingAssets.ReadAllText(Path.Combine(CardDataRelativePath, character_file_name));
+            //File.ReadAllText(Path.Combine(CardDataPath, character_file_name));
             var json = UCL.Core.JsonLib.JsonData.ParseJson(data);
             return json;
         }

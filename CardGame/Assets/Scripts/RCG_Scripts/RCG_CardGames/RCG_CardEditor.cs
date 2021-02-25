@@ -78,7 +78,7 @@ namespace RCG {
                 m_CardDataPaths.Clear();
             }
             if(string.IsNullOrEmpty(m_FolderPath)) return;
-            var files = UCL.Core.FileLib.Lib.GetFiles(m_FolderPath);
+            var files = UCL.Core.FileLib.Lib.GetFiles(m_FolderPath,"*.json");
 
             if(files != null) {
                 int discard_len = m_FolderPath.Length + 1;
@@ -382,7 +382,7 @@ namespace RCG {
             m_CardIconPaths.Clear();
             var icon_path = IconPath;
             if(string.IsNullOrEmpty(icon_path)) return;
-            var files = UCL.Core.FileLib.Lib.GetFiles(icon_path);
+            var files = UCL.Core.FileLib.Lib.GetFiles(icon_path, "*.png");
 
             if(files != null) {
                 int discard_len = icon_path.Length + 1;
