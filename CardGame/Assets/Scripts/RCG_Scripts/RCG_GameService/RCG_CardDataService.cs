@@ -51,9 +51,10 @@ namespace RCG {
                 return m_CardSprites[iIconName];
             }
             Sprite aIcon = null;
-            var aIconPath = Path.Combine(RCG_CardData.CardIconPath, iIconName);
-            if(File.Exists(aIconPath)) {
-                var aData = File.ReadAllBytes(aIconPath);
+            var aIconPath = Path.Combine(RCG_CardData.CardIconRelativePath, iIconName);
+            if(BetterStreamingAssets.FileExists(aIconPath)) {
+                var aData = BetterStreamingAssets.ReadAllBytes(aIconPath);
+                //var aData = File.ReadAllBytes(aIconPath);
                 Texture2D aTexture = new Texture2D(1, 1);
                 aTexture.LoadImage(aData);
                 var aSprite = Sprite.Create(aTexture, new Rect(0.0f, 0.0f, aTexture.width, aTexture.height),
@@ -74,19 +75,62 @@ namespace RCG {
             return m_CardDatas[iID];
         }
         public RCG_CardData GetCardData(string iCardName) {
-            if(!m_CardDataDic.ContainsKey(iCardName)) return null;
+            if (!m_CardDataDic.ContainsKey(iCardName))
+            {
+                Debug.LogError("!m_CardDataDic.ContainsKey:" + iCardName);
+                return null;
+            }
             return m_CardDataDic[iCardName];
         }
         public void LoadCardData() {
+            Debug.LogWarning("LoadCardData()");
             m_CardDatas.Clear();
-            var aFiles = UCL.Core.FileLib.Lib.GetFiles(RCG_CardData.CardDataPath);
-            foreach(var aFile in aFiles) {
-                //Debug.LogWarning("LoadData");
-                string aData = System.IO.File.ReadAllText(aFile);
-                RCG_CardData aCardData = new RCG_CardData(aData);
-                m_CardDatas.Add(aCardData);
-                m_CardDataDic.Add(UCL.Core.FileLib.Lib.RemoveFileExtension(aFile), aCardData);
+            string[] aFiles = null;
+            
+            try
+            {
+                aFiles = BetterStreamingAssets.GetFiles(RCG_CardData.CardDataRelativePath, "*.json", SearchOption.AllDirectories);
+                //Debug.LogError("aFiles:" + aFiles.UCL_ToString());
             }
+            catch (System.Exception e)
+            {
+                Debug.LogError("LoadCardData() Exception:" + e);
+            }
+            if (aFiles != null)
+            {
+                foreach (var aFile in aFiles)
+                {
+                    try
+                    {
+                        string aData = BetterStreamingAssets.ReadAllText(aFile); //System.IO.File.ReadAllText(aFile);
+                        //Debug.LogError("aData:" + aData);
+                        RCG_CardData aCardData = new RCG_CardData(aData);
+                        m_CardDatas.Add(aCardData);
+                        string aFileName = UCL.Core.FileLib.Lib.GetFileName(aFile);
+                        m_CardDataDic.Add(UCL.Core.FileLib.Lib.RemoveFileExtension(aFileName), aCardData);
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogError("LoadFile:" + aFile + " ,Exception:" + e);
+                    }
+                }
+            }
+
+
+
+
+            //var aFiles = UCL.Core.FileLib.Lib.GetFiles(RCG_CardData.CardDataPath);
+            //foreach(var aFile in aFiles) {
+            //    string aData = System.IO.File.ReadAllText(aFile);
+            //    RCG_CardData aCardData = new RCG_CardData(aData);
+            //    m_CardDatas.Add(aCardData);
+            //    string aFileName = UCL.Core.FileLib.Lib.GetFileName(aFile);
+            //    m_CardDataDic.Add(UCL.Core.FileLib.Lib.RemoveFileExtension(aFileName), aCardData);
+            //}
+
+
+
+            //Debug.LogError("m_CardDataDic:" + m_CardDataDic.UCL_ToString());
         }
     }
 }

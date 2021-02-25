@@ -16,6 +16,7 @@ MonoBehaviour:
   m_LoadCurrentSetting: 0
   m_Build: 0
   m_OpenOutputFolder: 0
+  m_OutputBuildLog: 1
   m_DefaultSetting: {fileID: 0}
   m_ProductName: RCG
   m_ApplicationIdentifier: com.RCG.RoguelikeCardGame

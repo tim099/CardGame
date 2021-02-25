@@ -59,11 +59,34 @@ namespace RCG {
         /// </summary>
         Off,
     }
+    /// <summary>
+    /// 使用卡牌後的回收方式
+    /// </summary>
+    public enum UsedType
+    {
+        ToDiscardPile = 0,//到棄牌堆 預設
+        ToDeckTop,//返回到牌堆頂端
+        Banish,//直接從這局中消失
+    }
     [System.Serializable]
     public class RCG_CardData {
+        public static string CardDataRelativePath
+        {
+            get
+            {
+                return "CardDatas/Datas";
+            }
+        }
         public static string CardDataPath {
             get {
-                return Application.streamingAssetsPath + "/.CardDatas/Datas";
+                return Application.streamingAssetsPath + "/" + CardDataRelativePath;
+            }
+        }
+        public static string CardIconRelativePath
+        {
+            get
+            {
+                return Path.Combine(UCL.Core.FileLib.Lib.RemoveFolderPath(CardDataRelativePath, 1), "Icons");
             }
         }
         public static string CardIconPath {
@@ -75,15 +98,15 @@ namespace RCG {
         public class CardData {
             public CardType m_CardType = CardType.Unknow;
             public TargetType m_TargetType = TargetType.None;
+            public UsedType m_UsedType = UsedType.ToDiscardPile;
             public string m_CardName = string.Empty;
             public string m_IconName = string.Empty;
             public int m_Cost = 0;
             public List<UnitSkill> m_RequireSkills = new List<UnitSkill>();
         }
-        public Sprite Icon { get { return m_Icon; } }
-        public Sprite m_Icon = null;
-        virtual public string CardName { 
-            get { 
+        virtual public Sprite Icon { get { return m_Icon; } }
+        virtual public string CardName {
+            get {
                 return UCL.Core.LocalizeLib.UCL_LocalizeManager.Get(m_Data.m_CardName);
             }
             set { m_Data.m_CardName = value; } }
@@ -92,30 +115,28 @@ namespace RCG {
         virtual public string Description {
             get {
                 string des = string.Empty;
-                foreach(var aEffect in m_CardEffects) {
+                foreach (var aEffect in m_CardEffects) {
                     string aDes = aEffect.Description;
-                    if(!string.IsNullOrEmpty(aDes)) {
+                    if (!string.IsNullOrEmpty(aDes)) {
                         des += aDes;
                     }
                 }
                 return des;
             }
         }
-        virtual public int Atk { get; protected set; }
-        virtual public int AtkTimes { get; protected set; }
-        virtual public int AtkRange { get; protected set; }
-        virtual public int Defense { get; protected set; }
         virtual public TargetType Target { get; protected set; }
 
-        public List<UnitSkill> RequireSkills { get { return m_Data.m_RequireSkills; } }
-        public List<RCG_CardEffect> m_CardEffects = new List<RCG_CardEffect>();
-        public CardType CardType { get { return m_Data.m_CardType; } set { m_Data.m_CardType = value; } }
-        public TargetType TargetType { get { return m_Data.m_TargetType; } set { m_Data.m_TargetType = value; } }
-        [SerializeField] protected CardData m_Data;
-        //protected HashSet<UnitSkill> m_RequireSkillSets = new HashSet<UnitSkill>();
-        public RCG_CardData() {
+        virtual public List<UnitSkill> RequireSkills { get { return m_Data.m_RequireSkills; } }
 
-        }
+        virtual public CardType CardType { get { return m_Data.m_CardType; } set { m_Data.m_CardType = value; } }
+        virtual public TargetType TargetType { get { return m_Data.m_TargetType; } set { m_Data.m_TargetType = value; } }
+        virtual public UsedType UsedType { get { return m_Data.m_UsedType; } set { m_Data.m_UsedType = value; } }
+        virtual public CardData Data { get{ return m_Data; } }
+        protected List<RCG_CardEffect> m_CardEffects = new List<RCG_CardEffect>();
+        [SerializeField] protected CardData m_Data;
+        protected Sprite m_Icon = null;
+        //protected HashSet<UnitSkill> m_RequireSkillSets = new HashSet<UnitSkill>();
+        public RCG_CardData() { }
         public RCG_CardData(string iJson) {
             //Debug.LogWarning("iJson:" + iJson);
             LoadJson(UCL.Core.JsonLib.JsonData.ParseJson(iJson));
@@ -123,6 +144,58 @@ namespace RCG {
         public RCG_CardData(UCL.Core.JsonLib.JsonData iSetting) {
             LoadJson(iSetting);
         }
+        virtual public bool CheckRequireSkill(HashSet<UnitSkill> iSkills)
+        {
+            foreach (var aSkill in m_Data.m_RequireSkills)
+            {
+                if (!iSkills.Contains(aSkill)) return false;
+            }
+            return true;
+        }
+        /// <summary>
+        /// 觸發卡牌效果前執行 用來選擇棄牌或其他行動
+        /// </summary>
+        virtual public void PostTriggerAction()
+        {
+            for(int i = 0; i < m_CardEffects.Count; i++)
+            {
+                m_CardEffects[i].PostTriggerAction();
+            }
+        }
+        virtual public void TriggerEffect(TriggerEffectData iTriggerEffectData, System.Action iEndAction)
+        {
+            if (m_CardEffects.Count == 0)
+            {
+                iEndAction.Invoke();
+                return;
+            }
+            System.Action<int> aTriggerAct = null;
+            aTriggerAct = delegate (int iTriggerAt)
+            {
+                //Debug.LogWarning("iTriggerAt:" + iTriggerAt);
+                var aCardEffect = m_CardEffects[iTriggerAt];
+                try
+                {
+                    aCardEffect.TriggerEffect(iTriggerEffectData, delegate () {
+                        if (iTriggerAt + 1 < m_CardEffects.Count)
+                        {
+                            aTriggerAct.Invoke(iTriggerAt + 1);
+                        }
+                        else
+                        {
+                            iEndAction.Invoke();
+                        }
+                    });
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError("aCardEffect.TriggerEffect Exception:" + e);
+                    iEndAction.Invoke();
+                }
+            };
+            aTriggerAct.Invoke(0);
+        }
+        virtual public void CardUsed(RCG_Player iPlayer) { }
         public void LoadJson(UCL.Core.JsonLib.JsonData iSetting) {
             m_Data = UCL.Core.JsonLib.JsonConvert.LoadDataFromJson<CardData>(iSetting);
             //var test = UCL.Core.JsonLib.JsonConvert.LoadListFromJson<float>(setting["Test"]);
@@ -137,21 +210,11 @@ namespace RCG {
             }
 
         }
-        public bool CheckRequireSkill(HashSet<UnitSkill> iSkills)
-        {
-            foreach (var aSkill in m_Data.m_RequireSkills)
-            {
-                if (!iSkills.Contains(aSkill)) return false;
-            }
-            return true;
-        }
+
         public UCL.Core.JsonLib.JsonData ToJson() {
             UCL.Core.JsonLib.JsonData data = new UCL.Core.JsonLib.JsonData();
             UCL.Core.JsonLib.JsonConvert.SaveDataToJson(m_Data, data);
             data["CardEffect"] = new UCL.Core.JsonLib.JsonData(m_CardEffects);
-            //data["Test"] = new UCL.Core.JsonLib.JsonData(new List<float>() { 0.4f, 12.4f, 5.3f });
-            //data["Test2"] = new UCL.Core.JsonLib.JsonData(new List<string>() { "AAA", "BBB", "CCC" });
-            //UCL.Core.JsonLib.JsonData effect_data = new UCL.Core.JsonLib.JsonData().ToArray();
             //data["CardEffect"] = effect_data;
             //for(int i = 0; i < m_CardEffects.Count; i++) {
             //    effect_data.Add(m_CardEffects[i].SerializeToJson());
@@ -176,15 +239,45 @@ namespace RCG {
 
             }
         }
+
         public void AddCardEffect(RCG_CardEffect effect) {
             m_CardEffects.Add(effect);
         }
 
-        public void DrawCardDatas() {
-
-        }
         #region Edit
-        public void DrawCardEffects() {
+        public void OnGUICardDatas()
+        {
+            CardName = UCL.Core.UI.UCL_GUILayout.TextField("CardName", CardName);
+            {
+                string aFieldName = "CardType";
+                GUILayout.BeginHorizontal();
+                UCL.Core.UI.UCL_GUILayout.LabelAutoSize(aFieldName);
+                bool flag = RCG_CardEditor.GetCardEditTmpData(aFieldName, false);
+                CardType = UCL.Core.UI.UCL_GUILayout.Popup(CardType, ref flag);
+                RCG_CardEditor.SetCardEditTmpData(aFieldName, flag);
+                GUILayout.EndHorizontal();
+            }
+            {
+                string aFieldName = "TargetType";
+                GUILayout.BeginHorizontal();
+                UCL.Core.UI.UCL_GUILayout.LabelAutoSize(aFieldName);
+                bool flag = RCG_CardEditor.GetCardEditTmpData(aFieldName, false);
+                TargetType = UCL.Core.UI.UCL_GUILayout.Popup(TargetType, ref flag);
+                RCG_CardEditor.SetCardEditTmpData(aFieldName, flag);
+                GUILayout.EndHorizontal();
+            }
+            {
+                string aFieldName = "UsedType";
+                GUILayout.BeginHorizontal();
+                UCL.Core.UI.UCL_GUILayout.LabelAutoSize(aFieldName);
+                bool flag = RCG_CardEditor.GetCardEditTmpData(aFieldName, false);
+                UsedType = UCL.Core.UI.UCL_GUILayout.Popup(UsedType, ref flag);
+                RCG_CardEditor.SetCardEditTmpData(aFieldName, flag);
+                GUILayout.EndHorizontal();
+            }
+            OnGUIRequireSkills();
+        }
+        public void OnGUICardEffects() {
             int delete_at = -1;
             for(int i = 0; i < m_CardEffects.Count; i++) {
                 var effect = m_CardEffects[i];
@@ -202,8 +295,9 @@ namespace RCG {
             if(delete_at >= 0) {
                 m_CardEffects.RemoveAt(delete_at);
             }
+            //Debug.LogWarning("GUIUtility.hotControl:" + GUIUtility.hotControl);
         }
-        public void DrawRequireSkills()
+        public void OnGUIRequireSkills()
         {
             {
                 GUILayout.BeginHorizontal();
@@ -245,41 +339,6 @@ namespace RCG {
             }
         }
         #endregion
-        virtual public bool TargetCheck(int target) {
-            return true;
-        }
-        virtual public void TriggerEffect(TriggerEffectData iTriggerEffectData, System.Action iEndAction) {
-            if(m_CardEffects.Count == 0)
-            {
-                iEndAction.Invoke();
-                return;
-            }
-            System.Action<int> aTriggerAct = null;
-            //int aTriggerAt = 0;
-            aTriggerAct = delegate (int iTriggerAt)
-            {
-                Debug.LogWarning("iTriggerAt:" + iTriggerAt);
-                var aCardEffect = m_CardEffects[iTriggerAt];
-                try
-                {
-                    aCardEffect.TriggerEffect(iTriggerEffectData, delegate() {
-                        if (iTriggerAt + 1 < m_CardEffects.Count)
-                        {
-                            aTriggerAct.Invoke(iTriggerAt + 1);
-                        }
-                        else
-                        {
-                            iEndAction.Invoke();
-                        }
-                    });
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogError("aCardEffect.TriggerEffect Exception:" + e);
-                    iEndAction.Invoke();
-                }
-            };
-            aTriggerAct.Invoke(0);
-        }
+
     }
 }

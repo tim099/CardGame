@@ -1,0 +1,37 @@
+{
+	"Cards":
+	[
+		{
+			"m_CardName":"Attack02",
+			"m_CardCount":1
+		},
+		{
+			"m_CardName":"DrawCard",
+			"m_CardCount":4
+		},
+		{
+			"m_CardName":"Attack01",
+			"m_CardCount":2
+		},
+		{
+			"m_CardName":"Archery",
+			"m_CardCount":3
+		},
+		{
+			"m_CardName":"CostAdd01",
+			"m_CardCount":2
+		},
+		{
+			"m_CardName":"Explosion",
+			"m_CardCount":2
+		},
+		{
+			"m_CardName":"Strength",
+			"m_CardCount":3
+		},
+		{
+			"m_CardName":"Defense01",
+			"m_CardCount":6
+		}
+	]
+}

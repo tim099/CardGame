@@ -7,6 +7,11 @@ namespace RCG {
         public bool IsCardActive {
             get { return !m_Card.IsEmpty && !m_Card.m_Used; }
         }
+        public bool IsUsing { get => m_Card.m_Using; }
+        public bool IsCardAvaliable
+        {
+            get { return m_Card.IsEmpty; }
+        }
         public Transform m_CardPos = null;
         public RCG_Card m_Card = null;
         public float m_Angle = 0;

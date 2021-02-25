@@ -192,6 +192,7 @@ MonoBehaviour:
   m_TB_Tweener: {fileID: 870112678151016135}
   m_CardDisplayer: {fileID: 870112677363859462}
   m_Used: 0
+  m_Using: 0
   p_CardPos: {fileID: 0}
 --- !u!1 &1434462057552279899
 GameObject:
@@ -450,6 +451,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1834061517449448929, guid: 949a92143beaa994db19f8304564c734,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 1834061517717232784, guid: 949a92143beaa994db19f8304564c734,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -563,7 +569,7 @@ PrefabInstance:
     - target: {fileID: 2564906245963655547, guid: 949a92143beaa994db19f8304564c734,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3636409010477429258, guid: 949a92143beaa994db19f8304564c734,
         type: 3}

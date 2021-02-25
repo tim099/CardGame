@@ -8,7 +8,7 @@ namespace RCG {
     //[RequireComponent(typeof(Slider))]
     public class RCG_UI_HPbar : MonoBehaviour
     {
-
+        public Text m_ArmorText = null;
         public TextMeshProUGUI m_hp_text;
         [SerializeField] private Slider m_HpMoveSlider = null;
         [SerializeField] private Slider m_HPslider;
@@ -45,7 +45,7 @@ namespace RCG {
                 if (m_DisplayHP != m_unit.Hp)
                 {
                     int aDel = m_unit.Hp - m_DisplayHP;
-                    Debug.LogWarning("aDel:" + aDel);
+                    //Debug.LogWarning("aDel:" + aDel);
                     int aMove = Mathf.RoundToInt(0.1f * aDel);
                     if (aMove == 0)
                     {
@@ -56,6 +56,10 @@ namespace RCG {
                 }
             }
 
+        }
+        public void UpdateArmor(int iValue)
+        {
+            m_ArmorText.text = iValue.ToString();
         }
         public void UpdateHp()
         {

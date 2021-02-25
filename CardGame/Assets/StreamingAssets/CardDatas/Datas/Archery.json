@@ -1,0 +1,35 @@
+{
+	"m_CardType":"Attack",
+	"m_TargetType":"Enemy",
+	"m_UsedType":"ToDiscardPile",
+	"m_CardName":" Archery",
+	"m_IconName":"archer.png",
+	"m_Cost":1,
+	"m_RequireSkills":
+	[
+		"Archery",
+		"Magic"
+	],
+	"CardEffect":
+	[
+		{
+			"EffectType":"AttackEffect",
+			"m_Atk":6,
+			"m_AttackRange":"RowAOE",
+			"m_AtkTimes":2,
+			"m_AttackType":"Normal",
+			"m_VFX":""
+		},
+		{
+			"EffectType":"DrawEffect",
+			"m_DrawCardNum":1
+		},
+		{
+			"EffectType":"StatusEffect",
+			"m_StatusType":"Bleed",
+			"m_BuffRange":"RowAOE",
+			"m_ShowBuffRangeDes":"False",
+			"m_Amount":3
+		}
+	]
+}

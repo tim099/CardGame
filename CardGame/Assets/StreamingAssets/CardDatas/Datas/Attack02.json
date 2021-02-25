@@ -1,0 +1,27 @@
+{
+	"m_CardType":"Attack",
+	"m_TargetType":"EnemyFront",
+	"m_UsedType":"ToDiscardPile",
+	"m_CardName":"Attack02",
+	"m_IconName":"02.png",
+	"m_Cost":2,
+	"m_RequireSkills":
+	[
+		"Melee"
+	],
+	"CardEffect":
+	[
+		{
+			"EffectType":"AttackEffect",
+			"m_Atk":9,
+			"m_AttackRange":"FrontEnemy",
+			"m_AtkTimes":3,
+			"m_AttackType":"Normal",
+			"m_VFX":""
+		},
+		{
+			"EffectType":"DrawEffect",
+			"m_DrawCardNum":1
+		}
+	]
+}

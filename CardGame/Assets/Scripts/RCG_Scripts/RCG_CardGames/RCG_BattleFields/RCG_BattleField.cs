@@ -56,9 +56,31 @@ namespace RCG {
         {
             return m_PlayerBattlePositionSetting.GetBackUntis();
         }
+        public List<RCG_Unit> GetRowUnits(UnitPos iPos, bool iIsEnemy)
+        {
+            if (iIsEnemy) return GetEnemyUnits(iPos);
+            return GetPlayerUnits(iPos);
+        }
+        public List<RCG_Unit> GetPlayerUnits(UnitPos iPos)
+        {
+            switch (iPos)
+            {
+                case UnitPos.Front: return m_PlayerBattlePositionSetting.GetFrontUntis();
+                case UnitPos.Back: return m_PlayerBattlePositionSetting.GetBackUntis();
+            }
+            return m_PlayerBattlePositionSetting.GetFrontUntis();
+        }
         public List<RCG_Unit> GetAllEnemyUnits()
         {
             return m_EnemyBattlePositionSetting.GetAllUnits();
+        }
+        public List<RCG_Unit> GetEnemyUnits(UnitPos iPos)
+        {
+            switch (iPos) {
+                case UnitPos.Front:return m_EnemyBattlePositionSetting.GetFrontUntis();
+                case UnitPos.Back:return m_EnemyBattlePositionSetting.GetBackUntis();
+            }
+            return m_EnemyBattlePositionSetting.GetFrontUntis();
         }
         public List<RCG_Unit> GetEnemyFrontUnits()
         {
@@ -97,7 +119,7 @@ namespace RCG {
             {
                 return null;
             }
-            aUnit.Init(iIsMonster);
+            aUnit.Init(iIsMonster, iUnitPos);
             if (iIsMonster)
             {
                 m_EnemyBattlePositionSetting.SetUnit(iUnitPos, iPosition, aUnit);
@@ -156,7 +178,7 @@ namespace RCG {
         public void SetSelectMode(TargetType iTargetType)
         {
             m_TargetType = iTargetType;
-            Debug.LogWarning("m_TargetType:" + m_TargetType.ToString());
+            //Debug.LogWarning("m_TargetType:" + m_TargetType.ToString());
             m_SelectedUnits.Clear();
             if (m_TargetType == TargetType.Close)
             {
@@ -248,7 +270,8 @@ namespace RCG {
         /// </summary>
         public void TurnStart()
         {
-            TurnEnd();
+            SetActiveUnit(null);
+            Debug.Log("Monster QWQ : " + m_Monsters.Count);
             foreach (RCG_Unit u in m_Monsters)
             {
                 if (u == null)
@@ -258,16 +281,26 @@ namespace RCG {
                 var m = u.gameObject.GetComponent<RCG_Monster>();
                 if (m)
                 {
-                    m.Act();
+                    try//目前有Exception導致流程失效
+                    {
+                        m.Act();
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogError(e);
+                    }
+                    Debug.Log("Monster action QWQ");
                 }
                 u.EndTurn();
             }
+            TurnEnd();
         }
         /// <summary>
         /// 敵方戰鬥行動結束
         /// </summary>
         public void TurnEnd()
         {
+            Debug.LogWarning("RCG_BattleField TurnEnd()");
             foreach (RCG_Unit u in m_Characters)
             {
                 if (u == null)
@@ -320,6 +353,29 @@ namespace RCG {
                 ActiveUnit.SelectUnit();
             }
             RCG_Player.ins.UpdateCardStatus();
+            RCG_Player.ins.UpdateCardDiscription();
+        }
+        /// <summary>
+        /// 單位死亡時觸發
+        /// </summary>
+        /// <param name="iUnit"></param>
+        public void OnUnitDead(RCG_Unit iUnit)
+        {
+            Debug.LogWarning("OnUnitDead:" + iUnit.name+ ",m_TargetType:"+ m_TargetType.ToString());
+            if (!iUnit.IsEnemy)
+            {
+                ///腳色死亡 清除ActiveUnit狀態
+                if(iUnit == ActiveUnit)
+                {
+                    SetActiveUnit(null);
+                }
+                ///腳色死亡 更新選擇腳色狀態
+                if(m_TargetType == TargetType.Close)
+                {
+                    SetSelectMode(TargetType.Close);
+                }
+            }
+            RCG_Player.ins.OnUnitDead(iUnit);
         }
         /// <summary>
         /// 選擇無目標按鈕
