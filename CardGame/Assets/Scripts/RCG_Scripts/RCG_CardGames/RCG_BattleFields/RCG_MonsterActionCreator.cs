@@ -42,6 +42,8 @@ namespace RCG
             RCG_MonsterAction iAction = new RCG_MonsterAction();
             foreach (var aFile in aFiles)
             {
+                if (!aFile.Contains(".json")) continue;
+                if (aFile.Contains(".meta")) continue; //ignore meta files
                 var aData = UCL.Core.JsonLib.JsonData.ParseJson(System.IO.File.ReadAllText(aFile));
                 if (aData["m_ActionName"] != typeVarientName) continue;
                 iAction = CreateBasicAction(aData["m_ActionName"]);

@@ -40,7 +40,7 @@ namespace RCG {
         {
             m_State = iState;
         }
-        public void EnterBattle() {
+        public void EnterBattle(RCG_MonsterSet iMonsterSet) {
             if(m_Entered) {
                 Debug.LogError("EnterBattle() Fail!! Already Entered!!");
                 return;
@@ -48,6 +48,7 @@ namespace RCG {
             m_Entered = true;
             gameObject.SetActive(true);
             m_BattleField.EnterBattle();
+            m_BattleField.SetMonsters(iMonsterSet);
             m_CardGame.EnterBattle();
             TurnInit();
         }

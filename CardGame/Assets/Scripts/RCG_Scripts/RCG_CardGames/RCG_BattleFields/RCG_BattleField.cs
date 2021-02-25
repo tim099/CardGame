@@ -156,13 +156,31 @@ namespace RCG {
             ActiveUnit = null;
             m_ActivatedUnit.Clear();
 
-            CreateMonsterAt(UnitPos.Front, 1, "Abigail", true);
-            CreateMonsterAt(UnitPos.Back, 1, "Archer", true);
-            CreateMonsterAt(UnitPos.Back, 2, "Knight", true);
-
             CreateCharacters();
             
             //SetSelectMode(TargetType.Close);
+        }
+        /// <summary>
+        /// 地圖上的怪物資訊
+        /// </summary>
+        virtual public void SetMonsters(RCG_MonsterSet iMonsterSet)
+        {
+            int frontCount = 1;
+            int backCount = 1;
+            foreach (var monster in iMonsterSet.m_Monsters)
+            {
+                frontCount = frontCount % 3;
+                backCount = backCount % 3;
+                if (monster.m_MonsterPos == UnitPos.Front)
+                {
+                    CreateMonsterAt(monster.m_MonsterPos, frontCount++, monster.m_MonsterName, true);
+                }
+                else
+                {
+                    CreateMonsterAt(monster.m_MonsterPos, backCount++, monster.m_MonsterName, true);
+                }
+                
+            }
         }
         /// <summary>
         /// 戰鬥結束

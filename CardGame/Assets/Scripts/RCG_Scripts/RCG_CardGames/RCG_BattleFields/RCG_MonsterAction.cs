@@ -19,7 +19,7 @@ namespace RCG
         {
             get
             {
-                return Application.streamingAssetsPath + "/.MonsterActions/Datas";
+                return Application.streamingAssetsPath + "/MonsterActions/Datas";
             }
         }
         public static string MonsterActionIconPath

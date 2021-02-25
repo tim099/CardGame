@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UCL.TweenLib;
+using System.IO;
+
 namespace RCG {
     public class RCG_Map : MonoBehaviour {
         public Transform m_NodesRoot = null;
@@ -11,6 +13,7 @@ namespace RCG {
         public RCG_MapItems m_MapItems = null;
 
         public RCG_MapNode m_CurCity = null;
+        public List<RCG_MonsterSet> m_MonsterSets = new List<RCG_MonsterSet>();
         UCL_Tweener m_Tweener = null;
         virtual public void Init(RCG_MapItems _MapItems) {
             m_MapItems = _MapItems;
@@ -25,6 +28,7 @@ namespace RCG {
             }
             //m_MapItems.m_PlayerIcon.transform.position = m_StartCity.transform.position;
             PlayerMoveTo(m_StartCity, true);
+            LoadMapData();
         }
         virtual public bool IsMoving() { return m_Tweener != null; }
         virtual public void PlayerMoveTo(RCG_MapNode _node, bool init_move = false) {
@@ -64,6 +68,38 @@ namespace RCG {
                 //transform.position = pos_e;
             }
 
+        }
+
+        public static string MapDataPath
+        {
+            get
+            {
+                return Application.streamingAssetsPath + "/MapDatas";
+            }
+        }
+        virtual public void LoadMapData()
+        {
+            var aFiles = UCL.Core.FileLib.Lib.GetFiles(Path.Combine(MapDataPath, gameObject.name));
+            Debug.Log(Path.Combine(MapDataPath, gameObject.name));
+            foreach (var aFile in aFiles)
+            {
+                Debug.Log(aFile);
+                if (!aFile.Contains(".json")) continue;
+                if (aFile.Contains(".meta")) continue; //ignore meta files
+
+                var aData = UCL.Core.JsonLib.JsonData.ParseJson(System.IO.File.ReadAllText(aFile));
+                for(int i=0; i < aData["MonsterSets"].Count; i++)
+                {
+                    RCG_MonsterSet iMonsterSet = new RCG_MonsterSet();
+                    var monsterSetJson = aData["MonsterSets"][i];
+                    for (int j = 0; j < monsterSetJson["Monsters"].Count; j++)
+                    {
+                        var monster = monsterSetJson["Monsters"][j];
+                        iMonsterSet.m_Monsters.Add(new RCG_MonsterTuple(monster["Name"], monster["Pos"]));
+                    }
+                    m_MonsterSets.Add(iMonsterSet);
+                }
+            }
         }
     }
 }

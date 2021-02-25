@@ -1,0 +1,37 @@
+{
+    "MapName": "Quest_0",
+    "MonsterSets":[
+        {
+            "Monsters":[
+                {
+                    "Name": "Knight",
+                    "Pos": "Front"
+                },
+                {
+                    "Name": "Abigail",
+                    "Pos": "Back"
+                },
+                {
+                    "Name": "Archer",
+                    "Pos": "Back"
+                }
+            ]
+        },
+        {
+            "Monsters":[
+                {
+                    "Name": "Knight",
+                    "Pos": "Front"
+                },
+                {
+                    "Name": "Knight",
+                    "Pos": "Front"
+                },
+                {
+                    "Name": "Knight",
+                    "Pos": "Front"
+                }
+            ]
+        }
+    ]
+}
