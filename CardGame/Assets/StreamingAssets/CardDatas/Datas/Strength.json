@@ -10,7 +10,7 @@
 	[
 		{
 			"EffectType":"DiscardEffect",
-			"m_DiscardCardNum":1
+			"m_DiscardCardNum":2
 		},
 		{
 			"EffectType":"StatusEffect",
@@ -21,7 +21,7 @@
 		},
 		{
 			"EffectType":"DrawEffect",
-			"m_DrawCardNum":1
+			"m_DrawCardNum":2
 		}
 	]
 }

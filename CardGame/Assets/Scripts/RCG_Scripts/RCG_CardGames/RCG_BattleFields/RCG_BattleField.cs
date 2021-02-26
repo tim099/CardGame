@@ -179,7 +179,6 @@ namespace RCG {
         public void SetSelectMode(TargetType iTargetType)
         {
             m_TargetType = iTargetType;
-            //Debug.LogWarning("m_TargetType:" + m_TargetType.ToString());
             m_SelectedUnits.Clear();
             if (m_TargetType == TargetType.Close)
             {
@@ -353,8 +352,7 @@ namespace RCG {
             {
                 ActiveUnit.SelectUnit();
             }
-            RCG_Player.ins.UpdateCardStatus();
-            RCG_Player.ins.UpdateCardDiscription();
+            RCG_Player.ins.SetActiveUnit(ActiveUnit);
         }
         /// <summary>
         /// 單位死亡時觸發

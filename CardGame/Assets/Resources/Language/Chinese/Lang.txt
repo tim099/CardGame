@@ -22,6 +22,8 @@
 "Status_Strength":"力量"
 "Status_Bleed":"出血"
 
+"SelectDiscardCard":"請選擇要捨棄的卡牌"
+
 "Explosion":"大爆炸"
 "Fate":"命運"
 "Attack_Des":"對{2}\n造成{1}次{0}點傷害"

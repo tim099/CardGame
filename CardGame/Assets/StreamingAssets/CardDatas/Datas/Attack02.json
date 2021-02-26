@@ -12,16 +12,19 @@
 	"CardEffect":
 	[
 		{
+			"EffectType":"StatusEffect",
+			"m_StatusType":"Strength",
+			"m_BuffRange":"Player",
+			"m_ShowBuffRangeDes":"True",
+			"m_Amount":1
+		},
+		{
 			"EffectType":"AttackEffect",
 			"m_Atk":9,
 			"m_AttackRange":"FrontEnemy",
 			"m_AtkTimes":3,
 			"m_AttackType":"Normal",
 			"m_VFX":""
-		},
-		{
-			"EffectType":"DrawEffect",
-			"m_DrawCardNum":1
 		}
 	]
 }
