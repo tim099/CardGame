@@ -30,7 +30,9 @@ namespace RCG {
             if(m_Inited) return;
             m_Inited = true;
             m_BattleManager.Init();
-            m_BattleManager.EnterBattle(new RCG_MonsterSet());
+            RCG_MonsterSet aRCG_MonsterSet = new RCG_MonsterSet();
+            aRCG_MonsterSet.m_Monsters.Add(new RCG_MonsterTuple("Knight", UnitPos.Front));
+            m_BattleManager.EnterBattle(aRCG_MonsterSet);
         }
         private void Update()
         {

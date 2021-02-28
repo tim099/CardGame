@@ -11,7 +11,7 @@ namespace RCG
         List<RCG_Unit> m_Targets = null;
         RCG_Unit m_Attaker = null;
         int m_Atk = 0;
-        public RCG_PlayerAttackAction(RCG_Unit iAttaker,List<RCG_Unit> iTargets, int iAtk)
+        public RCG_PlayerAttackAction(RCG_Unit iAttaker, List<RCG_Unit> iTargets, int iAtk)
         {
             m_Attaker = iAttaker;
             m_Targets = iTargets;
@@ -19,7 +19,11 @@ namespace RCG
         }
         public override void Trigger(Action iEndAction)
         {
-            int aAtk = RCG_BattleField.ins.ActiveUnit.GetAtk(m_Atk);
+            int aAtk = m_Atk;
+            if (RCG_BattleField.ins.ActiveUnit != null)
+            {
+                aAtk = RCG_BattleField.ins.ActiveUnit.GetAtk(m_Atk);
+            }
             if (m_Targets == null)
             {
                 iEndAction.Invoke();

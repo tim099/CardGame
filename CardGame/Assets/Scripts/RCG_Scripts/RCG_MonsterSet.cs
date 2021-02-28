@@ -14,6 +14,11 @@ namespace RCG
             m_MonsterName = iName;
             m_MonsterPos = (iPos == "Front" ? UnitPos.Front : UnitPos.Back);
         }
+        public RCG_MonsterTuple(string iName, UnitPos iPos)
+        {
+            m_MonsterName = iName;
+            m_MonsterPos = iPos;
+        }
     }
 
     public class RCG_MonsterSet
