@@ -7,6 +7,13 @@ namespace RCG {
         public bool IsCardActive {
             get { return !m_Card.IsEmpty && !m_Card.m_Used; }
         }
+        /// <summary>
+        /// 是否能出牌
+        /// </summary>
+        public bool IsSelectable
+        {
+            get { return m_Card.IsSelectable; }
+        }
         public bool IsUsing { get => m_Card.m_Using; }
         public bool IsCardAvaliable
         {

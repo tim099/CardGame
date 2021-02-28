@@ -38,6 +38,10 @@ namespace RCG
         {
             m_CardData.TriggerEffect(iTriggerEffectData, iEndAction);
         }
+        public override void CardDiscarded(RCG_Player iPlayer)
+        {
+            iPlayer.AddToDiscardPile(this);
+        }
         override public void CardUsed(RCG_Player iPlayer)
         {
             switch (UsedType) {

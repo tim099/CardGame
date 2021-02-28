@@ -4,7 +4,18 @@ using UnityEngine;
 
 namespace RCG {
     public class RCG_CardPosController : MonoBehaviour {
-
+        public int SelectableCardCount
+        {
+            get
+            {
+                int aCount = 0;
+                foreach (var aCardPos in m_CardPosList)
+                {
+                    if (aCardPos.IsSelectable) aCount++;
+                }
+                return aCount;
+            }
+        }
         public RCG_CardPos m_CardPosTmp = null;
         public Transform m_CardPosRoot = null;
         public List<RCG_CardPos> m_CardPosList = new List<RCG_CardPos>();
@@ -65,7 +76,7 @@ namespace RCG {
         }
         public void UpdateActiveCardList()
         {
-            RCG_CardPos aUsingCardPos = null;
+            List<RCG_CardPos> aUsingCardPos = new List<RCG_CardPos>();
             m_ActiveCardPosList.Clear();
             m_InActiveCardPosList.Clear();
 
@@ -80,7 +91,7 @@ namespace RCG {
                     }
                     else
                     {
-                        aUsingCardPos = aCardPos;
+                        aUsingCardPos.Add(aCardPos);
                     }
                 }
                 else
@@ -96,7 +107,7 @@ namespace RCG {
             }
             if (aUsingCardPos != null)
             {
-                m_CardPosList.Add(aUsingCardPos);
+                m_CardPosList.AddRange(aUsingCardPos);
             }
             for (int i = 0; i < m_InActiveCardPosList.Count; i++)
             {
@@ -106,7 +117,6 @@ namespace RCG {
         }
         public void UpdateCardPos()
         {
-            //UpdateActiveCardList();
             List<RCG_CardPos> aSelectedCardPos = new List<RCG_CardPos>();
             int aSelectedCardNum = 0;
             for (int i = 0; i < m_ActiveCardPosList.Count - 1; i++)
@@ -118,7 +128,6 @@ namespace RCG {
                     aSelectedCardPos.Add(aCardPos);
                 }
             }
-            //m_CardPosList.Clear();
             int aDiv = m_ActiveCardPosList.Count - 1 - aSelectedCardNum;
             if (aDiv <= 0) aDiv = 1;
 

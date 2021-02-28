@@ -13,19 +13,19 @@
 			"m_CostAlter":2
 		},
 		{
-			"EffectType":"AttackEffect",
-			"m_Atk":2,
-			"m_AttackRange":"Player",
-			"m_AtkTimes":1,
-			"m_AttackType":"Normal",
-			"m_VFX":""
-		},
-		{
 			"EffectType":"StatusEffect",
 			"m_StatusType":"Weak",
 			"m_BuffRange":"Player",
 			"m_ShowBuffRangeDes":"False",
 			"m_Amount":2
+		},
+		{
+			"EffectType":"AttackEffect",
+			"m_Atk":4,
+			"m_AttackRange":"Player",
+			"m_AtkTimes":1,
+			"m_AttackType":"Normal",
+			"m_VFX":""
 		}
 	]
 }

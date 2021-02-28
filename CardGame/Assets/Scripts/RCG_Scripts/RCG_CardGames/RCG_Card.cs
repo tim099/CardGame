@@ -34,6 +34,7 @@ namespace RCG {
             Cost = 1,//費用不足
             DrawCardAnime,//抽牌演出中
             TriggerCardAnime,//出牌演出中
+            CardMoveAnime,//移動演出中
             Player,//玩家行動中
             NoSkill,//腳色技能不符合
             UsingCard,//卡牌正在觸發效果中
@@ -43,6 +44,31 @@ namespace RCG {
         /// </summary>
         public bool IsBlocking {
             get { return m_SelectionBlock.Count > 0; }
+        }
+        /// <summary>
+        /// 是否正在使用中(或被選中準備被棄牌)
+        /// </summary>
+        public bool IsUsing
+        {
+            get { return m_Using; }
+        }
+        /// <summary>
+        /// 是否為空牌(隱藏狀態)
+        /// </summary>
+        virtual public bool IsEmpty
+        {
+            get
+            {
+                if (m_Used || m_Data == null) return true;
+                return false;
+            }
+        }
+        /// <summary>
+        /// 是否可出牌
+        /// </summary>
+        public bool IsSelectable
+        {
+            get { return !IsEmpty && !IsUsing && !IsBlocking; }
         }
         public GameObject m_BlockSelectionObject;
         public GameObject m_SelectedObject;
@@ -109,9 +135,10 @@ namespace RCG {
                 iEndAction.Invoke(false);
                 return;
             }
+            Debug.LogWarning("Trigger:" + m_Data.CardName);
             //if(!m_Data.TargetCheck(target)) return false;
             if(!p_Player.AlterCost(-m_Data.Cost)) {
-                Debug.LogError("Cost not enough!!");
+                Debug.LogError("Cost not enough!!:"+ m_Data.CardName);
                 ///費用不足
                 iEndAction.Invoke(false);
                 return;
@@ -140,12 +167,18 @@ namespace RCG {
         /// </summary>
         virtual public void UpdateCardStatus() {
             if(m_Data == null) return;
-            if(m_Data.Cost > p_Player.Cost) {
+            //Debug.LogError("UpdateCardStatus():" + p_Player.CurSelectCardMode.ToString());
+            bool aDoCheck = !(p_Player.CurSelectCardMode == RCG_Player.SelectCardMode.DontCheck);
+
+            if (aDoCheck && m_Data.Cost > p_Player.Cost)
+            {
                 BlockSelection(BlockingStatus.Cost);
-            } else {
+            }
+            else
+            {
                 UnBlockSelection(BlockingStatus.Cost);
             }
-            if(RCG_BattleField.ins.ActiveUnit == null || !m_Data.CheckRequireSkill(RCG_BattleField.ins.ActiveUnit.m_SkillSets))
+            if (aDoCheck && (RCG_BattleField.ins.ActiveUnit == null || !m_Data.CheckRequireSkill(RCG_BattleField.ins.ActiveUnit.m_SkillSets)))
             {
                 BlockSelection(BlockingStatus.NoSkill);
             }
@@ -153,16 +186,8 @@ namespace RCG {
             {
                 UnBlockSelection(BlockingStatus.NoSkill);
             }
-            SetBlockSelection(BlockingStatus.UsingCard, p_Player.IsUsingCard);
-        }
-        /// <summary>
-        /// Avaliable Cards
-        /// </summary>
-        virtual public bool IsEmpty {
-            get {
-                if(m_Used || m_Data == null) return true;
-                return false;
-            }
+            SetBlockSelection(BlockingStatus.UsingCard, aDoCheck && p_Player.IsUsingCard);
+
         }
         virtual public void SetCardPos(RCG_CardPos iCardPos) {
             p_CardPos = iCardPos;
@@ -257,6 +282,29 @@ namespace RCG {
             });
         }
         /// <summary>
+        /// 卡牌移動動畫
+        /// </summary>
+        /// <param name="iTargetPos"></param>
+        /// <param name="iEndAct"></param>
+        virtual public void CardMoveAnime(Transform iTargetPos, System.Action iEndAct)
+        {
+            var aPosO = transform.position;
+            transform.position = iTargetPos.position;
+            transform.rotation = iTargetPos.rotation;
+
+            m_CardPanel.transform.position = aPosO;
+            m_CardPanel.SetActive(true);
+            BlockSelection(BlockingStatus.CardMoveAnime, false);
+            m_TB_Tweener.StartTween(() => {
+                UnBlockSelection(BlockingStatus.CardMoveAnime);
+                transform.position = transform.parent.position;
+                m_CardPanel.transform.position = transform.parent.position;
+                transform.rotation = transform.parent.rotation;
+                m_CardPanel.transform.rotation = transform.parent.rotation;
+                if (iEndAct != null) iEndAct.Invoke();
+            });
+        }
+        /// <summary>
         /// 出牌演出
         /// </summary>
         /// <param name="iTargetPos"></param>
@@ -279,6 +327,17 @@ namespace RCG {
                 if(iEndAct != null) iEndAct.Invoke();
             });
         }
+        /// <summary>
+        /// 卡牌被丟棄掉
+        /// </summary>
+        virtual public void CardDiscarded()
+        {
+            m_Data.CardDiscarded(p_Player);
+            SetCardData(null);
+        }
+        /// <summary>
+        /// 卡牌觸發效果後消耗掉
+        /// </summary>
         virtual public void CardUsed() {
             m_Data.CardUsed(p_Player);
             SetCardData(null);

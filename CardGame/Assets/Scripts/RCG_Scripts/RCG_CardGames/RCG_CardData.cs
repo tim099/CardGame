@@ -195,6 +195,7 @@ namespace RCG {
             };
             aTriggerAct.Invoke(0);
         }
+        virtual public void CardDiscarded(RCG_Player iPlayer) { }
         virtual public void CardUsed(RCG_Player iPlayer) { }
         public void LoadJson(UCL.Core.JsonLib.JsonData iSetting) {
             m_Data = UCL.Core.JsonLib.JsonConvert.LoadDataFromJson<CardData>(iSetting);

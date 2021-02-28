@@ -156,7 +156,7 @@ namespace RCG {
             {
                 for (int i = 0; i < m_AtkTimes; i++)
                 {
-                    iTriggerEffectData.p_Player.AddPlayerAction(new RCG_PlayerAttackAction(iTriggerEffectData.m_PlayerUnit, aTargets, Atk));
+                    iTriggerEffectData.p_Player.AddPlayerAction(new RCG_PlayerAttackAction(iTriggerEffectData.m_PlayerUnit, aTargets, m_Atk));
                 }
             }
 

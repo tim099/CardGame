@@ -19,6 +19,7 @@ namespace RCG
         }
         public override void Trigger(Action iEndAction)
         {
+            int aAtk = RCG_BattleField.ins.ActiveUnit.GetAtk(m_Atk);
             if (m_Targets == null)
             {
                 iEndAction.Invoke();
@@ -44,7 +45,7 @@ namespace RCG
                     {
                         if (!aTarget.IsDead)
                         {
-                            aTarget.UnitHit(m_Atk);
+                            aTarget.UnitHit(aAtk);
                         }
                     }
                 });
