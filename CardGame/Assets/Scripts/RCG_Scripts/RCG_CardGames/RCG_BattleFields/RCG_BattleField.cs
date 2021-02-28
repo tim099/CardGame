@@ -111,7 +111,6 @@ namespace RCG {
             aUnit.m_UnitPosId = iPosition;
             if (iIsMonster) { 
                 m_Monsters.Add(aUnit);
-                Debug.Log("QWQ : " + m_Monsters.Count);
             }
             else { 
                 m_Characters.Add(aUnit);
@@ -157,13 +156,31 @@ namespace RCG {
             ActiveUnit = null;
             m_ActivatedUnit.Clear();
 
-            CreateMonsterAt(UnitPos.Front, 1, "Abigail", true);
-            CreateMonsterAt(UnitPos.Back, 1, "Archer", true);
-            CreateMonsterAt(UnitPos.Back, 2, "Knight", true);
-
             CreateCharacters();
             
             //SetSelectMode(TargetType.Close);
+        }
+        /// <summary>
+        /// 地圖上的怪物資訊
+        /// </summary>
+        virtual public void SetMonsters(RCG_MonsterSet iMonsterSet)
+        {
+            int frontCount = 1;
+            int backCount = 1;
+            foreach (var monster in iMonsterSet.m_Monsters)
+            {
+                frontCount = frontCount % 3;
+                backCount = backCount % 3;
+                if (monster.m_MonsterPos == UnitPos.Front)
+                {
+                    CreateMonsterAt(monster.m_MonsterPos, frontCount++, monster.m_MonsterName, true);
+                }
+                else
+                {
+                    CreateMonsterAt(monster.m_MonsterPos, backCount++, monster.m_MonsterName, true);
+                }
+                
+            }
         }
         /// <summary>
         /// 戰鬥結束
@@ -262,6 +279,7 @@ namespace RCG {
             Debug.LogWarning("Battle TurnInit()!!");
             ClearSelectedUnits();
             ClearActivatedUnits();
+            UpdateMonsterActions();
             SetSelectMode(TargetType.Close);
         }
         /// <summary>
@@ -270,28 +288,34 @@ namespace RCG {
         public void TurnStart()
         {
             SetActiveUnit(null);
-            Debug.Log("Monster QWQ : " + m_Monsters.Count);
+            MonsterAction();
+        }
+        /// <summary>
+        /// 敵人行動
+        /// </summary>
+        public void MonsterAction()
+        {
             foreach (RCG_Unit u in m_Monsters)
             {
-                Debug.Log("Monster QWQ " + u.name);
                 if (u == null)
                 {
                     continue;
                 }
                 var m = u.gameObject.GetComponent<RCG_Monster>();
-                if (m)
+                if (!m.m_acted)
                 {
                     try//目前有Exception導致流程失效
                     {
-                        m.Act();
+                        m.Act(delegate () {
+                            MonsterAction();
+                        });
                     }
                     catch (System.Exception e)
                     {
                         Debug.LogError(e);
                     }
-                    Debug.Log("Monster action QWQ");
+                    return;
                 }
-                u.EndTurn();
             }
             TurnEnd();
         }
@@ -414,6 +438,25 @@ namespace RCG {
         public void TriggerCardEffect(int target, RCG_CardData card_data){
             Debug.Log("TriggerCardEffect");
             //RCG_CardEffectHandler.TriggerCardEffectOnUnits(m_units ,target, card_data);
+        }
+
+        /// <summary>
+        /// 更新敵人的動作
+        /// </summary>
+        public void UpdateMonsterActions()
+        {
+            foreach (RCG_Unit u in m_Monsters)
+            {
+                if (u == null)
+                {
+                    continue;
+                }
+                var m = u.gameObject.GetComponent<RCG_Monster>();
+                if (m)
+                {
+                    m.PrepareToAct();
+                }
+            }
         }
     }
 }

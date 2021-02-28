@@ -22,8 +22,12 @@ namespace RCG {
             if(!m_unit){
                 m_unit = gameObject.GetComponentInParent<RCG_Unit>();
             }
+            if (!m_unit)
+            {
+                m_unit = gameObject.GetComponentInParent<RCG_Unit>();
+            }
             // m_hp_text.text = m_hp_slider.value + "/" + m_hp_slider.maxValue;
-           UpdateHUD();
+            UpdateHUD();
         }
 
         // Start is called before the first frame update

@@ -1,0 +1,10 @@
+{
+	"m_ActionName":"SimpleAttackAction",
+	"m_Atk":9,
+	"m_AttackRange":"Front",
+	"m_AtkTimes":3,
+	"m_AttackType":"Normal",
+	"m_Icon":"sword-brandish",
+	"m_Description":"Deal $m_Atk damage $m_AtkTimes times to target in frontline",
+	"m_DescriptionShort":"$m_Atk x $m_AtkTimes"
+}

@@ -1,7 +1,0 @@
-{
-	"m_ActionName":"SimpleAttackAction",
-	"m_Atk":9,
-	"m_AttackRange":"Front",
-	"m_AtkTimes":3,
-	"m_AttackType":"Normal"
-}

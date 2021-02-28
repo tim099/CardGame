@@ -21,7 +21,6 @@ namespace RCG
 
         public override void TriggerAction(Action iEndAction)
         {
-            Debug.Log("ACT QWQ");
             RCG_Unit aTarget = null;
             UnitPos target_pos = (m_AttackRange == "Front" ? UnitPos.Front : UnitPos.Back);
             UCL.Core.MathLib.UCL_Random.Instance.Shuffle(ref RCG_BattleField.ins.m_Characters);
@@ -33,20 +32,11 @@ namespace RCG
                     break;
                 }
             }
-            Debug.Log(aTarget.name + "is the target QWQ");
             if(aTarget != null)
             {
                 var aSeq = LibTween.Sequence();
-                Debug.Log("Start attack QWQ");
-                Debug.Log(m_Atk);
-                Debug.Log(m_AtkTimes);
-                Debug.Log(m_AttackRange);
-                Debug.Log(m_AttackType);
-                Debug.Log(m_ActionName);
-                //QWQ
                 for (int i = 0; i < m_AtkTimes; i++)
                 {
-                    Debug.Log("Attack QWQ");
                     aSeq.Append(delegate ()
                     {
                         if (!aTarget.IsDead)
