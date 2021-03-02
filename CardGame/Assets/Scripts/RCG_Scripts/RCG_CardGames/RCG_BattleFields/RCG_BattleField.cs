@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UCL.Core.UI;
 using UnityEngine.UI;
+using UCL.TweenLib;
+
 namespace RCG {
     [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_BattleField : MonoBehaviour
@@ -344,6 +346,10 @@ namespace RCG {
             m_ActivatedUnit.Clear();
             SetActiveUnit(null);
         }
+        /// <summary>
+        /// 單位被選中後呼叫
+        /// </summary>
+        /// <param name="iUnit"></param>
         public void SelectUnit(RCG_Unit iUnit)
         {
             if(m_TargetType == TargetType.Close)
@@ -377,6 +383,108 @@ namespace RCG {
                 ActiveUnit.SelectUnit();
             }
             RCG_Player.ins.SetActiveUnit(ActiveUnit);
+        }
+        /// <summary>
+        /// 演出多段攻擊動畫 攻擊群體敵人
+        /// </summary>
+        /// <param name="iAttaker"></param>
+        /// <param name="iTarget"></param>
+        /// <param name="iAtk"></param>
+        /// <param name="iEndAction"></param>
+        public void AttackUnit(RCG_Unit iAttaker, RCG_Unit iTarget, int iAtk, int iAtkTimes, System.Action iEndAction)
+        {
+            if(iTarget == null)
+            {
+                iEndAction.Invoke();
+            }
+            AttackUnits(iAttaker, new List<RCG_Unit>() { iTarget }, iAtk, iAtkTimes, iEndAction);
+        }
+        /// <summary>
+        /// 演出多段攻擊動畫 攻擊群體敵人
+        /// </summary>
+        /// <param name="iAttaker"></param>
+        /// <param name="iTargets"></param>
+        /// <param name="iAtk"></param>
+        /// <param name="iAtkTimes"></param>
+        /// <param name="iEndAction"></param>
+        public void AttackUnits(RCG_Unit iAttaker, List<RCG_Unit> iTargets, int iAtk, int iAtkTimes, System.Action iEndAction)
+        {
+            if (iAtkTimes <= 0)
+            {
+                iEndAction.Invoke();
+            }
+            System.Action<int> aAttackAct = null;
+            aAttackAct = delegate (int iAt)
+            {
+                AttackUnits(iAttaker, iTargets, iAtk, delegate () {
+                    if (iAt < iAtkTimes)
+                    {
+                        aAttackAct(iAt + 1);
+                    }
+                    else
+                    {
+                        iEndAction.Invoke();
+                    }
+                });
+            };
+            aAttackAct.Invoke(1);
+        }
+        /// <summary>
+        /// 演出攻擊動畫 攻擊群體敵人
+        /// </summary>
+        /// <param name="iAttaker"></param>
+        /// <param name="iTargets"></param>
+        /// <param name="iAtk"></param>
+        public void AttackUnits(RCG_Unit iAttaker, List<RCG_Unit> iTargets, int iAtk, System.Action iEndAction)
+        {
+            if (iTargets == null || iTargets.Count == 0)
+            {
+                iEndAction.Invoke();
+                return;
+            }
+            for (int i = iTargets.Count - 1; i >= 0; i--)
+            {
+                if (iTargets[i].IsDead)
+                {
+                    iTargets.RemoveAt(i);
+                }
+            }
+            if (iTargets.Count == 0)
+            {
+                iEndAction.Invoke();
+                return;
+            }
+            int aAtk = iAtk;
+            if (iAttaker != null)
+            {
+                aAtk = iAttaker.GetAtk(iAtk);
+            }
+
+            var aSeq = LibTween.Sequence();
+            {
+                aSeq.Append(delegate ()
+                {
+                    foreach (var aTarget in iTargets)
+                    {
+                        if (!aTarget.IsDead)
+                        {
+                            aTarget.UnitHit(aAtk);
+                        }
+                    }
+                });
+                var aTweener = LibTween.Tweener(0.2f);//aSeq.AppendInterval(0.8f);
+                aSeq.Append(aTweener);
+                foreach (var aTarget in iTargets)
+                {
+                    if (!aTarget.IsDead)
+                    {
+                        aTweener.AddComponent(aTarget.transform.TC_LocalShake(35, 20, true));
+                    }
+                }
+                aSeq.AppendInterval(0.4f);
+            }
+            aSeq.OnComplete(iEndAction);
+            aSeq.Start();
         }
         /// <summary>
         /// 單位死亡時觸發

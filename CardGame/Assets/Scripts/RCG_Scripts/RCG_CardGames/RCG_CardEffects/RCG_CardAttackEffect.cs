@@ -154,10 +154,7 @@ namespace RCG {
             //Debug.LogError("aTargets:" + aTargets.Count);
             if(aTargets != null && aTargets.Count > 0)
             {
-                for (int i = 0; i < m_AtkTimes; i++)
-                {
-                    iTriggerEffectData.p_Player.AddPlayerAction(new RCG_PlayerAttackAction(iTriggerEffectData.m_PlayerUnit, aTargets, m_Atk));
-                }
+                iTriggerEffectData.p_Player.AddPlayerAction(new RCG_PlayerAttackAction(iTriggerEffectData.m_PlayerUnit, aTargets, m_Atk, m_AtkTimes));
             }
 
             iEndAction.Invoke();
