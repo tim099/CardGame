@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 namespace RCG
 {
+    /// <summary>
+    /// 卡牌顯示介面(牌庫 棄牌堆)
+    /// </summary>
     public class RCG_ShowCardUI : MonoBehaviour
     {
         public RCG_CardRowsDisplayUI m_CardRowsDisplayUITmp;
@@ -18,10 +21,9 @@ namespace RCG
             m_CardRowsDisplayUIs.Add(m_CardRowsDisplayUITmp);
             m_ShowPos = transform.position;
         }
-        public void Show(List<RCG_CardData> cards) {
-            
+        public void Show(List<RCG_CardData> iCards) {
             int card_num_in_row = m_CardRowsDisplayUITmp.m_CardDisplayer.Count;
-            while(cards.Count > m_CardRowsDisplayUIs.Count * card_num_in_row) {
+            while(iCards.Count > m_CardRowsDisplayUIs.Count * card_num_in_row) {
                 var new_row = Instantiate(m_CardRowsDisplayUITmp, m_CardRowsDisplayUITmp.transform.parent);
                 new_row.name = m_CardRowsDisplayUITmp.name + "_" + m_CardRowsDisplayUIs.Count;
                 m_CardRowsDisplayUIs.Add(new_row);
@@ -29,10 +31,10 @@ namespace RCG
             for(int i = 0; i < m_CardRowsDisplayUIs.Count; i++) {
                 var row = m_CardRowsDisplayUIs[i];
                 int count = i * card_num_in_row;
-                if(count < cards.Count - card_num_in_row) {
-                    row.Show(cards, count, card_num_in_row);
-                } else if(count < cards.Count) {
-                    row.Show(cards, count, cards.Count - count);
+                if(count < iCards.Count - card_num_in_row) {
+                    row.Show(iCards, count, card_num_in_row);
+                } else if(count < iCards.Count) {
+                    row.Show(iCards, count, iCards.Count - count);
                 } else {
                     row.Hide();
                 }
@@ -43,12 +45,12 @@ namespace RCG
             transform.position = m_HidePos.position;
             transform.localScale = new Vector3(0.3f,0.3f,1f);
             m_ScrollRect.ToTop();
-            var twn = transform.UCL_Scale(0.3f, 1f).SetEase(EaseType.OutElastic);
-            twn.AddComponent(transform.TC_Move(m_ShowPos));
+            var aTweener = transform.UCL_Scale(0.3f, 1f).SetEase(EaseType.OutElastic);
+            aTweener.AddComponent(transform.TC_Move(m_ShowPos));
             //twn.OnComplete(() => {
             //    m_ScrollRect.ToTop();
             //});
-            twn.Start();
+            aTweener.Start();
 
         }
         public void Hide() {

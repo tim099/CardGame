@@ -13,9 +13,14 @@ namespace RCG
         System.Func<List<RCG_CardData>> m_GetCardsFunc = null;
         List<RCG_CardData> m_Cards;
         RCG_Player p_Player;
-        public void Init(RCG_Player _Player, System.Func<List<RCG_CardData>> _GetCardsFunc) {
-            p_Player = _Player;
-            m_GetCardsFunc = _GetCardsFunc;
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <param name="iPlayer"></param>
+        /// <param name="iGetCardsFunc">用來抓取要顯示的牌</param>
+        public void Init(RCG_Player iPlayer, System.Func<List<RCG_CardData>> iGetCardsFunc) {
+            p_Player = iPlayer;
+            m_GetCardsFunc = iGetCardsFunc;
 
             m_ShowCardUI.Init();
             m_ShowCardUI.gameObject.SetActive(false);

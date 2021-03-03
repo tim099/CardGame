@@ -1,0 +1,20 @@
+{
+	"m_ItemType":"Buff",
+	"m_TargetType":"Allied",
+	"m_UsedType":"Banish",
+	"m_ItemName":"HealPotion",
+	"m_IconName":"Char.png",
+	"m_Cost":0,
+	"m_RequireSkills":null,
+	"ItemEffect":
+	[
+		{
+			"EffectType":"AttackEffect",
+			"m_Atk":-5,
+			"m_AttackRange":"Target",
+			"m_AtkTimes":1,
+			"m_AttackType":"Normal",
+			"m_VFX":""
+		}
+	]
+}

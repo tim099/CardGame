@@ -46,7 +46,7 @@ namespace RCG {
         protected List<string> m_CardDataPaths = null;
         protected List<string> m_CardIconPaths = new List<string>();
         protected CardEditData m_EditingData = null;
-        protected RCG_DeckData m_EditingDeckData = null;
+        protected DeckData m_EditingDeckData = null;
         protected int m_CreateEffectID = 0;
         protected bool m_CreateEffectOpened = false;
         protected bool m_Inited = false;
@@ -151,7 +151,7 @@ namespace RCG {
 
         virtual protected void LoadDeckData()
         {
-            m_EditingDeckData = RCG_DeckData.LoadDeckData();
+            m_EditingDeckData = DeckData.LoadDeckData();
         }
 
         #region EditDeck
@@ -177,7 +177,7 @@ namespace RCG {
                 }
                 if (UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Save Deck", 22))
                 {
-                    m_EditingDeckData.SaveData(RCG_DeckData.DeckDataPath);
+                    m_EditingDeckData.SaveData(DeckData.DeckDataPath);
                 }
                 if (UCL.Core.UI.UCL_GUILayout.ButtonAutoSize("Load Deck", 22))
                 {
@@ -356,7 +356,7 @@ namespace RCG {
             using(var scope = new GUILayout.VerticalScope("box")) {
                 GUILayout.BeginHorizontal();
                 m_CreateEffectID = UCL.Core.UI.UCL_GUILayout.
-                    Popup(m_CreateEffectID, RCG_CardEffectCreator.m_EffectNameList, ref m_CreateEffectOpened);
+                    Popup(m_CreateEffectID, RCG_CardEffectCreator.EffectNameList, ref m_CreateEffectOpened);
                 if(GUILayout.Button("Add", GUILayout.Width(60))) {
                     card_data.AddCardEffect(RCG_CardEffectCreator.Create(m_CreateEffectID));
                 }

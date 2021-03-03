@@ -73,6 +73,10 @@ namespace RCG
         {
             return 0f;
         }
+        virtual public int GetAtkAlter()
+        {
+            return 0;
+        }
         virtual public void AlterLayer(int iAmount)
         {
             int aVal = m_StatusLayer + iAmount;

@@ -5,6 +5,16 @@ using UnityEngine;
 namespace RCG {
     
     public static class RCG_CardEffectCreator {
+        public static List<string> EffectNameList {
+            get
+            {
+                if(m_EffectNameList == null)
+                {
+                    Init();
+                }
+                return m_EffectNameList;
+            }
+        }
         public static List<string> m_EffectNameList = null;
         static Dictionary<string, System.Func<RCG_CardEffect>> m_CreateDic = null;
         [RuntimeInitializeOnLoadMethod]

@@ -61,8 +61,8 @@ namespace RCG {
                     new Vector2(0.5f, 0.5f), 100.0f);
                 m_CardSprites.Add(iIconName, aSprite);
                 aIcon = aSprite;
-                var aImg = UCL.Core.GameObjectLib.Create<Image>(iIconName, transform);
-                aImg.sprite = aIcon;
+                //var aImg = UCL.Core.GameObjectLib.Create<Image>(iIconName, transform);
+                //aImg.sprite = aIcon;
             } else {
                 Debug.LogError("GetCardIcon:" + iIconName + ",File not found!!aIconPath:" + aIconPath);
             }

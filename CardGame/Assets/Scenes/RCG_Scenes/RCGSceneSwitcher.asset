@@ -19,4 +19,5 @@ MonoBehaviour:
   - m_Scene: {fileID: 102900000, guid: ac1af6a14070de4499775800e7e50e84, type: 3}
   - m_Scene: {fileID: 102900000, guid: b45373a914146ec44964d803c697bc7e, type: 3}
   - m_Scene: {fileID: 102900000, guid: 8afd48478dbcbbb4db0e21f0471de8dd, type: 3}
+  - m_Scene: {fileID: 102900000, guid: dc690978d205cf048b3604038e5685e6, type: 3}
   m_LoadSceneName: RCG_MainMenu

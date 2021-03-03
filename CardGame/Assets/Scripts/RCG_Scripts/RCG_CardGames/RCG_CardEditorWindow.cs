@@ -6,7 +6,6 @@ using UnityEditor;
 namespace RCG {
     public class RCG_CardEditorWindow : EditorWindow {
         public static RCG_CardEditorWindow ShowWindow(RCG_CardEditor target) {
-            Debug.LogWarning("UCL_SceneSwitcherWindow ShowWindow() !!");
             var window = EditorWindow.GetWindow<RCG_CardEditorWindow>("CardEditor");
             window.Init(target);
             return window;

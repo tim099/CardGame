@@ -64,6 +64,16 @@ namespace RCG {
         {
             get { return m_UnitUI.m_StatusEffectUI; }
         }
+        /// <summary>
+        /// 攻擊變化值(直接加減在傷害上
+        /// </summary>
+        public int AtkAlter
+        {
+            get
+            {
+                return m_AtkAlter;
+            }
+        }
         public float AtkBuff
         {
             get
@@ -94,6 +104,7 @@ namespace RCG {
         public UnitPos m_UnitPos = UnitPos.Front;
         public int m_UnitPosId = 0;
         [SerializeField] float m_AtkBuff = 1f;//[SerializeField]for Debug
+        [SerializeField] int m_AtkAlter = 0;
         [SerializeField] protected int m_MaxHp = 0;
         [SerializeField] protected RCG_UnitUI m_UnitUI = null;
         protected int m_Hp = 0;
@@ -155,6 +166,7 @@ namespace RCG {
         }
         virtual public int GetAtk(int iOriginAtk)
         {
+            iOriginAtk += AtkAlter;
             iOriginAtk = Mathf.RoundToInt(AtkBuff * iOriginAtk);
             return iOriginAtk;
         }
@@ -162,6 +174,7 @@ namespace RCG {
         {
             m_AtkBuff = 1f;
             m_AtkBuff += StatusEffectUI.GetAtkBuff();
+            m_AtkAlter = StatusEffectUI.GetAtkAlter();
             if (Selected)//是目前的行動單位 更新手牌顯示資訊
             {
                 RCG_Player.ins.UpdateCardDiscription();

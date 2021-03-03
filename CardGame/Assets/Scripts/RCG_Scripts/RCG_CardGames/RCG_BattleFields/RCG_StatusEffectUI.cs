@@ -21,6 +21,15 @@ namespace RCG
             }
             return aBuff;
         }
+        virtual public int GetAtkAlter()
+        {
+            int aAlter = 0;
+            foreach (var aStatus in m_StatusEffects.Values)
+            {
+                aAlter += aStatus.GetAtkAlter();
+            }
+            return aAlter;
+        }
         virtual public void AddStatusEffect(StatusType iStatusType, int iAmount)
         {
             if (!m_StatusEffects.ContainsKey(iStatusType))

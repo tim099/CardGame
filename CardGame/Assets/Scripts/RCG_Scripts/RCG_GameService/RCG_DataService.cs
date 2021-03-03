@@ -10,7 +10,7 @@ namespace RCG
     /// 玩家牌組資料
     /// </summary>
     [System.Serializable]
-    public class RCG_DeckData : IJsonSerializable
+    public class DeckData : IJsonSerializable
     {
         public static string DeckDataPath
         {
@@ -26,9 +26,9 @@ namespace RCG
                 return "CardDatas/Deck.json";
             }
         }
-        public static RCG_DeckData LoadDeckData()
+        public static DeckData LoadDeckData()
         {
-            var aDeckData = new RCG_DeckData();
+            var aDeckData = new DeckData();
             //var aDeckPath = DeckDataPath;
             var aJson = BetterStreamingAssets.ReadAllText(DeckDataRelativePath);
             aDeckData.LoadFromJson(aJson);
@@ -164,7 +164,17 @@ namespace RCG
         public List<CardData> m_Cards = new List<CardData>();
     }
     #endregion
-    
+    #region ItemsData
+    public class ItemsData
+    {
+        public List<RCG_ItemData> GetItems()
+        {
+            m_Items.Add(RCG_ItemDataService.ins.GetItemData("HealPotion"));
+            return m_Items;
+        }
+        List<RCG_ItemData> m_Items = new List<RCG_ItemData>();
+    }
+    #endregion
     /// <summary>
     /// 用來管理遊戲開始後的所有資料
     /// </summary>
@@ -176,7 +186,8 @@ namespace RCG
                 return Path.Combine(RCG_GameManager.ins.GetGameFolderPath(),"Saves");
             } }
         static public RCG_DataService ins = null;
-        public RCG_DeckData m_DeckData = new RCG_DeckData();
+        public DeckData m_DeckData = new DeckData();
+        public ItemsData m_ItemsData = new ItemsData();
         public List<RCG_CharacterData> m_CharacterDatas;
         public override void Init() {
             base.Init();
@@ -255,7 +266,7 @@ namespace RCG
         public override void Load(string dir)
         {
             //Init Deck
-            m_DeckData = RCG_DeckData.LoadDeckData();
+            m_DeckData = DeckData.LoadDeckData();
             //Debug.LogWarning("m_DeckData:" + m_DeckData.UCL_ToString());
             string aPath = Path.Combine(dir, InfoSaveName);
             if (!File.Exists(aPath))

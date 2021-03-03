@@ -22,7 +22,7 @@ namespace RCG
         public Text m_CostText = null;
         public UCL_OnPointerEvent m_OnPointerEvent = null;
         public List<Image> m_RequireSkillImages = new List<Image>();
-        protected RCG_CardData m_Data;
+        protected RCG_CardData m_Data = null;
         protected bool m_Selected = false;
         protected bool m_BlockSelection = false;
         virtual public void Init(RCG_CardData _Data) {

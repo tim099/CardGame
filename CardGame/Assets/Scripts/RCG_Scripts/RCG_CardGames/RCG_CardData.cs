@@ -109,7 +109,8 @@ namespace RCG {
             get {
                 return UCL.Core.LocalizeLib.UCL_LocalizeManager.Get(m_Data.m_CardName);
             }
-            set { m_Data.m_CardName = value; } }
+            set { m_Data.m_CardName = value; } 
+        }
         virtual public int Cost { get { return m_Data.m_Cost; } set { m_Data.m_Cost = value; } }
         virtual public string IconName { get { return m_Data.m_IconName; } set { m_Data.m_IconName = value; } }
         virtual public string Description {
@@ -248,7 +249,7 @@ namespace RCG {
         #region Edit
         public void OnGUICardDatas()
         {
-            CardName = UCL.Core.UI.UCL_GUILayout.TextField("CardName", CardName);
+            m_Data.m_CardName = UCL.Core.UI.UCL_GUILayout.TextField("Name", m_Data.m_CardName);
             {
                 string aFieldName = "CardType";
                 GUILayout.BeginHorizontal();
