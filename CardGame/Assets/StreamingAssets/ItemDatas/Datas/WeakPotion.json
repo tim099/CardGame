@@ -1,0 +1,19 @@
+{
+	"m_ItemType":"Unknow",
+	"m_TargetType":"Enemy",
+	"m_UsedType":"ToDiscardPile",
+	"m_ItemName":"WeakPotion",
+	"m_IconName":"archer.png",
+	"m_Cost":0,
+	"m_RequireSkills":null,
+	"ItemEffect":
+	[
+		{
+			"EffectType":"StatusEffect",
+			"m_StatusType":"Weak",
+			"m_BuffRange":"Target",
+			"m_ShowBuffRangeDes":"True",
+			"m_Amount":2
+		}
+	]
+}

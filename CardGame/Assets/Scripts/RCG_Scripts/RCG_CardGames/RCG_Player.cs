@@ -309,8 +309,8 @@ namespace RCG {
         /// <summary>
         /// 使用手牌
         /// </summary>
-        /// <param name="iSelectUnits"></param>
-        public void TriggerCard(List<RCG_Unit> iSelectUnits)
+        /// <param name="iSelectedUnits"></param>
+        public void TriggerCard(List<RCG_Unit> iSelectedUnits)
         {
             if (m_SelectedCard == null) return;
             m_TriggerCard = m_SelectedCard;
@@ -320,7 +320,7 @@ namespace RCG {
             SetState(PlayerState.TriggerCardInit);
 
             m_TriggerEffectData = new TriggerEffectData(this);
-            m_TriggerEffectData.m_Targets = iSelectUnits;
+            m_TriggerEffectData.m_Targets = iSelectedUnits;
             m_TriggerEffectData.m_PlayerUnit = RCG_BattleField.ins.ActiveUnit;
             
             m_TriggerCardPos.gameObject.SetActive(true);//打牌特效
@@ -329,7 +329,34 @@ namespace RCG {
                 SetState(PlayerState.TriggerCardPostTriggerAction);
             });
         }
-        protected void TriggerPlayerActions(System.Action iEndAction)
+        public void UseItem(RCG_Item iItem, System.Action iEndAct)
+        {
+            if (m_PlayerState != PlayerState.Idle)
+            {
+                Debug.LogWarning("SetSelectedCard Fail, m_PlayerState:" + m_PlayerState.ToString());
+                return;
+            }
+            System.Action<List<RCG_Unit>> aTriggerAct = delegate (List<RCG_Unit> iSelectedUnits)
+            {
+                var m_TriggerEffectData = new TriggerEffectData(this);
+                m_TriggerEffectData.m_Targets = iSelectedUnits;
+                m_TriggerEffectData.m_PlayerUnit = null;//物品不吃腳色身上的Buff
+                iItem.ItemData.TriggerEffect(m_TriggerEffectData, delegate ()
+                {
+                    TriggerPlayerActions(iEndAct);
+                });
+            };
+            if(iItem.ItemData.TargetType == TargetType.None)
+            {
+                aTriggerAct.Invoke(null);
+            }
+            else
+            {
+                RCG_BattleField.ins.SetSelectMode(iItem.ItemData.TargetType, aTriggerAct);
+            }
+            
+        }
+        public void TriggerPlayerActions(System.Action iEndAction)
         {
             if (m_PlayerActions.Count == 0)
             {
@@ -445,18 +472,18 @@ namespace RCG {
             m_SelectedCard = iCard;
             if (m_SelectedCard == null)
             {
-                RCG_BattleField.ins.SetSelectMode(TargetType.Close);
+                RCG_BattleField.ins.SetSelectMode(TargetType.Close, RCG_BattleField.ins.SelectActiveUnit);
                 return;
             }
             m_SelectedCard.Select();
             if (m_SelectedCard.Data != null)
             {
-                RCG_BattleField.ins.SetSelectMode(m_SelectedCard.Data.TargetType);
+                RCG_BattleField.ins.SetSelectMode(m_SelectedCard.Data.TargetType, SelectTargets);
             }
             else
             {
                 Debug.LogError("m_SelectedCard.Data == null!!");
-                RCG_BattleField.ins.SetSelectMode(TargetType.Close);
+                RCG_BattleField.ins.SetSelectMode(TargetType.Close, RCG_BattleField.ins.SelectActiveUnit);
             }
 
         }
@@ -507,7 +534,7 @@ namespace RCG {
                 m_SelectedCard.Deselect();
             }
             m_SelectedCard = null;
-            RCG_BattleField.ins.SetSelectMode(TargetType.Close);
+            RCG_BattleField.ins.SetSelectMode(TargetType.Close, RCG_BattleField.ins.SelectActiveUnit);
         }
         /// <summary>
         /// 新增玩家行動

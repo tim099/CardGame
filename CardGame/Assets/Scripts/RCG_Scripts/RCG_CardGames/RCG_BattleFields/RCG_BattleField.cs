@@ -32,7 +32,7 @@ namespace RCG {
         public RCG_BattlePositionSetting m_EnemyBattlePositionSetting = null;
         protected TargetType m_TargetType = TargetType.Close;
         protected bool m_Entered = false;
-
+        protected System.Action<List<RCG_Unit>> m_SelectEndAct = null;
         virtual public void Init()
         {
             ins = this;
@@ -79,8 +79,8 @@ namespace RCG {
         public List<RCG_Unit> GetEnemyUnits(UnitPos iPos)
         {
             switch (iPos) {
-                case UnitPos.Front:return m_EnemyBattlePositionSetting.GetFrontUntis();
-                case UnitPos.Back:return m_EnemyBattlePositionSetting.GetBackUntis();
+                case UnitPos.Front: return m_EnemyBattlePositionSetting.GetFrontUntis();
+                case UnitPos.Back: return m_EnemyBattlePositionSetting.GetBackUntis();
             }
             return m_EnemyBattlePositionSetting.GetFrontUntis();
         }
@@ -111,10 +111,10 @@ namespace RCG {
             RCG_Unit aUnit = CreateUnit(iUnitName, iIsMonster);
             aUnit.m_UnitPos = iUnitPos;
             aUnit.m_UnitPosId = iPosition;
-            if (iIsMonster) { 
+            if (iIsMonster) {
                 m_Monsters.Add(aUnit);
             }
-            else { 
+            else {
                 m_Characters.Add(aUnit);
             }
             if (aUnit == null)
@@ -130,13 +130,13 @@ namespace RCG {
             {
                 m_PlayerBattlePositionSetting.SetUnit(iUnitPos, iPosition, aUnit);
             }
-            
+
 
             return aUnit;
         }
         public RCG_Unit CreateUnit(string aUnitName, bool iIsMonster = true)
         {
-            RCG_Unit aUnit = Resources.Load<RCG_Unit>((iIsMonster? PathConst.MonsterResource: PathConst.CharacterResource) + "/" + aUnitName);
+            RCG_Unit aUnit = Resources.Load<RCG_Unit>((iIsMonster ? PathConst.MonsterResource : PathConst.CharacterResource) + "/" + aUnitName);
             if (aUnit == null)
             {
                 Debug.LogError("CreateMonster Fail:" + aUnitName + ", Not Exist!!");
@@ -149,7 +149,7 @@ namespace RCG {
         /// 進入戰鬥 進行初始化
         /// </summary>
         virtual public void EnterBattle() {
-            if(m_Entered) {
+            if (m_Entered) {
                 Debug.LogError("EnterBattle() Fail!! Already Entered!!");
                 return;
             }
@@ -159,7 +159,7 @@ namespace RCG {
             m_ActivatedUnit.Clear();
 
             CreateCharacters();
-            
+
             //SetSelectMode(TargetType.Close);
         }
         /// <summary>
@@ -181,23 +181,24 @@ namespace RCG {
                 {
                     CreateMonsterAt(monster.m_MonsterPos, backCount++, monster.m_MonsterName, true);
                 }
-                
+
             }
         }
         /// <summary>
         /// 戰鬥結束
         /// </summary>
         public void ExitBattle() {
-            if(!m_Entered) {
+            if (!m_Entered) {
                 Debug.LogError("ExitBattle() Fail!! Not Entered!!");
                 return;
             }
             m_Entered = false;
             gameObject.SetActive(false);
         }
-        public void SetSelectMode(TargetType iTargetType)
+        public void SetSelectMode(TargetType iTargetType, System.Action<List<RCG_Unit>> iSelectEndAct = null)
         {
             m_TargetType = iTargetType;
+            m_SelectEndAct = iSelectEndAct;
             m_SelectedUnits.Clear();
             if (m_TargetType == TargetType.Close)
             {
@@ -282,7 +283,7 @@ namespace RCG {
             ClearSelectedUnits();
             ClearActivatedUnits();
             UpdateMonsterActions();
-            SetSelectMode(TargetType.Close);
+            SetSelectMode(TargetType.Close, SelectActiveUnit);
         }
         /// <summary>
         /// 玩家行動結束 敵人開始行動
@@ -352,14 +353,23 @@ namespace RCG {
         /// <param name="iUnit"></param>
         public void SelectUnit(RCG_Unit iUnit)
         {
-            if(m_TargetType == TargetType.Close)
+            //if (m_TargetType == TargetType.Close)
+            //{
+            //    SetActiveUnit(iUnit);
+            //    SetSelectMode(TargetType.Close);
+            //    return;
+            //}
+            m_SelectedUnits.Add(iUnit);
+            m_SelectEndAct?.Invoke(m_SelectedUnits.Clone());
+        }
+        public void SelectActiveUnit(List<RCG_Unit> iUnits)
+        {
+            if (iUnits == null || iUnits.Count == 0)
             {
-                SetActiveUnit(iUnit);
-                SetSelectMode(TargetType.Close);
                 return;
             }
-            m_SelectedUnits.Add(iUnit);
-            RCG_Player.ins.SelectTargets(m_SelectedUnits);
+            SetActiveUnit(iUnits[0]);
+            SetSelectMode(TargetType.Close, SelectActiveUnit);
         }
         /// <summary>
         /// 設定目前行動的腳色
@@ -430,12 +440,12 @@ namespace RCG {
             aAttackAct.Invoke(1);
         }
         /// <summary>
-        /// 演出攻擊動畫 攻擊群體敵人
+        /// 演出攻擊動畫 攻擊群體敵人(單次)
         /// </summary>
         /// <param name="iAttaker"></param>
         /// <param name="iTargets"></param>
         /// <param name="iAtk"></param>
-        public void AttackUnits(RCG_Unit iAttaker, List<RCG_Unit> iTargets, int iAtk, System.Action iEndAction)
+        protected void AttackUnits(RCG_Unit iAttaker, List<RCG_Unit> iTargets, int iAtk, System.Action iEndAction)
         {
             if (iTargets == null || iTargets.Count == 0)
             {
@@ -486,6 +496,66 @@ namespace RCG {
             aSeq.OnComplete(iEndAction);
             aSeq.Start();
         }
+
+        /// <summary>
+        /// 演出恢復動畫
+        /// </summary>
+        /// <param name="iHealer"></param>
+        /// <param name="iTargets"></param>
+        /// <param name="iHealAmount"></param>
+        /// <param name="iEndAction"></param>
+        public void HealUnits(RCG_Unit iHealer, List<RCG_Unit> iTargets, int iHealAmount, System.Action iEndAction)
+        {
+            if (iTargets == null || iTargets.Count == 0)
+            {
+                iEndAction.Invoke();
+                return;
+            }
+            for (int i = iTargets.Count - 1; i >= 0; i--)
+            {
+                if (iTargets[i].IsDead)
+                {
+                    iTargets.RemoveAt(i);
+                }
+            }
+            if (iTargets.Count == 0)
+            {
+                iEndAction.Invoke();
+                return;
+            }
+            int aHealAmount = iHealAmount;
+            if (iHealer != null)
+            {
+                aHealAmount = iHealer.GetHealAmount(iHealAmount);
+            }
+
+            var aSeq = LibTween.Sequence();
+            {
+                aSeq.Append(delegate ()
+                {
+                    foreach (var aTarget in iTargets)
+                    {
+                        if (!aTarget.IsDead)
+                        {
+                            aTarget.UnitHeal(aHealAmount);
+                        }
+                    }
+                });
+                var aTweener = LibTween.Tweener(0.2f);//aSeq.AppendInterval(0.8f);
+                aTweener.SetBackfolding(true);
+                aSeq.Append(aTweener);
+                foreach (var aTarget in iTargets)
+                {
+                    if (!aTarget.IsDead)
+                    {
+                        aTweener.AddComponent(aTarget.transform.TC_LocalMove(0, 20, 0));
+                    }
+                }
+                aSeq.AppendInterval(0.4f);
+            }
+            aSeq.OnComplete(iEndAction);
+            aSeq.Start();
+        }
         /// <summary>
         /// 單位死亡時觸發
         /// </summary>
@@ -503,7 +573,7 @@ namespace RCG {
                 ///腳色死亡 更新選擇腳色狀態
                 if(m_TargetType == TargetType.Close)
                 {
-                    SetSelectMode(TargetType.Close);
+                    SetSelectMode(TargetType.Close, SelectActiveUnit);
                 }
             }
             RCG_Player.ins.OnUnitDead(iUnit);
@@ -514,7 +584,7 @@ namespace RCG {
         public void SelectNone()
         {
             RCG_Player.ins.SelectTargets(m_SelectedUnits);
-            SetSelectMode(TargetType.Close);
+            SetSelectMode(TargetType.Close, SelectActiveUnit);
         }
 
 

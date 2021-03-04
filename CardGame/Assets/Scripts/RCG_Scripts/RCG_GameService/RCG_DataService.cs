@@ -167,12 +167,19 @@ namespace RCG
     #region ItemsData
     public class ItemsData
     {
-        public List<RCG_ItemData> GetItems()
+        public List<RCG_Item> GetItems()
         {
-            m_Items.Add(RCG_ItemDataService.ins.GetItemData("HealPotion"));
             return m_Items;
         }
-        List<RCG_ItemData> m_Items = new List<RCG_ItemData>();
+        public void AddItem(RCG_Item iItem)
+        {
+            m_Items.Add(iItem);
+        }
+        public void RemoveItem(RCG_Item iItem)
+        {
+            m_Items.Remove(iItem);
+        }
+        List<RCG_Item> m_Items = new List<RCG_Item>();
     }
     #endregion
     /// <summary>
@@ -192,17 +199,30 @@ namespace RCG
         public override void Init() {
             base.Init();
             ins = this;
+        }
+        public override void InitEnd()
+        {
             try
             {
+                //fake Item
+                for (int i = 0; i < 4; i++)
+                {
+                    m_ItemsData.AddItem(RCG_ItemDataService.ins.CreateItem("HealPotion"));
+                    m_ItemsData.AddItem(RCG_ItemDataService.ins.CreateItem("Brick"));
+                    m_ItemsData.AddItem(RCG_ItemDataService.ins.CreateItem("WeakPotion"));
+                    m_ItemsData.AddItem(RCG_ItemDataService.ins.CreateItem("DrawCard"));
+                    
+                }
+
+
                 //placeholder QWQ
                 m_CharacterDatas.Add(new RCG_CharacterData("Knight"));
                 m_CharacterDatas.Add(new RCG_CharacterData("Archer"));
             }
-            catch(System.Exception e)
+            catch (System.Exception e)
             {
                 Debug.LogError("Exception:" + e);
             }
-
         }
         /// <summary>
         /// 新的一局遊戲 重置資料

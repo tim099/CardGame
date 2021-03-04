@@ -1,0 +1,16 @@
+{
+	"m_ItemType":"Unknow",
+	"m_TargetType":"None",
+	"m_UsedType":"ToDiscardPile",
+	"m_ItemName":"DrawCard",
+	"m_IconName":"glass.png",
+	"m_Cost":0,
+	"m_RequireSkills":null,
+	"ItemEffect":
+	[
+		{
+			"EffectType":"DrawEffect",
+			"m_DrawCardNum":3
+		}
+	]
+}

@@ -34,7 +34,7 @@ namespace RCG
             //    }
             //}
             aTarget = UCL.Core.MathLib.UCL_Random.Instance.RandomPick(aTargets);
-            RCG_BattleField.ins.AttackUnit(null, aTarget, m_Atk, m_AtkTimes, iEndAction);
+            RCG_BattleField.ins.AttackUnit(p_Unit, aTarget, m_Atk, m_AtkTimes, iEndAction);
 
             //if(aTarget != null)
             //{

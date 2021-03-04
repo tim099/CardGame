@@ -164,6 +164,17 @@ namespace RCG {
             DamageHP(iDamage);
             m_UnitUI.Hit();
         }
+        virtual public void UnitHeal(int iHealAmount)
+        {
+            var aHPVFX = RCG_VFXManager.ins.CreateVFX<RCG_VFX_HP>("VFX_Heal");
+            aHPVFX.SetAlterHP(iHealAmount, m_UnitDisplay.position, IsEnemy);
+            RestoreHP(iHealAmount);
+            //m_UnitUI.Hit();
+        }
+        virtual public int GetHealAmount(int iOriginHeal)
+        {
+            return iOriginHeal;
+        }
         virtual public int GetAtk(int iOriginAtk)
         {
             iOriginAtk += AtkAlter;

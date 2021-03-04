@@ -54,7 +54,7 @@ namespace RCG {
                 Init();
                 if (m_ActionsNames.Count == 0) //no action assigned
                 {
-                    m_Actions.Add(RCG_MonsterActionCreator.Create("SimpleAttackAction"));
+                    m_Actions.Add(RCG_MonsterActionCreator.Create("SimpleAttackAction").Init(GetComponent<RCG_Unit>()));
                 }
             }
             List<RCG_MonsterAction> aAvailableActions = new List<RCG_MonsterAction>();

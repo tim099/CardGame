@@ -5,6 +5,25 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace RCG
 {
+    public class RCG_Item {
+        public RCG_ItemData ItemData
+        {
+            get { return m_Data; }
+        }
+        public RCG_Item(RCG_ItemData iData)
+        {
+            m_Data = iData;
+        }
+        /// <summary>
+        /// 使用這個道具
+        /// </summary>
+        public void Use(System.Action iEndAct)
+        {
+            RCG_DataService.ins.m_ItemsData.RemoveItem(this);
+            RCG_Player.ins.UseItem(this, iEndAct);
+        }
+        RCG_ItemData m_Data;
+    }
     /// <summary>
     /// 讀取後儲存物品資料(從設定檔轉換成RCG_ItemData)
     /// </summary>
@@ -66,6 +85,10 @@ namespace RCG
                 return null;
             }
             return m_ItemDataDic[iItemName];
+        }
+        public RCG_Item CreateItem(string iItemName)
+        {
+            return new RCG_Item(GetItemData(iItemName));
         }
         public void LoadItemData()
         {

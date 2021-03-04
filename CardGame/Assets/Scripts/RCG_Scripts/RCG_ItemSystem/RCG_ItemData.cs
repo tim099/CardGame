@@ -134,6 +134,38 @@ namespace RCG {
         {
             m_ItemEffects.Add(effect);
         }
+        virtual public void TriggerEffect(TriggerEffectData iTriggerEffectData, System.Action iEndAction)
+        {
+            if (m_ItemEffects.Count == 0)
+            {
+                iEndAction.Invoke();
+                return;
+            }
+            System.Action<int> aTriggerAct = null;
+            aTriggerAct = delegate (int iTriggerAt)
+            {
+                var aEffect = m_ItemEffects[iTriggerAt];
+                try
+                {
+                    aEffect.TriggerEffect(iTriggerEffectData, delegate () {
+                        if (iTriggerAt + 1 < m_ItemEffects.Count)
+                        {
+                            aTriggerAct.Invoke(iTriggerAt + 1);
+                        }
+                        else
+                        {
+                            iEndAction.Invoke();
+                        }
+                    });
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError("aEffect.TriggerEffect Exception:" + e);
+                    iEndAction.Invoke();
+                }
+            };
+            aTriggerAct.Invoke(0);
+        }
         #region Edit
         public void OnGUICardDatas()
         {

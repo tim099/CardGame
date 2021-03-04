@@ -23,6 +23,7 @@ namespace RCG {
             m_CreateDic = new Dictionary<string, System.Func<RCG_CardEffect>>();
             m_EffectNameList = new List<string>();
             AddEffect<RCG_CardAttackEffect>();
+            AddEffect<RCG_CardHealEffect>();
             AddEffect<RCG_CardDrawEffect>();
             AddEffect<RCG_CardCostEffect>();
             AddEffect<RCG_CardDefenseEffect>();

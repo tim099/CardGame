@@ -32,6 +32,8 @@ namespace RCG {
             m_BattleManager.Init();
             RCG_MonsterSet aRCG_MonsterSet = new RCG_MonsterSet();
             aRCG_MonsterSet.m_Monsters.Add(new RCG_MonsterTuple("Knight", UnitPos.Front));
+            aRCG_MonsterSet.m_Monsters.Add(new RCG_MonsterTuple("Abigail", UnitPos.Back));
+            aRCG_MonsterSet.m_Monsters.Add(new RCG_MonsterTuple("Archer", UnitPos.Back));
             m_BattleManager.EnterBattle(aRCG_MonsterSet);
         }
         private void Update()

@@ -14,7 +14,10 @@ namespace RCG
         protected string m_Icon;
         protected string m_Description;
         protected string m_DescriptionShort;
-
+        /// <summary>
+        /// 使用的單位 用來讀取Buff與Debuff
+        /// </summary>
+        protected RCG_Unit p_Unit = null;
         public static string MonsterActionPath
         {
             get
@@ -29,7 +32,11 @@ namespace RCG
                 return Path.Combine(UCL.Core.FileLib.Lib.RemoveFolderPath(MonsterActionPath, 1), "Icons");
             }
         }
-
+        virtual public RCG_MonsterAction Init(RCG_Unit iUnit)
+        {
+            p_Unit = iUnit;
+            return this;
+        }
         virtual public void DeserializeFromJson(UCL.Core.JsonLib.JsonData data)
         {
             UCL.Core.JsonLib.JsonConvert.LoadDataFromJson(this, data);

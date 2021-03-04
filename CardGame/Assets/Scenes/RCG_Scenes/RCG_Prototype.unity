@@ -43926,6 +43926,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: RCG_BattleManager
       objectReference: {fileID: 0}
+    - target: {fileID: 820961799216540621, guid: fbb2882cfdbb7d74a937fc43498626e9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 820961799216540622, guid: fbb2882cfdbb7d74a937fc43498626e9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -44060,6 +44065,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302521563068094309, guid: fbb2882cfdbb7d74a937fc43498626e9,
+        type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302521563068094309, guid: fbb2882cfdbb7d74a937fc43498626e9,
+        type: 3}
+      propertyPath: m_DisabledColor.r
+      value: 0.41509432
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302521563068094309, guid: fbb2882cfdbb7d74a937fc43498626e9,
+        type: 3}
+      propertyPath: m_DisabledColor.g
+      value: 0.34672585
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302521563068094309, guid: fbb2882cfdbb7d74a937fc43498626e9,
+        type: 3}
+      propertyPath: m_DisabledColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5302521563068094309, guid: fbb2882cfdbb7d74a937fc43498626e9,
+        type: 3}
+      propertyPath: m_Transition
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7066750851626156591, guid: fbb2882cfdbb7d74a937fc43498626e9,
         type: 3}

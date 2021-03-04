@@ -18,14 +18,26 @@ namespace RCG
         [SerializeField] RCG_ItemRowsDisplayUI m_RowsDisplayUITmp = null;
         List<RCG_ItemRowsDisplayUI> m_RowsDisplayUIs = new List<RCG_ItemRowsDisplayUI>();
         Vector3 m_ShowPos = Vector3.zero;
-        public void Init()
+        System.Action<RCG_Item> m_SelectItemAction = null;
+        public void Init(System.Action<RCG_Item> iSelectItemAction)
         {
+            m_SelectItemAction = iSelectItemAction;
             m_RowsDisplayUITmp.Hide();
-            m_RowsDisplayUIs.Add(m_RowsDisplayUITmp);
+            AddItemRowsDisplayUI(m_RowsDisplayUITmp);
             m_ShowPos = transform.position;
             gameObject.SetActive(false);
         }
-        public void Show(List<RCG_ItemData> iItems)
+        void AddItemRowsDisplayUI(RCG_ItemRowsDisplayUI iItemRowsDisplayUI)
+        {
+            iItemRowsDisplayUI.Init(OnItemSelected);
+            m_RowsDisplayUIs.Add(iItemRowsDisplayUI);
+        }
+        public void OnItemSelected(RCG_Item iItem)
+        {
+            //Debug.LogError("OnItemSelected:" + iItem.ItemData.ItemName);
+            m_SelectItemAction?.Invoke(iItem);
+        }
+        public void Show(List<RCG_Item> iItems)
         {
             if (IsShowing) return;
             IsShowing = true;
@@ -34,7 +46,7 @@ namespace RCG
             {
                 var aNewRow = Instantiate(m_RowsDisplayUITmp, m_RowsDisplayUITmp.transform.parent);
                 aNewRow.name = m_RowsDisplayUITmp.name + "_" + m_RowsDisplayUIs.Count;
-                m_RowsDisplayUIs.Add(aNewRow);
+                AddItemRowsDisplayUI(aNewRow);
             }
             for (int i = 0; i < m_RowsDisplayUIs.Count; i++)
             {

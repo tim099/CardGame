@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UCL.Core.UI;
 using UnityEngine;
 using UnityEngine.UI;
 namespace RCG
@@ -10,15 +11,23 @@ namespace RCG
         [SerializeField] Text m_NameText = null;
         [SerializeField] Text m_DescriptionText = null;
         [SerializeField] GameObject m_Description = null;
-        protected RCG_ItemData m_Data = null;
-        virtual public void Init(RCG_ItemData _Data)
+        [SerializeField] UCL_Button m_Button = null;
+        protected RCG_Item m_Data = null;
+        virtual public void Init(System.Action<RCG_Item> iOnClikAction)
+        {
+            m_Button.m_OnClick.AddListener(delegate ()
+            {
+                iOnClikAction.Invoke(m_Data);
+            });
+        }
+        virtual public void SetItem(RCG_Item _Data)
         {
             m_Data = _Data;
             if (m_Data != null)
             {
                 gameObject.SetActive(true);
-                m_IconImage.SetSprite(m_Data.Icon);
-                m_NameText.SetText(m_Data.ItemName);
+                m_IconImage.SetSprite(m_Data.ItemData.Icon);
+                m_NameText.SetText(m_Data.ItemData.ItemName);
                 UpdateDiscription();
                 ShowDescription();
             }
@@ -32,7 +41,7 @@ namespace RCG
             if (m_Data == null) return;
             if (m_DescriptionText != null)
             {
-                m_DescriptionText.SetText(m_Data.Description);
+                m_DescriptionText.SetText(m_Data.ItemData.Description);
             }
         }
         virtual public void ShowDescription()

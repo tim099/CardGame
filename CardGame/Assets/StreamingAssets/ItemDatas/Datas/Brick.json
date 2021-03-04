@@ -2,16 +2,15 @@
 	"m_ItemType":"Buff",
 	"m_TargetType":"Allied",
 	"m_UsedType":"Banish",
-	"m_ItemName":"HealPotion",
-	"m_IconName":"Char.png",
+	"m_ItemName":"Brick",
+	"m_IconName":"brick.png",
 	"m_Cost":0,
 	"m_RequireSkills":null,
 	"ItemEffect":
 	[
 		{
-			"EffectType":"HealEffect",
-			"m_HealAmount":10,
-			"m_HealRange":"Target"
+			"EffectType":"DefenseEffect",
+			"m_Defense":20
 		}
 	]
 }

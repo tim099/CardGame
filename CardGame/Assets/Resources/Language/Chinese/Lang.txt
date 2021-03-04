@@ -28,6 +28,7 @@
 "Fate":"命運"
 "Attack_Des":"對{2}\n造成{1}次{0}點傷害"
 "Attack_DesSingle":"對{1}\n造成{0}點傷害"
+"Heal_Des":"對{1}\n恢復{0}點血量"
 "Def_Des":"增加{0}點護甲"
 "AddCost_Des":"回復{0}點能量"
 "DrawCard_Des":"抽{0}張卡"
@@ -35,6 +36,9 @@
 "AppliedStatus_Des":"對{2}\n附加{0}層{1}"
 "AppliedStatus_DesNoTarget":"附加{0}層{1}"
 
+"UseItem":"使用道具"
+"Use":"使用"
+"Cancel":"取消"
 "City_Constantinople":"君士坦丁堡"
 "City_Galata":"加拉達石塔"
 
