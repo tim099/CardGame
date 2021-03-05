@@ -31,6 +31,8 @@
 "Heal_Des":"對{1}\n恢復{0}點血量"
 "Def_Des":"增加{0}點護甲"
 "AddCost_Des":"回復{0}點能量"
+"AddHandCardCost_Des":"增加{0}點\n所有手牌費用"
+"SubHandCardCost_Des":"降低{0}點\n所有手牌費用"
 "DrawCard_Des":"抽{0}張卡"
 "DiscardCard_Des":"捨棄{0}張手牌"
 "AppliedStatus_Des":"對{2}\n附加{0}層{1}"

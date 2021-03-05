@@ -32,9 +32,7 @@ namespace RCG
                 m_Image.SetSprite(m_Data.Icon);
                 m_NameText.SetText(m_Data.CardName);
                 UpdateCardDiscription();
-                int cost = m_Data.Cost;
-                if(cost < 0) cost = 0;
-                m_CostText.SetText(cost);
+                UpdateCost();
                 var aRequireSkill = m_Data.RequireSkills;
                 for (int i = 0; i < m_RequireSkillImages.Count; i++)
                 {
@@ -84,6 +82,11 @@ namespace RCG
             //HideDescription();
             m_ScaleUpTB.Kill();
             m_ScaleBackTB.StartTween();
+        }
+        virtual public void UpdateCost()
+        {
+            if (m_Data == null) return;
+            m_CostText.SetText(m_Data.Cost);
         }
         virtual public void UpdateCardDiscription()
         {

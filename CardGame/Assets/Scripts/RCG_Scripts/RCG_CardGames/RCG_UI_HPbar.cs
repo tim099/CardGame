@@ -13,8 +13,7 @@ namespace RCG {
         [SerializeField] private Slider m_HpMoveSlider = null;
         [SerializeField] private Slider m_HPslider;
         private RCG_Unit m_unit;
-        private int m_Timer = 0;
-        private int m_DisplayHP = 0;
+        private float m_DisplayHP = 0;
         private void Awake() {
             if(!m_HPslider){
                 m_HPslider = gameObject.GetComponent<Slider>();
@@ -30,32 +29,33 @@ namespace RCG {
             UpdateHUD();
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            
-        }
-
         // Update is called once per frame
         void Update()
         {
-            if (++m_Timer > 2)
+            if (m_DisplayHP != m_unit.Hp)
             {
-                m_Timer = 0;
-                if (m_DisplayHP != m_unit.Hp)
+                const float aSpeed = 0.15f;
+                float aDel = m_unit.Hp - m_DisplayHP;
+                float aDelVal = Mathf.Abs(aDel);
+                if (aDelVal > 0.1f)
                 {
-                    int aDel = m_unit.Hp - m_DisplayHP;
-                    //Debug.LogWarning("aDel:" + aDel);
-                    int aMove = Mathf.RoundToInt(0.1f * aDel);
-                    if (aMove == 0)
-                    {
-                        aMove = aDel > 0 ? 1 : -1;
-                    }
-                    m_DisplayHP += aMove;
+                    m_DisplayHP += (aDel > 0 ? aSpeed : -aSpeed) * Mathf.Sqrt(aDelVal);
+                }
+                else
+                {
+                    m_DisplayHP = m_unit.Hp;
+                }
+                //Debug.LogWarning("aDel:" + aDel);
+
+                if (aDel < 0)
+                {
                     m_HpMoveSlider.value = m_DisplayHP;
                 }
+                else
+                {
+                    m_HPslider.value = m_DisplayHP;
+                }
             }
-
         }
         public void UpdateArmor(int iValue)
         {
@@ -63,8 +63,17 @@ namespace RCG {
         }
         public void UpdateHp()
         {
-            m_HPslider.value = m_unit.Hp;
-            m_HpMoveSlider.maxValue = m_HPslider.maxValue = m_unit.MaxHp;
+            if(m_unit.Hp <= m_HPslider.value)
+            {
+                m_HPslider.value = m_unit.Hp;
+                m_HpMoveSlider.maxValue = m_HPslider.maxValue = m_unit.MaxHp;
+            }
+            else
+            {
+                m_HpMoveSlider.value = m_unit.Hp;
+                m_HpMoveSlider.maxValue = m_HPslider.maxValue = m_unit.MaxHp;
+            }
+
             m_hp_text.text = m_unit.Hp + "/" + m_unit.MaxHp;
         }
         public void UpdateHUD(){

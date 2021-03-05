@@ -137,6 +137,15 @@ namespace RCG {
         [SerializeField] protected CardData m_Data;
         protected Sprite m_Icon = null;
         //protected HashSet<UnitSkill> m_RequireSkillSets = new HashSet<UnitSkill>();
+        /// <summary>
+        /// 初始化資料 卡牌進入牌堆後執行清除掉Buff等效果
+        /// </summary>
+        virtual public void InitData() { }
+        /// <summary>
+        /// 調整卡牌費用
+        /// </summary>
+        /// <param name="iAmount"></param>
+        virtual public void AlterCost(int iAmount) { }
         public RCG_CardData() { }
         public RCG_CardData(string iJson) {
             //Debug.LogWarning("iJson:" + iJson);

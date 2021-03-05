@@ -195,6 +195,13 @@ namespace RCG {
             m_Entered = false;
             gameObject.SetActive(false);
         }
+        /// <summary>
+        /// 設定到選擇腳色模式
+        /// </summary>
+        public void SetActiveUnitSelectMode()
+        {
+            SetSelectMode(TargetType.Close, SelectActiveUnit);
+        }
         public void SetSelectMode(TargetType iTargetType, System.Action<List<RCG_Unit>> iSelectEndAct = null)
         {
             m_TargetType = iTargetType;
@@ -283,7 +290,7 @@ namespace RCG {
             ClearSelectedUnits();
             ClearActivatedUnits();
             UpdateMonsterActions();
-            SetSelectMode(TargetType.Close, SelectActiveUnit);
+            SetActiveUnitSelectMode();
         }
         /// <summary>
         /// 玩家行動結束 敵人開始行動
@@ -360,7 +367,12 @@ namespace RCG {
             //    return;
             //}
             m_SelectedUnits.Add(iUnit);
-            m_SelectEndAct?.Invoke(m_SelectedUnits.Clone());
+            if (m_SelectEndAct != null)
+            {
+                var aAct = m_SelectEndAct;
+                m_SelectEndAct = null;
+                aAct.Invoke(m_SelectedUnits.Clone());
+            }
         }
         public void SelectActiveUnit(List<RCG_Unit> iUnits)
         {
@@ -369,7 +381,7 @@ namespace RCG {
                 return;
             }
             SetActiveUnit(iUnits[0]);
-            SetSelectMode(TargetType.Close, SelectActiveUnit);
+            SetActiveUnitSelectMode();
         }
         /// <summary>
         /// 設定目前行動的腳色
@@ -573,7 +585,7 @@ namespace RCG {
                 ///腳色死亡 更新選擇腳色狀態
                 if(m_TargetType == TargetType.Close)
                 {
-                    SetSelectMode(TargetType.Close, SelectActiveUnit);
+                    SetActiveUnitSelectMode();
                 }
             }
             RCG_Player.ins.OnUnitDead(iUnit);
@@ -584,7 +596,7 @@ namespace RCG {
         public void SelectNone()
         {
             RCG_Player.ins.SelectTargets(m_SelectedUnits);
-            SetSelectMode(TargetType.Close, SelectActiveUnit);
+            SetActiveUnitSelectMode();
         }
 
 

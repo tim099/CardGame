@@ -26,6 +26,7 @@ namespace RCG {
             AddEffect<RCG_CardHealEffect>();
             AddEffect<RCG_CardDrawEffect>();
             AddEffect<RCG_CardCostEffect>();
+            AddEffect<RCG_CardHandCardCostEffect>();
             AddEffect<RCG_CardDefenseEffect>();
             AddEffect<RCG_CardStatusEffect>();
             AddEffect<RCG_CardDiscardEffect>();

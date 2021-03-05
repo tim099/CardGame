@@ -166,6 +166,9 @@ namespace RCG {
         }
         virtual public void UnitHeal(int iHealAmount)
         {
+            var aHealVFX = RCG_VFXManager.ins.CreateVFX("VFX_HealEffect");
+            aHealVFX.transform.position = transform.position;
+            Debug.LogError("transform.position:" + transform.position.ToString());
             var aHPVFX = RCG_VFXManager.ins.CreateVFX<RCG_VFX_HP>("VFX_Heal");
             aHPVFX.SetAlterHP(iHealAmount, m_UnitDisplay.position, IsEnemy);
             RestoreHP(iHealAmount);
@@ -177,9 +180,31 @@ namespace RCG {
         }
         virtual public int GetAtk(int iOriginAtk)
         {
-            iOriginAtk += AtkAlter;
             iOriginAtk = Mathf.RoundToInt(AtkBuff * iOriginAtk);
+            iOriginAtk += AtkAlter;
             return iOriginAtk;
+        }
+        virtual public string GetAtkDescription(int iOriginAtk)
+        {
+            int aAtk = Mathf.RoundToInt(AtkBuff * iOriginAtk);
+            string aAtkStr = aAtk.ToString();
+            if (aAtk > iOriginAtk)//Buff
+            {
+                aAtkStr = aAtkStr.RichTextColor("00FF00");
+            }
+            else if (aAtk < iOriginAtk)//Debuff
+            {
+                aAtkStr = aAtkStr.RichTextColor("FF0000");
+            }
+            if (AtkAlter > 0) {
+                aAtkStr += ("+" + AtkAlter.ToString()).RichTextColor("00FF00");
+            }
+            else if (AtkAlter < 0)
+            {
+                aAtkStr += ("-" + AtkAlter.ToString()).RichTextColor("FF0000");
+            }
+
+            return aAtkStr;
         }
         virtual public void UpdateAtkBuff()
         {

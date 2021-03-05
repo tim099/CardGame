@@ -29,7 +29,7 @@ namespace RCG
             transform.localScale = Vector3.one;
             m_AlterHP = iAlterHP;
             m_AlterHPText.text = m_AlterHP.ToString();
-            m_Tweener = LibTween.Tweener(0.6f);
+            m_Tweener = LibTween.Tweener(0.8f);
             m_Tweener.SetEase(EaseType.OutSin);
             float aOffset = m_MoveOffset.position.x - transform.position.x;
             if (m_AlterHP < 0)

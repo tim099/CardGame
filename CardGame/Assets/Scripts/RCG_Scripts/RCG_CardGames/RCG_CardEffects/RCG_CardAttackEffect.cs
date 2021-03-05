@@ -128,15 +128,19 @@ namespace RCG {
             get {
                 string aAttackRangeDes = GetAttackRangeDes(m_AttackRange);
                 string aAtkStr = m_Atk.ToString();
-                int aAtk = Atk;
-                if (aAtk > m_Atk)//Buff
+                if (RCG_BattleField.ins != null && RCG_BattleField.ins.ActiveUnit != null)
                 {
-                    aAtkStr = aAtk.ToString().RichTextColor("00FF00");
+                    aAtkStr = RCG_BattleField.ins.ActiveUnit.GetAtkDescription(m_Atk);
                 }
-                else if (aAtk < m_Atk)//Debuff
-                {
-                    aAtkStr = aAtk.ToString().RichTextColor("FF0000");
-                }
+                //int aAtk = Atk;
+                //if (aAtk > m_Atk)//Buff
+                //{
+                //    aAtkStr = aAtk.ToString().RichTextColor("00FF00");
+                //}
+                //else if (aAtk < m_Atk)//Debuff
+                //{
+                //    aAtkStr = aAtk.ToString().RichTextColor("FF0000");
+                //}
                 if (m_AtkTimes > 1) {
                     return UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("Attack_Des", aAtkStr, m_AtkTimes, aAttackRangeDes) + "\n";
                 } else {

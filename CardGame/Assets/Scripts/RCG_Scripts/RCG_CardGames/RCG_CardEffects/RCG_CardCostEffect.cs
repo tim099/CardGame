@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace RCG {
+    /// <summary>
+    /// 增減玩家Cost的效果
+    /// </summary>
     public class RCG_CardCostEffect : RCG_CardEffect {
         public int m_CostAlter = 0;
         override public string Description { get {

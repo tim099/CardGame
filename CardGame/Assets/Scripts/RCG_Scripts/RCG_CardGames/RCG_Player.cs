@@ -338,6 +338,7 @@ namespace RCG {
             }
             System.Action<List<RCG_Unit>> aTriggerAct = delegate (List<RCG_Unit> iSelectedUnits)
             {
+                RCG_BattleField.ins.SetActiveUnitSelectMode();
                 var m_TriggerEffectData = new TriggerEffectData(this);
                 m_TriggerEffectData.m_Targets = iSelectedUnits;
                 m_TriggerEffectData.m_PlayerUnit = null;//物品不吃腳色身上的Buff
@@ -483,7 +484,7 @@ namespace RCG {
             else
             {
                 Debug.LogError("m_SelectedCard.Data == null!!");
-                RCG_BattleField.ins.SetSelectMode(TargetType.Close, RCG_BattleField.ins.SelectActiveUnit);
+                RCG_BattleField.ins.SetActiveUnitSelectMode();
             }
 
         }
@@ -534,7 +535,7 @@ namespace RCG {
                 m_SelectedCard.Deselect();
             }
             m_SelectedCard = null;
-            RCG_BattleField.ins.SetSelectMode(TargetType.Close, RCG_BattleField.ins.SelectActiveUnit);
+            RCG_BattleField.ins.SetActiveUnitSelectMode();
         }
         /// <summary>
         /// 新增玩家行動
@@ -627,6 +628,20 @@ namespace RCG {
                 return false;
             }
             m_CardPosController.UpdateCardStatus();
+            return true;
+        }
+        /// <summary>
+        /// 調整手牌能量消耗
+        /// </summary>
+        /// <param name="iAlter"></param>
+        /// <returns></returns>
+        public bool AlterHandCardCost(int iAlter)
+        {
+            foreach(var aCard in m_HandCards)
+            {
+                aCard.Data.AlterCost(iAlter);
+                aCard.m_CardDisplayer.UpdateCost();
+            }
             return true;
         }
         /// <summary>

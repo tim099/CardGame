@@ -10,7 +10,11 @@ namespace RCG
         public RCG_CardData m_CardData = null;
         override public Sprite Icon { get { return m_CardData.Icon; } }
         override public string CardName { get { return m_CardData.CardName; } }
-        override public int Cost { get { return m_CardData.Cost; } }
+        override public int Cost { get { 
+                int aCost = m_CardData.Cost + m_CostAlter;
+                if (aCost < 0) return 0;
+                return aCost;
+            } }
         override public string IconName { get { return m_CardData.IconName; } }
         override public string Description
         {
@@ -25,6 +29,17 @@ namespace RCG
         override public CardType CardType { get { return m_CardData.CardType; } }
         override public TargetType TargetType { get { return m_CardData.TargetType; } }
 
+        protected int m_CostAlter = 0;
+        /// <summary>
+        /// 初始化資料 卡牌進入牌堆後執行清除掉Buff等效果
+        /// </summary>
+        override public void InitData() {
+            m_CostAlter = 0;
+        }
+        public override void AlterCost(int iAmount)
+        {
+            m_CostAlter += iAmount;
+        }
         public RCG_CardBattleData(RCG_CardData iData)
         {
             m_CardData = iData;
@@ -40,10 +55,12 @@ namespace RCG
         }
         public override void CardDiscarded(RCG_Player iPlayer)
         {
+            InitData();
             iPlayer.AddToDiscardPile(this);
         }
         override public void CardUsed(RCG_Player iPlayer)
         {
+            InitData();
             switch (UsedType) {
                 case UsedType.ToDiscardPile:
                     {

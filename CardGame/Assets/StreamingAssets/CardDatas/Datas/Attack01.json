@@ -25,6 +25,10 @@
 			"m_BuffRange":"BackEnemy",
 			"m_ShowBuffRangeDes":"False",
 			"m_Amount":5
+		},
+		{
+			"EffectType":"HandCardCostEffect",
+			"m_CostAlter":-1
 		}
 	]
 }
