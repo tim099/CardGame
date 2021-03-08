@@ -59,6 +59,7 @@ MonoBehaviour:
   m_CardTemplate: {fileID: 870112678433552045, guid: d09f410d112979946b0c1ebb3b82a185,
     type: 3}
   m_Cards: []
+  m_HandCards: []
   m_DrawCardCount: 0
   m_DrawCardPos: {fileID: 5292762293240979504}
   m_DiscardCardPos: {fileID: 4914849227247878618}
@@ -14684,6 +14685,7 @@ GameObject:
   - component: {fileID: 7587968864898526107}
   - component: {fileID: 1924598412382180156}
   - component: {fileID: 6763007720864869507}
+  - component: {fileID: 9195555735007189249}
   m_Layer: 5
   m_Name: SelectCardDescriptionText
   m_TagString: Untagged
@@ -14767,6 +14769,52 @@ MonoBehaviour:
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
   m_Size: 2
+--- !u!114 &9195555735007189249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8511216185383109740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07496e38c5092ca4eba68d0b931910e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StartOption: 2
+  m_EndOnDestroy: 1
+  m_EndOnDisable: 1
+  m_Backfolding: 1
+  m_Looping: 1
+  m_StartEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_EndEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_CompleteWhenKill: 1
+  m_Ease: 17
+  m_Duration: 1
+  m_DrawGizmos: 0
+  m_TimeManager: {fileID: 0}
+  m_TweenerComponents:
+  - m_Type: 7
+    m_Transform:
+    - {fileID: 4868898284390414517}
+    - {fileID: 0}
+    m_Quaternion: []
+    m_UCL_Path: []
+    m_LookAtFront: []
+    m_UCL_TC_Event: []
+    m_Vector3:
+    - {x: 1.1, y: 1.1, z: 1}
+    - {x: 0, y: 0, z: 0}
+    m_Vector2: []
+    m_Boolean: 0000
+    m_Byte: 
+    m_Int32: 
+    m_Single: []
+    m_Foldout: 1
 --- !u!1001 &2231673228701065983
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -33,9 +33,16 @@ namespace RCG {
             Debug.LogWarning("m_Cards:" + m_Cards.Count);
             Debug.LogWarning("m_UsedCards:" + m_DiscardPile.Count);
         }
+        /// <summary>
+        /// 清空牌庫
+        /// </summary>
+        public void ClearCards()
+        {
+            m_Cards.Clear();
+        }
         public List<RCG_CardData> ShowCards() {
             var list = m_Cards.Clone();
-            UCL.Core.MathLib.UCL_Random.Instance.Shuffle(ref list);
+            UCL.Core.MathLib.UCL_Random.Instance.Shuffle(list);
             return list;
         }
         public List<RCG_CardData> ShowUsedCards() {
@@ -68,25 +75,28 @@ namespace RCG {
                 Debug.LogError("AddToDeckTop fail card == null");
                 return;
             }
-            //Debug.LogWarning("m_HandCardCount:" + m_HandCardCount);
             m_Cards.Insert(0, iCard);
         }
         public void Shuffle() {
-            UCL.Core.MathLib.UCL_Random.Instance.Shuffle(ref m_Cards);
+            UCL.Core.MathLib.UCL_Random.Instance.Shuffle(m_Cards);
         }
         public void OnDeckEmpty() {
             UCL.Core.GameObjectLib.Swap(ref m_Cards, ref m_DiscardPile);
             Shuffle();
             m_OnDeckEmptyEvent.UCL_Invoke();
         }
+        /// <summary>
+        /// 從牌堆頂抽一張牌
+        /// </summary>
+        /// <returns></returns>
         public RCG_CardData Draw() {
             if(m_Cards.Count == 0) {
                 if(m_DiscardPile.Count == 0) return null;
+                //牌庫清空 進行洗牌補牌
                 OnDeckEmpty();
             }
             var card = m_Cards[0];
             m_Cards.RemoveAt(0);
-            //Debug.LogWarning("m_HandCardCount:" + m_HandCardCount);
             return card;
         }
     }

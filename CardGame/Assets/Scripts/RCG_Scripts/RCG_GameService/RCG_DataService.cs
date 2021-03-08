@@ -188,6 +188,7 @@ namespace RCG
     public class RCG_DataService : UCL.Core.Game.UCL_GameService
     {
         const string DeckSaveName = "Deck.txt";
+        const string BattleSaveName = "Battle.txt";
         const string InfoSaveName = "DataService.txt";
         protected string GameSavePath { get{
                 return Path.Combine(RCG_GameManager.ins.GetGameFolderPath(),"Saves");
@@ -232,7 +233,7 @@ namespace RCG
 
         }
         /// <summary>
-        /// 存檔
+        /// 遊戲存檔
         /// </summary>
         public void SaveGame(string iSavePath = "Save01")
         {
@@ -242,10 +243,10 @@ namespace RCG
                 Directory.CreateDirectory(aDir);
             }
             {//Deck
-                string aPath = Path.Combine(aDir, DeckSaveName);
-                m_DeckData.SaveData(aPath);
-                //JsonData aData = UCL.Core.JsonLib.JsonConvert.ObjectToJson(m_DeckData);
-                //File.WriteAllText(aPath, aData.ToJson());
+                m_DeckData.SaveData(Path.Combine(aDir, DeckSaveName));
+            }
+            {
+                RCG_BattleManager.Ins.SaveData(Path.Combine(aDir, BattleSaveName));
             }
         }
         /// <summary>
@@ -266,6 +267,9 @@ namespace RCG
                 m_DeckData.LoadData(aPath);
                 //m_DeckData = UCL.Core.JsonLib.JsonConvert.JsonToObject<RCG_DeckData>(aData);
                 
+            }
+            {
+                RCG_BattleManager.Ins.LoadData(Path.Combine(aDir, BattleSaveName));
             }
         }
         /// <summary>

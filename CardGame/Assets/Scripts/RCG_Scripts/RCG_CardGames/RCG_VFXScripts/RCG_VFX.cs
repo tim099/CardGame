@@ -7,7 +7,7 @@ namespace RCG
     public class RCG_VFX : MonoBehaviour
     {
         public UnityEngine.Events.UnityEvent m_ShowEvents;
-        bool m_Created = false;
+        protected bool m_Created = false;
         virtual public void Init()
         {
             gameObject.SetActive(false);
@@ -37,7 +37,7 @@ namespace RCG
         {
             if (!m_Created) return;
             m_Created = false;
-            RCG_VFXManager.ins.DeleteVFX(this);
+            RCG_VFXManager.Ins.DeleteVFX(this);
         }
     }
 }

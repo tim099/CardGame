@@ -30,7 +30,7 @@ namespace RCG
             var aUnits = RCG_CardAttackEffect.GetAttackRangeTarget(iTriggerEffectData, m_BuffRange);
             foreach(var aUnit in aUnits)
             {
-                RCG_Player.ins.AddPlayerAction(CreateAction.StatusAction(aUnit, m_StatusType, m_Amount));
+                RCG_Player.Ins.AddPlayerAction(CreateAction.StatusAction(aUnit, m_StatusType, m_Amount));
             }
             //iTriggerEffectData.p_Player.AlterCost(m_CostAlter);
             iEndAction.Invoke();

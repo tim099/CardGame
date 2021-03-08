@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace RCG {
     [UCL.Core.ATTR.EnableUCLEditor]
     public class RCG_Player : MonoBehaviour {
-        public static RCG_Player ins = null;
+        public static RCG_Player Ins = null;
         /// <summary>
         /// 選牌模式
         /// </summary>
@@ -102,7 +102,7 @@ namespace RCG {
         public void Init() {
             if(m_Inited) return;
             m_Inited = true;
-            ins = this;
+            Ins = this;
             m_TriggerCardPos.gameObject.SetActive(false);
             m_SelectCardUI.Init();
             m_CardPosController.Init();
@@ -114,16 +114,29 @@ namespace RCG {
                 m_Cards.Add(aCard);
             }
             m_Deck.Init(this);
-            var aDeckData = RCG_DataService.ins.m_DeckData;
-            //Debug.LogWarning("aDeckData:" + aDeckData.UCL_ToString());
-            var aCards = aDeckData.GetCardDatas();
-            //Debug.LogWarning("aCards:" + aCards.UCL_ToString());
-            foreach (var aCard in aCards)
+
+
+        }
+        /// <summary>
+        /// 初始化牌庫
+        /// </summary>
+        /// <param name="iCards"></param>
+        public void InitDeckDatas(List<RCG_CardData> iCards)
+        {
+            SetDeckDatas(iCards);
+            //初始化後進行洗牌
+            m_Deck.Shuffle();
+        }
+        /// <summary>
+        /// 設定牌庫(不進行洗牌 讀檔可用)
+        /// </summary>
+        public void SetDeckDatas(List<RCG_CardData> iCards)
+        {
+            m_Deck.ClearCards();
+            foreach (var aCard in iCards)
             {
                 m_Deck.Add(new RCG_CardBattleData(aCard));
             }
-
-            m_Deck.Shuffle();
         }
         /// <summary>
         /// 單位死亡時觸發
@@ -673,6 +686,25 @@ namespace RCG {
         public void SetState(PlayerState iPlayerState)
         {
             m_PlayerState = iPlayerState;
+            switch (m_PlayerState)
+            {
+                case PlayerState.Idle:
+                    {
+                        RCG_ItemUI.Ins.UnBlockItem();
+                        break;
+                    }
+                case PlayerState.PlayerActionStart:
+                case PlayerState.PlayerAction:
+                    {
+                        RCG_ItemUI.Ins.BlockItem();
+                        break;
+                    }
+                case PlayerState.TriggerCardInit:
+                    {
+                        RCG_ItemUI.Ins.BlockItem();
+                        break;
+                    }
+            }
         }
         /// <summary>
         /// 玩家行動結束
@@ -681,7 +713,7 @@ namespace RCG {
         {
             ClearSelectedCard();
             ClearAllHandCard();
-            RCG_BattleManager.ins.PlayerTurnEnd();
+            RCG_BattleManager.Ins.PlayerTurnEnd();
         }
         public void TurnEndPlayerAction(System.Action iEndAct)
         {

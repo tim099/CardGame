@@ -9,7 +9,7 @@ namespace RCG
     {
         public override void Trigger(Action iEndAct)
         {
-            RCG_Player.ins.DrawCardAnim(iEndAct);
+            RCG_Player.Ins.DrawCardAnim(iEndAct);
         }
     }
 }

@@ -35,9 +35,9 @@ namespace RCG
             m_DiscardCardList = new List<RCG_Card>();
             for(int i = 0; i < m_DiscardCardNum; i++)
             {
-                RCG_Player.ins.AddPlayerAction(CreateAction.ActionTrigger(delegate (System.Action iEndAct)
+                RCG_Player.Ins.AddPlayerAction(CreateAction.ActionTrigger(delegate (System.Action iEndAct)
                 {
-                    RCG_Player.ins.StartSelectCardDontCheck(UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("SelectDiscardCard"),
+                    RCG_Player.Ins.StartSelectCardDontCheck(UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("SelectDiscardCard"),
                         delegate (RCG_Card iCard)
                         {
                             if(iCard == null)
@@ -47,7 +47,7 @@ namespace RCG
                                 return;
                             }
                             m_DiscardCardList.Add(iCard);
-                            RCG_Player.ins.AddUsingCardAnim(iCard, iEndAct);
+                            RCG_Player.Ins.AddUsingCardAnim(iCard, iEndAct);
                             //Debug.LogWarning("Selected Card:" + iCard.Data.CardName);
                         });
                 }));

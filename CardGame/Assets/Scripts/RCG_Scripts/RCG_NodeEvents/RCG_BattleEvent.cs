@@ -7,7 +7,7 @@ namespace RCG {
         override public void StartEvent(RCG_MapNode iNode) {
             var iMap = iNode.gameObject.GetComponentInParent<RCG_Map>();
             var iMonsterSet = iMap.m_MonsterSets[iMap.m_MonsterSets.Count-1];
-            RCG_BattleManager.ins.EnterBattle(iMonsterSet);
+            RCG_BattleManager.Ins.EnterBattle(iMonsterSet);
         }
     }
 }

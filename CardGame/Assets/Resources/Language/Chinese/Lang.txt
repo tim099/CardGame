@@ -41,6 +41,12 @@
 "UseItem":"使用道具"
 "Use":"使用"
 "Cancel":"取消"
+"SelectTargetUnit":"請選擇施放目標"
+"SelectActiveUnit":"選擇行動腳色"
+"SwitchActiveUnit":"使用卡牌或切換行動腳色"
+"UseCard":"使用卡牌"
+
+
 "City_Constantinople":"君士坦丁堡"
 "City_Galata":"加拉達石塔"
 

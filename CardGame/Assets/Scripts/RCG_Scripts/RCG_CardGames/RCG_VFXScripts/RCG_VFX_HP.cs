@@ -34,7 +34,7 @@ namespace RCG
             float aOffset = m_MoveOffset.position.x - transform.position.x;
             if (m_AlterHP < 0)
             {
-                m_Tweener.AddComponent(transform.TC_Jump(iPos + new Vector3(IsEnemy ? aOffset : -aOffset, 0, 0), 1, Vector3.up, 100, 1.5f));
+                m_Tweener.AddComponent(transform.TC_Jump(iPos + new Vector3(IsEnemy ? aOffset : -aOffset, 0, 0), 1, Vector3.up, 80, 1.5f));
             }
             else//Heal
             {
@@ -44,9 +44,9 @@ namespace RCG
             m_Tweener.AddComponent(transform.TC_Scale(1.5f,1.5f,1f));
             m_Tweener.OnUpdate((y) =>
             {
-                if (y > 0.75f)
+                if (y > 0.8f)
                 {
-                    m_AlterHPText.color = new Color(m_Col.r, m_Col.g, m_Col.b, 4f - 4f * y);
+                    m_AlterHPText.color = new Color(m_Col.r, m_Col.g, m_Col.b, 5f - 5f * y);
                 }
             });
             m_Tweener.OnComplete(DeleteVFX);

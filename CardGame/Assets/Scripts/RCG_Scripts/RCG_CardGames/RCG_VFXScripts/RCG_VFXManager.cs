@@ -6,7 +6,7 @@ namespace RCG
 {
     public class RCG_VFXManager : MonoBehaviour
     {
-        public static RCG_VFXManager ins = null;
+        public static RCG_VFXManager Ins = null;
         [SerializeField] protected Transform m_VFXRoot = null;
         [SerializeField] protected Transform m_VFXTemplatesRoot = null;
 
@@ -15,7 +15,7 @@ namespace RCG
         protected Dictionary<string, Queue<RCG_VFX> > m_VFXDic = null;
         virtual public void Init()
         {
-            ins = this;
+            Ins = this;
             m_VFXTemplates = new List<RCG_VFX>();
             UCL.Core.GameObjectLib.SearchChild(m_VFXTemplatesRoot, m_VFXTemplates);
             m_VFXTemplatesDic = new Dictionary<string, RCG_VFX>();

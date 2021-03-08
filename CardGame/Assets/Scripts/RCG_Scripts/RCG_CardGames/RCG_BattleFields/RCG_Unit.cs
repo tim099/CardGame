@@ -41,8 +41,8 @@ namespace RCG {
             } 
             protected set
             {
+                m_unit_HUD.HPbar.UpdateArmor(m_Armor, value);
                 m_Armor = value;
-                m_unit_HUD.HPbar.UpdateArmor(m_Armor);
             }
         }
         public int MaxHp {
@@ -144,7 +144,7 @@ namespace RCG {
 
             if (Armor > 0)
             {
-                var aArmorVFX = RCG_VFXManager.ins.CreateVFX<RCG_VFX_HP>("VFX_Armor");
+                var aArmorVFX = RCG_VFXManager.Ins.CreateVFX<RCG_VFX_HP>("VFX_Armor");
                 
                 if (iDamage <= Armor)
                 {
@@ -159,17 +159,17 @@ namespace RCG {
                     AlterArmor(-Armor);
                 }
             }
-            var aHPVFX = RCG_VFXManager.ins.CreateVFX<RCG_VFX_HP>();
+            var aHPVFX = RCG_VFXManager.Ins.CreateVFX<RCG_VFX_HP>();
             aHPVFX.SetAlterHP(-iDamage, m_UnitDisplay.position, IsEnemy);
             DamageHP(iDamage);
             m_UnitUI.Hit();
         }
         virtual public void UnitHeal(int iHealAmount)
         {
-            var aHealVFX = RCG_VFXManager.ins.CreateVFX("VFX_HealEffect");
+            var aHealVFX = RCG_VFXManager.Ins.CreateVFX("VFX_HealEffect");
             aHealVFX.transform.position = transform.position;
-            Debug.LogError("transform.position:" + transform.position.ToString());
-            var aHPVFX = RCG_VFXManager.ins.CreateVFX<RCG_VFX_HP>("VFX_Heal");
+            //Debug.LogError("transform.position:" + transform.position.ToString());
+            var aHPVFX = RCG_VFXManager.Ins.CreateVFX<RCG_VFX_HP>("VFX_Heal");
             aHPVFX.SetAlterHP(iHealAmount, m_UnitDisplay.position, IsEnemy);
             RestoreHP(iHealAmount);
             //m_UnitUI.Hit();
@@ -213,7 +213,7 @@ namespace RCG {
             m_AtkAlter = StatusEffectUI.GetAtkAlter();
             if (Selected)//是目前的行動單位 更新手牌顯示資訊
             {
-                RCG_Player.ins.UpdateCardDiscription();
+                RCG_Player.Ins.UpdateCardDiscription();
             }
         }
         virtual public void AddStatusEffect(StatusType iStatusType, int iAmount)
@@ -244,6 +244,10 @@ namespace RCG {
         public void AlterArmor(int iAmount)
         {
             Armor = m_Armor + iAmount;
+            if (iAmount > 0)
+            {
+                RCG_VFXManager.Ins.CreateVFX("VFX_ArmorEffect").transform.position = transform.position;
+            }
         }
         public int RestoreHP(int amount){
             Hp += amount;

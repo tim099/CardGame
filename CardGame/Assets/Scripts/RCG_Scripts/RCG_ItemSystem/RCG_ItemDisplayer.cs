@@ -20,6 +20,10 @@ namespace RCG
                 iOnClikAction.Invoke(m_Data);
             });
         }
+        virtual public void ShowSelectButton(bool iShow)
+        {
+            m_Button.gameObject.SetActive(iShow);
+        }
         virtual public void SetItem(RCG_Item _Data)
         {
             m_Data = _Data;

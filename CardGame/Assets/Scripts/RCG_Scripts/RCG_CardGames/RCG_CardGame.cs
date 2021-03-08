@@ -29,6 +29,9 @@ namespace RCG {
             }
             m_Entered = true;
             gameObject.SetActive(true);
+            var aCards = RCG_DataService.ins.m_DeckData.GetCardDatas();
+            //UCL.Core.MathLib.UCL_Random.Instance.Shuffle(aCards);
+            m_Player.InitDeckDatas(aCards);
         }
         public void ExitBattle() {
             if(!m_Entered) {

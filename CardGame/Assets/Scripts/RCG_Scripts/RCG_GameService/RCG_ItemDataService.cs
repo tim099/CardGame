@@ -20,7 +20,7 @@ namespace RCG
         public void Use(System.Action iEndAct)
         {
             RCG_DataService.ins.m_ItemsData.RemoveItem(this);
-            RCG_Player.ins.UseItem(this, iEndAct);
+            RCG_Player.Ins.UseItem(this, iEndAct);
         }
         RCG_ItemData m_Data;
     }

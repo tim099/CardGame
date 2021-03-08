@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
+using UCL.TweenLib;
 namespace RCG {
     //[RequireComponent(typeof(Slider))]
     public class RCG_UI_HPbar : MonoBehaviour
@@ -14,6 +14,7 @@ namespace RCG {
         [SerializeField] private Slider m_HPslider;
         private RCG_Unit m_unit;
         private float m_DisplayHP = 0;
+        UCL_Tweener m_Tweener = null;
         private void Awake() {
             if(!m_HPslider){
                 m_HPslider = gameObject.GetComponent<Slider>();
@@ -57,9 +58,24 @@ namespace RCG {
                 }
             }
         }
-        public void UpdateArmor(int iValue)
+        public void UpdateArmor(int iOldValue, int iValue)
         {
-            m_ArmorText.text = iValue.ToString();
+            int aDel = Mathf.Abs(iValue - iOldValue);
+            m_Tweener?.Kill();
+            m_Tweener = LibTween.Tweener(0.15f + 0.025f * aDel);
+            m_Tweener.SetEase(EaseType.OutSin);
+            m_Tweener.OnUpdate((y) =>
+            {
+                float aSize = 1f + 0.333f * UCL.Core.MathLib.Lib.BackFolding(y,0.75f);
+                m_ArmorText.transform.parent.localScale = new Vector3(aSize, aSize, 1);
+                m_ArmorText.text = UCL.Core.MathLib.Lib.Lerp(iOldValue, iValue, y).ToString();
+            });
+            m_Tweener.OnComplete(() =>
+            {
+                m_ArmorText.transform.parent.localScale = Vector3.one;
+                m_ArmorText.text = iValue.ToString();
+            });
+            m_Tweener.Start();
         }
         public void UpdateHp()
         {

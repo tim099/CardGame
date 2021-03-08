@@ -30,6 +30,7 @@ namespace RCG {
         public HashSet<RCG_Unit> m_ActivatedUnit = new HashSet<RCG_Unit>();
         public RCG_BattlePositionSetting m_PlayerBattlePositionSetting = null;
         public RCG_BattlePositionSetting m_EnemyBattlePositionSetting = null;
+        [SerializeField] protected Text m_SelectUnitDescriptionText = null;
         protected TargetType m_TargetType = TargetType.Close;
         protected bool m_Entered = false;
         protected System.Action<List<RCG_Unit>> m_SelectEndAct = null;
@@ -207,22 +208,44 @@ namespace RCG {
             m_TargetType = iTargetType;
             m_SelectEndAct = iSelectEndAct;
             m_SelectedUnits.Clear();
+            if(m_TargetType == TargetType.Off)
+            {
+                m_SelectUnitDescriptionText.gameObject.SetActive(false);
+                m_SelectNoneButton.gameObject.SetActive(false);
+                m_PlayerBattlePositionSetting.SetAllSelection(false);
+                m_EnemyBattlePositionSetting.SetAllSelection(false);
+                return;
+            }
             if (m_TargetType == TargetType.Close)
             {
+                //m_SelectUnitDescriptionText.gameObject.SetActive(false);
+
+                m_SelectUnitDescriptionText.gameObject.SetActive(true);
+                if (ActiveUnit == null)
+                {
+                    m_SelectUnitDescriptionText.text = UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("SelectActiveUnit");
+                }
+                else
+                {
+                    m_SelectUnitDescriptionText.text = UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("SwitchActiveUnit");
+                }
                 m_SelectNoneButton.gameObject.SetActive(false);
                 m_PlayerBattlePositionSetting.SelectPlayer(m_ActivatedUnit);
                 m_EnemyBattlePositionSetting.SetAllSelection(false);
                 return;
             }
+            m_SelectUnitDescriptionText.gameObject.SetActive(true);
+            if(m_TargetType == TargetType.None)
+            {
+                m_SelectUnitDescriptionText.text = UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("UseCard");
+            }
+            else
+            {
+                m_SelectUnitDescriptionText.text = UCL.Core.LocalizeLib.UCL_LocalizeManager.Get("SelectTargetUnit");// + m_TargetType.ToString();
+            }
+            
             switch (m_TargetType)
             {
-                case TargetType.Off:
-                    {
-                        m_SelectNoneButton.gameObject.SetActive(false);
-                        m_PlayerBattlePositionSetting.SetAllSelection(false);
-                        m_EnemyBattlePositionSetting.SetAllSelection(false);
-                        break;
-                    }
                 case TargetType.None:
                     {
                         m_SelectNoneButton.gameObject.SetActive(true);
@@ -343,7 +366,7 @@ namespace RCG {
                 }
                 u.EndTurn();
             }
-            RCG_BattleManager.ins.EnemyTurnEnd();
+            RCG_BattleManager.Ins.EnemyTurnEnd();
         }
         public void ClearSelectedUnits()
         {
@@ -366,6 +389,7 @@ namespace RCG {
             //    SetSelectMode(TargetType.Close);
             //    return;
             //}
+            m_SelectUnitDescriptionText.gameObject.SetActive(false);
             m_SelectedUnits.Add(iUnit);
             if (m_SelectEndAct != null)
             {
@@ -404,7 +428,7 @@ namespace RCG {
             {
                 ActiveUnit.SelectUnit();
             }
-            RCG_Player.ins.SetActiveUnit(ActiveUnit);
+            RCG_Player.Ins.SetActiveUnit(ActiveUnit);
         }
         /// <summary>
         /// 演出多段攻擊動畫 攻擊群體敵人
@@ -588,14 +612,14 @@ namespace RCG {
                     SetActiveUnitSelectMode();
                 }
             }
-            RCG_Player.ins.OnUnitDead(iUnit);
+            RCG_Player.Ins.OnUnitDead(iUnit);
         }
         /// <summary>
         /// 選擇無目標按鈕
         /// </summary>
         public void SelectNone()
         {
-            RCG_Player.ins.SelectTargets(m_SelectedUnits);
+            RCG_Player.Ins.SelectTargets(m_SelectedUnits);
             SetActiveUnitSelectMode();
         }
 

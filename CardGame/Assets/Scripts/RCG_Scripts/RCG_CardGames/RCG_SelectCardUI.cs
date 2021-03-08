@@ -14,7 +14,7 @@ namespace RCG {
         }
         virtual protected void ConfirmSelected()
         {
-            if (!RCG_Player.ins.ConfirmSelectedCard())
+            if (!RCG_Player.Ins.ConfirmSelectedCard())
             {
                 return;
             }

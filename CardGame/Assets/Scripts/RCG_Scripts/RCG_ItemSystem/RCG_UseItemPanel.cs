@@ -16,6 +16,7 @@ namespace RCG
         {
             m_Item = iItem;
             m_ItemDisplayer.SetItem(m_Item);
+            m_ItemDisplayer.ShowSelectButton(false);
             gameObject.SetActive(true);
         }
         public void UseItem()

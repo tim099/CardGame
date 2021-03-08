@@ -89,20 +89,20 @@ namespace RCG
             {
                 case StatusDecreaseType.Normal:
                     {
-                        RCG_Player.ins.AddPlayerAction(CreateAction.StatusAction(p_Unit, m_StatusType, -1));
+                        RCG_Player.Ins.AddPlayerAction(CreateAction.StatusAction(p_Unit, m_StatusType, -1));
                         //AlterLayer(-1);
                         break;
                     }
                 case StatusDecreaseType.Clear:
                     {
-                        RCG_Player.ins.AddPlayerAction(CreateAction.StatusAction(p_Unit, m_StatusType, -StatusLayer));
+                        RCG_Player.Ins.AddPlayerAction(CreateAction.StatusAction(p_Unit, m_StatusType, -StatusLayer));
                         //StatusLayer = 0;
                         break;
                     }
                 case StatusDecreaseType.Half:
                     {
                         int aDel = m_StatusLayer - m_StatusLayer / 2;
-                        RCG_Player.ins.AddPlayerAction(CreateAction.StatusAction(p_Unit, m_StatusType, -aDel));
+                        RCG_Player.Ins.AddPlayerAction(CreateAction.StatusAction(p_Unit, m_StatusType, -aDel));
 
                         break;
                     }

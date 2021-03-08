@@ -13,7 +13,7 @@ namespace RCG {
         public override void TriggerEffect(TriggerEffectData iTriggerEffectData, Action iEndAction)
         {
             var aTargets = iTriggerEffectData.m_Targets.Clone();
-            RCG_Player.ins.AddPlayerAction(CreateAction.ActionTrigger(delegate ()
+            RCG_Player.Ins.AddPlayerAction(CreateAction.ActionTrigger(delegate ()
             {
                 foreach(var aTarget in aTargets)
                 {

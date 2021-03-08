@@ -152,7 +152,9 @@ namespace RCG {
         {
             if (!string.IsNullOrEmpty(m_VFX))
             {
-                RCG_VFXManager.ins.CreateVFX(m_VFX);
+                var aAtkVfx = RCG_VFXManager.Ins.CreateVFX<RCG_VFX_Atk>(m_VFX);
+                //projectile
+                aAtkVfx.InitAtkVFX(iTriggerEffectData.m_PlayerUnit, iTriggerEffectData.m_Targets);
             }
             var aTargets = GetAttackRangeTarget(iTriggerEffectData, m_AttackRange);
             //Debug.LogError("aTargets:" + aTargets.Count);

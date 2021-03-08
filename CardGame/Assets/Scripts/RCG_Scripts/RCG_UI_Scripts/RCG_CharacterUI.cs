@@ -19,14 +19,14 @@ namespace RCG
         // Update is called once per frame
         void Update()
         {
-            if (RCG_BattleManager.ins) { //can be better QWQ
-                if (m_Showed && RCG_BattleManager.ins.gameObject.activeInHierarchy)
+            if (RCG_BattleManager.Ins) { //can be better QWQ
+                if (m_Showed && RCG_BattleManager.Ins.gameObject.activeInHierarchy)
                 {
                     m_DetailPanel.gameObject.SetActive(false);
                     hidePanels();
                     m_Showed = false;
                 }
-                else if (!m_Showed && !RCG_BattleManager.ins.gameObject.activeInHierarchy)
+                else if (!m_Showed && !RCG_BattleManager.Ins.gameObject.activeInHierarchy)
                 {
                     m_DetailPanel.gameObject.SetActive(false);
                     showPanels();
